@@ -1,0 +1,1426 @@
+[
+  {
+    "id": 93,
+    "sku": "P001-091",
+    "marca": "Marvel Legends",
+    "titulo": "Gambito - Marvel Legends X-men 97",
+    "estado": "Sellado",
+    "precio": 170.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/93/P001-091-1790148944871-GAMBITO_X97_8hj9NxdrJ.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 92,
+    "sku": "P001-090",
+    "marca": "Marvel Legends",
+    "titulo": "Iron Man vs Spiral - Marvel Serie Legends",
+    "estado": "Sellado",
+    "precio": 229.0,
+    "precio_reserva": 10.0,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/92/P001-090-1790148892281-IRON_MAN_MARVEL_VS_CAPCOM_rkJgBkqmA.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 91,
+    "sku": "P001-089",
+    "marca": "Sh Figuarts",
+    "titulo": "Son Goku Super Saiyan God",
+    "estado": "Sellado",
+    "precio": 170.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/91/P001-089-1790148793866-GOKU_GOD_SJ_SH_FIGUARTS_7ABjdEWwu.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 90,
+    "sku": "P001-088",
+    "marca": "Marvel Legends",
+    "titulo": "Daredevil & Jessica Jones - Marvel Legends Series Daredevil: Born Again",
+    "estado": "Sellado",
+    "precio": 229.0,
+    "precio_reserva": 20.0,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/90/P001-088-1790148693434-DAREDEVIL_Y_JESICA_JONES_SG5sB0P82.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 89,
+    "sku": "P001-087",
+    "marca": "Marvel Legends",
+    "titulo": "Magneto - Avengers Doomsday Marvel Legends (Octubre - 2026)",
+    "estado": "Sellado",
+    "precio": 145.0,
+    "precio_reserva": 20.0,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/89/P001-087-1790147946482-MAGNETO_K8vsxFzR1.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 88,
+    "sku": "P001-086",
+    "marca": "Marvel Legends",
+    "titulo": "Doom - Avengers Doomsday Marvel Legends (Octubre - 2026)",
+    "estado": "Sellado",
+    "precio": 120.0,
+    "precio_reserva": 10.0,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/88/P001-086-1790147789302-DOOM_DRIMQhHoG.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 86,
+    "sku": "P001-084",
+    "marca": "Marvel Legends",
+    "titulo": "Shang Chi - Avengers Doomsday Marvel Legends (Octubre - 2026)",
+    "estado": "Sellado",
+    "precio": 120.0,
+    "precio_reserva": 10.0,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/86/P001-084-1790147720757-SHANG_CHI_YJlJ8CRFp.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 87,
+    "sku": "P001-085",
+    "marca": "Marvel Legends",
+    "titulo": "Cyclops - Avengers Doomsday Marvel Legends (Octubre - 2026)",
+    "estado": "Sellado",
+    "precio": 120.0,
+    "precio_reserva": 10.0,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/87/P001-085-1790147749469-CYCLOPS_xMk2o19rs.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 83,
+    "sku": "P001-081",
+    "marca": "Marvel Legends",
+    "titulo": "Duende Verde - Marvel Legends (Octubre - 2026)",
+    "estado": "Sellado",
+    "precio": 230.0,
+    "precio_reserva": 10.0,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/83/P001-081-1790146447426-GREEN_GOBLIN_pbuehwakut.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 84,
+    "sku": "P001-082",
+    "marca": "Marvel Legends",
+    "titulo": "Thor - Avengers Doomsday Marvel Legends (Octubre - 2026)",
+    "estado": "Sellado",
+    "precio": 120.0,
+    "precio_reserva": 10.0,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/84/P001-082-1790146893295-THOR_JvfwXcuoT.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 85,
+    "sku": "P001-083",
+    "marca": "Marvel Legends",
+    "titulo": "Gambito - Avengers Doomsday Marvel Legends (Octubre - 2026)",
+    "estado": "Sellado",
+    "precio": 120.0,
+    "precio_reserva": 10.0,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/85/P001-083-1790146952492-GAMBITO_-Gp0i9U0z.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "sku": "P001-018",
+    "marca": "Marvel Legends",
+    "titulo": "The Punisher",
+    "estado": "Sellado",
+    "precio": 130.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/20/P001-018-1790147295399-IMG_1445_l1Dwk3FhT.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 82,
+    "sku": "P001-080",
+    "marca": "Mafex",
+    "titulo": "Wolverine (Damage Ver.) - Deadpool & Wolverine Noviembre 2026",
+    "estado": "Sellado",
+    "precio": 355.0,
+    "precio_reserva": 20.0,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/82/P001-080-1790141905069-wolverine_damge_32mAfsJHf.webp",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 81,
+    "sku": "P001-079",
+    "marca": "Mafex",
+    "titulo": "Wolverine - Deadpool & Wolverine  Octubre 2026",
+    "estado": "Sellado",
+    "precio": 355.0,
+    "precio_reserva": 20.0,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/81/P001-079-1790140661399-wolverinemafex_TtW0VTE1y.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 80,
+    "sku": "P001-078",
+    "marca": "Revoltech",
+    "titulo": "Saitama - One-Punch Man  Setiembre 2026",
+    "estado": "Sellado",
+    "precio": 365.0,
+    "precio_reserva": 25.0,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/80/P001-078-1790140250909-saitama_Banlp_CJA.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 77,
+    "sku": "P001-075",
+    "marca": "Revoltech",
+    "titulo": "Genos (Bonus) - One Punch Man",
+    "estado": "Sellado",
+    "precio": 390.0,
+    "precio_reserva": 30.0,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/77/P001-075-1790138589168-genus___bonus_A0F5Sw-5c.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 79,
+    "sku": "P001-077",
+    "marca": "Sh Figuarts",
+    "titulo": "Inosuke Hashibira - Demon Slayer",
+    "estado": "Sellado",
+    "precio": 299.9,
+    "precio_reserva": 9.9,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/79/P001-077-1790139933653-inosuke_hashibara_93j6ooibp.webp",
+        "posicion": 0
+      },
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/79/P001-077-1790139935495-inske2_2IEdtz6lA.png",
+        "posicion": 1
+      }
+    ]
+  },
+  {
+    "id": 78,
+    "sku": "P001-076",
+    "marca": "Mafex",
+    "titulo": "X-Men Gambit - Comic Ver",
+    "estado": "Sellado",
+    "precio": 419.9,
+    "precio_reserva": 19.9,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/78/P001-076-1790139567368-gambit_mafex_freQWSarF.webp",
+        "posicion": 0
+      },
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/78/P001-076-1790139569987-gambit_2_G5H0KT0zv.jpeg",
+        "posicion": 1
+      }
+    ]
+  },
+  {
+    "id": 76,
+    "sku": "P001-074",
+    "marca": "INART",
+    "titulo": "Catwoman - The Dark Knight Rises",
+    "estado": "Sellado",
+    "precio": 390.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/76/P001-074-1790138034679-catwoman1_6e0VxXiNa.jpeg",
+        "posicion": 0
+      },
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/76/P001-074-1790138036125-inart_catwoman_2to0pLCdA.webp",
+        "posicion": 1
+      }
+    ]
+  },
+  {
+    "id": 68,
+    "sku": "P001-066",
+    "marca": "Yolopark",
+    "titulo": "Optimus Prime - The Last Knights",
+    "estado": "Sellado",
+    "precio": 390.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/68/P001-066-1790136851940-IMG_1437_AChGgK4T1.webp",
+        "posicion": 0
+      },
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/68/P001-066-1790136939087-IMG_1436_-6L9hBrOF.jpeg",
+        "posicion": 1
+      }
+    ]
+  },
+  {
+    "id": 74,
+    "sku": "P001-072",
+    "marca": "Sh Figuarts",
+    "titulo": "Iron man Mark 85",
+    "estado": "Sellado",
+    "precio": 299.9,
+    "precio_reserva": 9.9,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/74/P001-072-1790136704174-SCRL_0007_cc9nvHsE1.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 73,
+    "sku": "P001-071",
+    "marca": "Mafex",
+    "titulo": "Spider man - The Amazing Spider-Man 2",
+    "estado": "Sellado",
+    "precio": 420.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/73/P001-071-1790136582215-IMG_1435_9UUgDswQq.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 72,
+    "sku": "P001-070",
+    "marca": "Sh Figuarts",
+    "titulo": "Cyclops - Gameverse",
+    "estado": "Sellado",
+    "precio": 365.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/72/P001-070-1790134751573-IMG_1433_AKaKjXytoD.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 71,
+    "sku": "P001-069",
+    "marca": "Mafex",
+    "titulo": "Black Panther - Endgame Ver",
+    "estado": "Sellado",
+    "precio": 355.0,
+    "precio_reserva": 20.0,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/71/P001-069-1790134430307-IMG_1431_aXlr2AREX4.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 70,
+    "sku": "P001-068",
+    "marca": "Mafex",
+    "titulo": "Armored Batman - Batman v Superman Dawn of Justice",
+    "estado": "Sellado",
+    "precio": 345.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/70/P001-068-1790134210343-IMG_1430_Kz3V6pt9t.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 69,
+    "sku": "P001-067",
+    "marca": "Mafex",
+    "titulo": "Deadpool - Deadpool & Wolverine",
+    "estado": "Sellado",
+    "precio": 380.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/69/P001-067-1790131005887-IMG_1429_R-ZASbTac-.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 67,
+    "sku": "P001-065",
+    "marca": "Mafex",
+    "titulo": "Spider man Black Costume - Comics Ver",
+    "estado": "Sellado",
+    "precio": 290.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/67/P001-065-1790114672214-spider_man_black_coustume_comic_ver_42p95xSKW.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 66,
+    "sku": "P001-064",
+    "marca": "Mafex",
+    "titulo": "Shuri - Wakanda Forever",
+    "estado": "Sellado",
+    "precio": 340.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/66/P001-064-1790114562890-shuri_mafex_KSWYapIy6.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 65,
+    "sku": "P001-063",
+    "marca": "Mafex",
+    "titulo": "Rogue - Comic Ver",
+    "estado": "Sellado",
+    "precio": 330.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/65/P001-063-1790114502926-mafex_rogue_comic_ver_cxzLENAty.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 64,
+    "sku": "P001-062",
+    "marca": "Mafex",
+    "titulo": "Flash - The Flash",
+    "estado": "Sellado",
+    "precio": 355.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/64/P001-062-1790114386462-flash_the_flash_mafex_4b6Jg6lzE.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 63,
+    "sku": "P001-061",
+    "marca": "Mafex",
+    "titulo": "Shazam! - Fury Of The Gods Ver",
+    "estado": "Open",
+    "precio": 290.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/63/P001-061-1790114261693-shazam_mafex_CPHO6ptef.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 62,
+    "sku": "P001-060",
+    "marca": "Mafex",
+    "titulo": "Knightmare Batman - Zack Snyder's Justice League Ver",
+    "estado": "Sellado",
+    "precio": 300.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/62/P001-060-1790114188832-batman_knightmare_LWoPzGH7x.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 61,
+    "sku": "P001-059",
+    "marca": "Mafex",
+    "titulo": "Spider-Man - Comic Paint",
+    "estado": "Sellado",
+    "precio": 340.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/61/P001-059-1790114090673-mafex_spiderman_comic_paint_D21lUBw32.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 60,
+    "sku": "P001-058",
+    "marca": "Mafex",
+    "titulo": "Gwen - Spider-Man: Into the Spider-Verse",
+    "estado": "Sellado",
+    "precio": 270.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/60/P001-058-1790114030520-mafex_gwen_p27UD--WT.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 59,
+    "sku": "P001-057",
+    "marca": "Mafex",
+    "titulo": "Batman Blue - Hush",
+    "estado": "Sellado",
+    "precio": 300.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/59/P001-057-1790113921903-Batman_hush_blue_m9APSo0HV.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 58,
+    "sku": "P001-056",
+    "marca": "Mafex",
+    "titulo": "Superman - Hush",
+    "estado": "Sellado",
+    "precio": 390.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/58/P001-056-1790113874681-superman_hush_DOyK3wVVO.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 57,
+    "sku": "P001-055",
+    "marca": "Mafex",
+    "titulo": "Thomas Elliot - Hush",
+    "estado": "Sellado",
+    "precio": 280.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/57/P001-055-1790113814775-thomas_elliot_hush_TfdJt7ApMC.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 56,
+    "sku": "P001-054",
+    "marca": "Mafex",
+    "titulo": "Robin - Hush",
+    "estado": "Sellado",
+    "precio": 340.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/56/P001-054-1790113759353-robin_hush_HlgGbVQD6.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 55,
+    "sku": "P001-053",
+    "marca": "Mafex",
+    "titulo": "Batman Stealth Jumper - Hush",
+    "estado": "Sellado",
+    "precio": 270.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/55/P001-053-1790113717577-batman_stealth_jumper_mafex_17tFY_Bbt.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 54,
+    "sku": "P001-052",
+    "marca": "Mafex",
+    "titulo": "Bane - Batman: Knightfall Ver",
+    "estado": "Sellado",
+    "precio": 330.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/54/P001-052-1790113644830-bane_knigtfall_mafex_Q41bDzRT8.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 53,
+    "sku": "P001-051",
+    "marca": "Sh Figuarts",
+    "titulo": "Iron Man - Mark I",
+    "estado": "Sellado",
+    "precio": 240.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/53/P001-051-1790113567046-iron_man_mark_1_shf_gX85wxsh1.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 52,
+    "sku": "P001-050",
+    "marca": "Sh Figuarts",
+    "titulo": "Iron Man - Mark I",
+    "estado": "Open",
+    "precio": 210.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/52/P001-050-1790113518471-iron_man_mark_1_shf_open_jKaeDc_Wk.webp",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 51,
+    "sku": "P001-049",
+    "marca": "Sh Figuarts",
+    "titulo": "Son Goku (Kind-Hearted Saiyan) - Drago Ball Z",
+    "estado": "Sellado",
+    "precio": 170.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/51/P001-049-1790113430487-goku__dFECFMET2.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 50,
+    "sku": "P001-048",
+    "marca": "Sh Figuarts",
+    "titulo": "Super Saiyan Son Goku - The Games Begin",
+    "estado": "Sellado",
+    "precio": 170.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/50/P001-048-1790113348597-goku_ssj_FHVBhb-uV.webp",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 49,
+    "sku": "P001-047",
+    "marca": "Sh Figuarts",
+    "titulo": "Super Saiyan Goku Blue - Dragon Ball Super",
+    "estado": "Sellado",
+    "precio": 170.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/49/P001-047-1790113239253-goku_ssj_blue_I255uXo67.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 48,
+    "sku": "P001-046",
+    "marca": "Sh Figuarts",
+    "titulo": "Vegeta Super Saiyan - Dangerous Pride",
+    "estado": "Sellado",
+    "precio": 170.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/48/P001-046-1790112896302-vegeta_ssj_SKII6yjJ1.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 47,
+    "sku": "P001-045",
+    "marca": "Sh Figuarts",
+    "titulo": "Falcon - The Falcon and the Winter Soldier",
+    "estado": "Open",
+    "precio": 220.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/47/P001-045-1790112686292-Falcon_shf_IoL-YbQ9w.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 46,
+    "sku": "P001-044",
+    "marca": "Mafex",
+    "titulo": "Homelander Blood - The Boys",
+    "estado": "Sellado",
+    "precio": 370.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/46/P001-044-1790112630368-homelander_blood_mafex_5f-EIqUJpX.webp",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 45,
+    "sku": "P001-043",
+    "marca": "Mafex",
+    "titulo": "Butcher - The Boys",
+    "estado": "Sellado",
+    "precio": 330.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/45/P001-043-1790112572509-butcher_the_boys_mafex_6DEbzZUU4.webp",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 44,
+    "sku": "P001-042",
+    "marca": "Mafex",
+    "titulo": "The Deep - The Boys",
+    "estado": "Sellado",
+    "precio": 290.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/44/P001-042-1790112524644-the_deep_uFtAk-NlA.webp",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 43,
+    "sku": "P001-041",
+    "marca": "Mafex",
+    "titulo": "A Train - The Boys",
+    "estado": "Sellado",
+    "precio": 355.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/43/P001-041-1790112463451-a_train_G_O6nkMDe.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 42,
+    "sku": "P001-040",
+    "marca": "Mafex",
+    "titulo": "Starlight - The Boys",
+    "estado": "Sellado",
+    "precio": 275.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/42/P001-040-1790112408024-starlight_XYPXpVP7p.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 41,
+    "sku": "P001-039",
+    "marca": "Mafex",
+    "titulo": "Superman Cyborg - Return of Superman",
+    "estado": "Sellado",
+    "precio": 330.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/41/P001-039-1790112360435-superman_cyborg_qeTy9fg7pH.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 40,
+    "sku": "P001-038",
+    "marca": "Mafex",
+    "titulo": "Superman - The Dark Knight Returns",
+    "estado": "Sellado",
+    "precio": 295.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/40/P001-038-1790112195925-superman_TDKR_dMD5ZqSnRl.webp",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 39,
+    "sku": "P001-037",
+    "marca": "Sh Figuarts",
+    "titulo": "Venom - The Last Dance",
+    "estado": "Sellado",
+    "precio": 290.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/39/P001-037-1790111935151-venom_the_last_dance_shf_pD2Bi5kl9.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 38,
+    "sku": "P001-036",
+    "marca": "Marvel Legends",
+    "titulo": "Thor - Maximum",
+    "estado": "Sellado",
+    "precio": 230.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/38/P001-036-1790111832818-thor_maximum_q6_WkvgTJ.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 37,
+    "sku": "P001-035",
+    "marca": "Marvel Legends",
+    "titulo": "Ghost Rider Johnny Blaze with Motorcycle",
+    "estado": "Sellado",
+    "precio": 240.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/37/P001-035-1790111793994-ghost_rider_marvel_legends_EbrXlfbUY.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 36,
+    "sku": "P001-034",
+    "marca": "Marvel Legends",
+    "titulo": "Carnage - Venom: Let There Be Carnage",
+    "estado": "Sellado",
+    "precio": 250.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/36/P001-034-1790111634148-carnage_marvel_legends_tbnqkfgaV.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "sku": "P001-032",
+    "marca": "Marvel Legends",
+    "titulo": "Green Goblin - Retro Collection",
+    "estado": "Sellado",
+    "precio": 130.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/34/P001-032-1790111351520-green_goblin_marvel_legends_retro_Y3YqnW0CK.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "sku": "P001-033",
+    "marca": "Marvel Legends",
+    "titulo": "kingPin - Retro Collection",
+    "estado": "Sellado",
+    "precio": 185.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/35/P001-033-1790111537278-kingpin_marvel_legends_adLpwlfyl.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "sku": "P001-031",
+    "marca": "Marvel Legends",
+    "titulo": "Capitan America - Endgame Ver",
+    "estado": "Sellado",
+    "precio": 130.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/33/P001-031-1790111292742-capitan_america_endgame_Hon1FtNrN.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "sku": "P001-030",
+    "marca": "Marvel Legends",
+    "titulo": "Wolverine Damage - Deadpool & Wolverine",
+    "estado": "Sellado",
+    "precio": 120.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/32/P001-030-1790111230853-wolverine_damage_marvel_legends_7I7iWI4w-.webp",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "sku": "P001-029",
+    "marca": "Marvel Legends",
+    "titulo": "Deadpool Deluxe - Deadpool & Wolverine",
+    "estado": "Sellado",
+    "precio": 180.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/31/P001-029-1790111153892-deadpool_deluxe_marvel_legends_zLb3Wuafv.webp",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "sku": "P001-028",
+    "marca": "Marvel Legends",
+    "titulo": "Casandra Nova - Deadpool & Wolverine",
+    "estado": "Sellado",
+    "precio": 120.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/30/P001-028-1790111088721-casandra_marvel_legends_hxN8c4xAB.webp",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "sku": "P001-027",
+    "marca": "Marvel Legends",
+    "titulo": "X 23 - Deadpool & Wolverine",
+    "estado": "Sellado",
+    "precio": 130.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/29/P001-027-1790111033569-x23_marvel_legends_7uwKLzMLP.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "sku": "P001-026",
+    "marca": "Revoltech",
+    "titulo": "Flash Reverse - Bonus",
+    "estado": "Open",
+    "precio": 340.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/28/P001-026-1790110959843-flash_reverse_9Fmb-87qZ.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "sku": "P001-025",
+    "marca": "Mafex",
+    "titulo": "Venom Blue - Comic Ver",
+    "estado": "Sellado",
+    "precio": 320.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/27/P001-025-1790110905467-venom_blue_comic_mafex_wwOBC2-jb.webp",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "sku": "P001-024",
+    "marca": "Sh Figuarts",
+    "titulo": "Naruto - The Jinchuuriki Entrusted With Hope",
+    "estado": "Sellado",
+    "precio": 170.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/26/P001-024-1790110791184-naruto_the_jinchuriki_shf_4W0PMfClr.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "sku": "P001-023",
+    "marca": "Mafex",
+    "titulo": "Ice Man - Comic Ver",
+    "estado": "Sellado",
+    "precio": 365.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/25/P001-023-1790110655132-ice_man_mafex_comic_ver_qQcgyXedW.jpeg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "sku": "P001-022",
+    "marca": "Marvel Legends",
+    "titulo": "Abomination",
+    "estado": "Sellado",
+    "precio": 200.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/24/P001-022-1790110614857-abomination_marvel_legends_k6pG3OVAx.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "sku": "P001-021",
+    "marca": "Sh Figuarts",
+    "titulo": "Luigi - Super Mario Bros",
+    "estado": "Sellado",
+    "precio": 150.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/23/P001-021-1790110434411-Luigi_shf_EL96sBLjY.webp",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "sku": "P001-020",
+    "marca": "Mafex",
+    "titulo": "Weapon X - Age of Apocalypse Ver.",
+    "estado": "Sellado",
+    "precio": 320.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/22/P001-020-1790110368021-weaponmafex_hLH4WzRyF.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "sku": "P001-019",
+    "marca": "Sh Figuarts",
+    "titulo": "Voldemort - Harry Potter y el cáliz de fuego",
+    "estado": "Sellado",
+    "precio": 320.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/21/P001-019-1790110277671-voldemort_shf_CIwEMOT6X.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "sku": "P001-016",
+    "marca": "Sh Figuarts",
+    "titulo": "Scarlet Spider - Spider-Man: Across the Spider-Verse",
+    "estado": "Sellado",
+    "precio": 320.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/18/P001-016-1790110012393-scarlet_spider_shf_1t-nFEXxO.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "sku": "P001-017",
+    "marca": "Marvel Legends",
+    "titulo": "Spider man - Secret Wars",
+    "estado": "Sellado",
+    "precio": 130.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/19/P001-017-1790110092632-spiderman_secret_wars_marvel_legends_2byaheGxHQ.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "sku": "P001-015",
+    "marca": "Sh Figuarts",
+    "titulo": "Sasuke Uchiha",
+    "estado": "Sellado",
+    "precio": 210.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/17/P001-015-1790109903654-sasukeuchiha_X8AodDtcp.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "sku": "P001-014",
+    "marca": "Sh Figuarts",
+    "titulo": "Naruto Uzumaki - Kid",
+    "estado": "Open",
+    "precio": 170.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/16/P001-014-1790109808711-narutokid_J9NFhb34m.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "sku": "P001-013",
+    "marca": "Marvel Legends",
+    "titulo": "Moon Knight - Marvel Rivals",
+    "estado": "Sellado",
+    "precio": 160.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/15/P001-013-1790109721391-moonknightrivals_ob-sKsx5W.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "sku": "P001-012",
+    "marca": "Sh Figuarts",
+    "titulo": "Mace Windu - Star Wars: Revenge of the Sith",
+    "estado": "Sellado",
+    "precio": 270.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/14/P001-012-1790109601677-mace_windu_shf_T3Rj51KCi.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "sku": "P001-011",
+    "marca": "Marvel Legends",
+    "titulo": "Hulk - Spider man Brand New Day",
+    "estado": "Sellado",
+    "precio": 210.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/13/P001-011-1790109509415-hulkbndlegends_utpi3QX25.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "sku": "P001-010",
+    "marca": "Marvel Legends",
+    "titulo": "Electro - Spider man No Way Home",
+    "estado": "Sellado",
+    "precio": 120.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/12/P001-010-1790109444074-electromarvellegends_nYw9LqzKm.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "sku": "P001-009",
+    "marca": "Mafex",
+    "titulo": "Bane - The Dark Knight Rises",
+    "estado": "Sellado",
+    "precio": 290.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/11/P001-009-1790109335108-Bane_the_dark_knight_mafex_1dQiBxKUP.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "sku": "P001-008",
+    "marca": "Marvel Legends",
+    "titulo": "Blade - Deadpool & Wolverine",
+    "estado": "Sellado",
+    "precio": 130.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/10/P001-008-1790109138538-blade_marvel_legends_YHYrZs3uY.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "sku": "P001-007",
+    "marca": "Sh Figuarts",
+    "titulo": "Hulk - Spider man Brand New Day",
+    "estado": "Sellado",
+    "precio": 430.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/9/P001-007-1790108945189-hulk_sh_figuarts_bnd_5BhRK4p8E.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "sku": "P001-006",
+    "marca": "Revoltech",
+    "titulo": "Attack on Titan - Attack Titan (Limited + Bonus)",
+    "estado": "Sellado",
+    "precio": 390.0,
+    "precio_reserva": 30.0,
+    "tipo": "preventa",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/8/P001-006-1790108810639-EREN_REVOLTECH_BONIUS_H8fhUBoUR.webp",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "sku": "P001-003",
+    "marca": "Mafex",
+    "titulo": "Miles Morales - Comic Ver",
+    "estado": "Sellado",
+    "precio": 300.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/4/P001-003-1790051575114-milesMoralesComic_LoOvgUa4m.png",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "sku": "P001-002",
+    "marca": "Mafex",
+    "titulo": "Iron Spider Renewal - EndGame ver",
+    "estado": "Sellado",
+    "precio": 340.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/2/P001-002-1790051635734-iron_spider_renewal_mafex_5IzJZ1yUv.jpg",
+        "posicion": 0
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "sku": "P001-001",
+    "marca": "Mafex",
+    "titulo": "Spider Man Ben Reilly - Comic Ver",
+    "estado": "Sellado",
+    "precio": 270.0,
+    "precio_reserva": null,
+    "tipo": "venta",
+    "imagenes_producto": [
+      {
+        "url": "https://ik.imagekit.io/xstoregr0t1/grooty/productos/1/P001-001-1790051662973-spider_man_ben_railey_mafex_blKXgfVYo.jpg",
+        "posicion": 0
+      }
+    ]
+  }
+]
