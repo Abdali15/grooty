@@ -1,0 +1,75 @@
+/* ───────── Fuentes autoalojadas (subset latin) ───────── */
+@font-face { font-family: "DM Sans"; src: url("../assets/fonts/dm-sans-latin-wght-normal.woff2") format("woff2"); font-weight: 100 1000; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow Condensed"; src: url("../assets/fonts/barlow-condensed-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow Condensed"; src: url("../assets/fonts/barlow-condensed-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Instrument Serif"; src: url("../assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Instrument Serif"; src: url("../assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+
+:root {
+  /* ── Paleta Grooty (identidad original) ── */
+  --grooty-ink: #191d17;
+  --grooty-deep: #3d4b29;
+  --grooty-green: #75834e;
+  --grooty-lime: #829c38;
+  --grooty-olive: #d2dfac;
+  --grooty-soft-olive: #c0cb9f;
+  --grooty-sage: #dce3c9;
+  --grooty-paper: #f6f7f2;
+  --grooty-muted: #65695f;
+  --grooty-line: #dce0d4;
+
+  /* derivados */
+  --paper-2: #eff1e7;
+  --white: #ffffff;
+  --champagne: #ebe1c5;
+  --champagne-ink: #5b4a22;
+  --olive-tint: color-mix(in srgb, var(--grooty-olive) 48%, var(--grooty-paper));
+  --deep-2: #2c3620;
+
+  /* ── Roles ── */
+  --bg: var(--grooty-paper);
+  --text: var(--grooty-ink);
+  --text-2: #565a51;
+  --accent: var(--grooty-green);      /* iconos, bordes, progreso: NO texto pequeño */
+  --accent-strong: var(--grooty-deep); /* texto acento, CTA */
+  --line: var(--grooty-line);
+  --tile-sale: var(--grooty-sage);
+  --tile-pre: color-mix(in srgb, var(--champagne) 62%, var(--grooty-olive));
+  --focus: var(--grooty-deep);
+
+  /* ── Tipografía ── */
+  --font-ui: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-label: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
+
+  /* ── Layout ── */
+  --container: 1320px;
+  --gutter: 16px;
+  --header-h: 68px;
+  --bottomnav-h: 64px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+
+  /* ── Radios ── */
+  --r-1: 10px;
+  --r-2: 14px;
+  --r-3: 20px;
+  --r-4: 28px;
+  --r-tile: 20px;
+  --r-hero: 32px;
+  --pill: 999px;
+
+  /* ── Profundidad ── */
+  --shadow-1: 0 10px 30px rgba(25, 29, 23, 0.06);
+  --shadow-2: 0 18px 48px rgba(25, 29, 23, 0.1);
+  --shadow-pop: 0 24px 70px rgba(25, 29, 23, 0.18);
+
+  /* ── Motion ── */
+  --dur-micro: 150ms;
+  --dur-ui: 280ms;
+  --dur-section: 600ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+}
+@media (min-width: 640px) { :root { --gutter: 24px; --header-h: 72px; } }
+@media (min-width: 1024px) { :root { --gutter: 32px; } }
+@media (min-width: 1280px) { :root { --gutter: 48px; } }

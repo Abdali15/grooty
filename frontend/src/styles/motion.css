@@ -1,0 +1,25 @@
+/* ───────── Transiciones de ruta (View Transitions API) ───────── */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) { animation: 0.2s var(--ease-io) both vt-out; }
+  ::view-transition-new(root) { animation: 0.32s var(--ease-out) both vt-in; }
+  ::view-transition-group(product-img) { animation-duration: 0.42s; animation-timing-function: var(--ease-out); }
+  ::view-transition-old(product-img), ::view-transition-new(product-img) { height: 100%; object-fit: contain; }
+}
+@keyframes vt-out { to { opacity: 0; transform: translateY(-6px); } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
+
+/* ───────── Interruptor global: sin movimiento ───────── */
+.no-motion *, .no-motion *::before, .no-motion *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+.no-motion .mq-track { animation: none !important; transform: none; }
+.no-motion .marquee { overflow-x: auto; -webkit-mask-image: none; mask-image: none; scrollbar-width: thin; }
+.no-motion .mq-set[aria-hidden="true"] { display: none; }
+.no-motion .layer-far, .no-motion .layer-near { transform: none !important; }
+.no-motion .hero-frame, .no-motion .brand-card { transform: none !important; }
+.no-motion [data-reveal], .no-motion [data-reveal-item] { opacity: 1 !important; transform: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .mq-track { animation: none; }
+  .marquee { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .mq-set[aria-hidden="true"] { display: none; }
+}
