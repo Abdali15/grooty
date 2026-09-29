@@ -40,7 +40,7 @@ export function renderShell() {
   </nav>`;
 }
 
-/* Logo real: si /logo.svg existe se muestra; si no, queda el wordmark tipográfico. */
+/* Logo original con alternativa tipográfica si el archivo no carga. */
 export function loadLogo() {
   const probe = new Image();
   probe.onload = () => {
@@ -48,6 +48,7 @@ export function loadLogo() {
     html.classList.add("has-logo");
     if (!SITE.logo.showWordmark) html.classList.add("logo-only");
   };
+  probe.onerror = () => document.documentElement.classList.add("logo-unavailable");
   probe.src = SITE.logo.src;
 }
 

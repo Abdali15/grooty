@@ -47,7 +47,7 @@ data.forEach((p) => {
   routes.push({
     path,
     title: `${name.trim()} · ${p.marca} · Grooty Store`,
-    description: `${p.titulo} (${p.marca}). ${pre ? "Preventa" : "En venta"} desde ${money(p.precio)}. Grooty Store Perú.`,
+    description: `${p.titulo} (${p.marca}). ${pre ? "Preventa" : "En venta"} · Precio total ${money(p.precio)}. Grooty Store Perú.`,
     image,
     ld: { "@context": "https://schema.org", "@type": "Product", name: p.titulo, sku: p.sku, brand: { "@type": "Brand", name: p.marca }, image: (p.imagenes_producto || []).map((i) => ogImg(i.url)), offers }
   });

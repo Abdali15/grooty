@@ -17,7 +17,7 @@ export function heartButton(p, cls = "") {
 }
 
 export function priceBlock(p, { compact = false } = {}) {
-  return `<p class="price">${money(p.precio)}</p>${p.isPre && p.precio_reserva != null ? `<p class="reserve">Reserva ${money(p.precio_reserva)}</p>` : ""}`;
+  return `<p class="price">${p.isPre ? '<span class="sr-only">Precio total </span>' : ""}${money(p.precio)}</p>${p.isPre && p.precio_reserva != null ? `<p class="reserve">Reserva ${money(p.precio_reserva)}</p>` : ""}`;
 }
 
 export function addButton(p, cls = "") {
@@ -37,7 +37,7 @@ export function productCard(p, { eager = false, sizes = SIZES, extra = "" } = {}
     <div class="card-body">
       <p class="card-brand">${esc(p.brand)}</p>
       <h3 class="card-title"><a href="${p.url}" data-nav data-card>${esc(p.name)}</a></h3>
-      ${p.line ? `<p class="card-line">${esc(p.line)}</p>` : ""}
+      <p class="card-line">${esc(p.line || (p.isPre ? `Estado: ${p.estado}` : "Figura de colección"))}</p>
       <div class="card-foot">
         <div class="card-price">${priceBlock(p)}</div>
         ${addButton(p)}

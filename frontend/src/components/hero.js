@@ -188,7 +188,8 @@ export function mountHero(root, { intro = false } = {}) {
   hero.addEventListener("focusin", (e) => e.target.matches(":focus-visible") && ((flags.focus = true), syncPause()), sig);
   hero.addEventListener("focusout", () => ((flags.focus = false), syncPause()), sig);
   document.addEventListener("visibilitychange", () => ((flags.hidden = document.hidden), syncPause()), sig);
-  new IntersectionObserver(([e]) => ((flags.off = !e.isIntersecting), syncPause()), { threshold: 0.25 }).observe(hero);
+  const observer = new IntersectionObserver(([e]) => ((flags.off = !e.isIntersecting), syncPause()), { threshold: 0.25 });
+  observer.observe(hero);
 
   hero.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight") next();
@@ -246,6 +247,7 @@ export function mountHero(root, { intro = false } = {}) {
 
   return () => {
     ac.abort();
+    observer.disconnect();
     timeline.forEach((t) => t.kill());
   };
 }

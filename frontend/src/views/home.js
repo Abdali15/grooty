@@ -26,8 +26,8 @@ export const home = {
       <section class="band band--paper" aria-labelledby="new-title">
         <div class="container">
           ${sectionHead({
-            title: '<span id="new-title">Recién llegados</span>',
-            sub: "Nuevas piezas para tu colección.",
+            title: '<span id="new-title">Novedades del catálogo</span>',
+            sub: `${brands.reduce((total, b) => total + b.count, 0)} figuras · ${brands.length} marcas · ${preorders.length} preventas para explorar.`,
             action: `<a class="link-arrow" href="/catalogo" data-nav>Ver todo el catálogo ${icons.arrow}</a><button class="btn btn-ghost btn-sm" type="button" data-surprise>${icons.dice}<span>Sorpréndeme</span></button>`
           })}
           <div class="product-grid" data-reveal-group>${fresh.map((p, i) => productCard(p, { eager: i < 4, extra: "" }).replace('class="card ', 'data-reveal-item class="card ')).join("")}</div>

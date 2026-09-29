@@ -22,9 +22,9 @@ export const SITE = {
   announcement: "",
   currency: "PEN",
 
-  // 2) Logo real. Copia tu logo original en frontend/public/logo.svg.
+  // 2) Logo original optimizado, sin cambiar su composición.
   //    Si el archivo ya incluye el texto "Grooty Store", pon showWordmark en false.
-  logo: { src: "/logo.svg", showWordmark: true },
+  logo: { src: "/logo.webp", showWordmark: true },
 
   // 3) Imágenes: usa transformaciones de ImageKit (?tr=w-…,f-auto) para servir
   //    tamaños pequeños y WebP/AVIF. Si algún día cambias de CDN, ponlo en false.

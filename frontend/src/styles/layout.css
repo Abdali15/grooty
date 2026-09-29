@@ -2,11 +2,12 @@
 .announcement { min-height: 34px; padding: 6px var(--gutter); background: var(--grooty-ink); color: var(--grooty-paper); display: grid; place-items: center; font-size: 13px; text-align: center; }
 .site-header { position: sticky; top: 0; z-index: 90; height: var(--header-h); border-bottom: 1px solid transparent; background: transparent; transition: background-color var(--dur-ui) var(--ease-out), border-color var(--dur-ui), box-shadow var(--dur-ui), backdrop-filter var(--dur-ui); }
 .site-header.is-stuck { background: color-mix(in srgb, var(--grooty-paper) 88%, transparent); -webkit-backdrop-filter: blur(16px) saturate(1.2); backdrop-filter: blur(16px) saturate(1.2); border-color: var(--line); box-shadow: 0 8px 30px rgba(25, 29, 23, 0.05); }
-.navbar { height: 100%; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 24px; }
+.navbar { height: 100%; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: clamp(12px, 2vw, 24px); }
 
 .brand { display: inline-flex; align-items: center; gap: 11px; min-height: 44px; transition: transform var(--dur-ui) var(--ease-out); }
-.brand-logo { display: none; height: 40px; width: auto; max-width: 150px; object-fit: contain; }
+.brand-logo { display: block; height: 48px; width: 48px; flex: none; border-radius: 12px; object-fit: contain; }
 .has-logo .brand-logo { display: block; }
+.logo-unavailable .brand-logo { display: none; }
 .has-logo.logo-only .brand-word { display: none; }
 .brand-word strong { display: block; font: 700 23px / 0.9 var(--font-label); letter-spacing: 0.06em; }
 .brand-word small { display: block; margin-top: 4px; font: 600 10.5px / 1 var(--font-label); letter-spacing: 0.34em; color: var(--accent-strong); }
@@ -58,7 +59,7 @@
 .section-head .section-sub { margin-top: 10px; }
 .section-action { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
-.page-head { padding-top: clamp(18px, 3vw, 36px); padding-bottom: clamp(14px, 2vw, 24px); }
+.page-head { padding-top: clamp(28px, 4vw, 48px); padding-bottom: clamp(24px, 3vw, 36px); }
 .page-head-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px 32px; flex-wrap: wrap; }
 .page-head .h-page { margin-top: 8px; }
 .page-head .page-sub { margin-bottom: 6px; }
@@ -81,7 +82,7 @@
 .footer .brand-logo--footer { height: 44px; filter: none; }
 
 /* ───────── Grillas ───────── */
-.product-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; }
+.product-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 16px; }
 @media (min-width: 640px) { .product-grid { gap: 32px 16px; } }
 @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 20px; } }
 @media (min-width: 1200px) { .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 40px 24px; } }
@@ -95,8 +96,8 @@
 
 @media (max-width: 1023.98px) { .footer-grid { grid-template-columns: 1fr 1fr; } .footer-brand { grid-column: 1 / -1; } }
 @media (min-width: 1024px) { .desktop-nav { display: flex; } }
-@media (min-width: 1100px) {
-  .search-pill { width: 236px; justify-content: flex-start; padding: 0 12px 0 16px; color: var(--text-2); }
+@media (min-width: 1280px) {
+  .search-pill { width: 204px; justify-content: flex-start; padding: 0 12px 0 16px; color: var(--text-2); }
   .search-pill-text { display: inline; font-size: 14px; font-weight: 500; }
   .search-pill .kbd { display: inline-grid; margin-left: auto; }
   .search-pill:hover, .search-pill:focus-visible { color: var(--text); }
@@ -109,4 +110,17 @@
   .cta-pill .count { position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px; font-size: 11px; box-shadow: 0 0 0 2px var(--bg); }
   .footer-grid { grid-template-columns: 1fr; gap: 24px; }
   .footer { border-radius: var(--r-3) var(--r-3) 0 0; }
+}
+
+@media (max-width: 639.98px) {
+  .brand { gap: 8px; }
+  .brand-logo { width: 44px; height: 44px; }
+  .brand-word strong { font-size: 20px; }
+  .brand-word small { font-size: 9px; }
+  .navbar { gap: 10px; }
+  .nav-actions { gap: 6px; }
+}
+@media (max-width: 359.98px) {
+  .brand-word { display: none; }
+  .product-grid { gap: 28px 12px; }
 }

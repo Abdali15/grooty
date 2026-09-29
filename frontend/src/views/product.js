@@ -40,20 +40,25 @@ function info(p) {
     <p class="pdp-brand"><a href="/marcas/${p.brandSlug}" data-nav data-brand="${p.brandSlug}">${esc(p.brand)}</a></p>
     <h1 class="pdp-title">${esc(p.name)}</h1>
     ${p.line ? `<p class="pdp-line">${esc(p.line)}</p>` : ""}
+    <p class="pdp-price-label">Precio total de la figura</p>
     <div class="pdp-price"><strong>${money(p.precio)}</strong>${p.isPre && p.precio_reserva != null ? `<span class="pdp-reserve">Reserva ${money(p.precio_reserva)}</span>` : ""}</div>
     ${
       p.isPre
         ? `<div class="pre-box"><p class="pre-box-title">Preventa</p>
             ${balance != null ? `<p class="pre-split"><span>Hoy reservas <b>${money(p.precio_reserva)}</b></span><span>Al llegar completas <b>${money(balance)}</b></span></p>` : ""}
             <p class="pre-policy-text">${esc(PREORDER_POLICY.text)}</p></div>`
-        : `<p class="pdp-note">Disponibilidad, pago y entrega se confirman por WhatsApp.</p>`
+        : `<p class="pdp-note">Confirma disponibilidad, pago y entrega con la tienda antes de comprar.</p>`
     }
     <div class="pdp-actions">
       <button class="btn btn-primary btn-lg" type="button" data-add="${p.id}" data-add-label>${icons.plus}<span>Añadir a Mi selección</span></button>
       <button class="btn btn-secondary btn-lg" type="button" data-wa="product" data-id="${p.id}">${icons.whatsapp}<span>${waLabel("Consultar por WhatsApp")}</span></button>
       ${heartButton(p, "fav-btn--inline fav-btn--lg")}
     </div>
-    <dl class="meta-row meta-row--lg"><div><dt>Estado</dt><dd>${esc(p.estado)}</dd></div><div><dt>Modalidad</dt><dd>${p.isPre ? "Preventa" : "Venta"}</dd></div><div><dt>Código</dt><dd>${esc(p.sku)}</dd></div></dl>
+    <dl class="meta-row meta-row--lg"><div><dt>Marca</dt><dd>${esc(p.brand)}</dd></div>${p.line ? `<div><dt>Línea / edición</dt><dd>${esc(p.line)}</dd></div>` : ""}<div><dt>Fotos publicadas</dt><dd>${p.images.length}</dd></div><div><dt>Estado</dt><dd>${esc(p.estado)}</dd></div><div><dt>Modalidad</dt><dd>${p.isPre ? "Preventa" : "Venta"}</dd></div><div><dt>Código</dt><dd>${esc(p.sku)}</dd></div></dl>
+    ${p.description ? `<section class="pdp-details"><h2 class="h-mini">Sobre esta figura</h2><p>${esc(p.description)}</p></section>` : ""}
+    ${p.includes_text ? `<section class="pdp-details"><h2 class="h-mini">Qué incluye</h2><p>${esc(p.includes_text)}</p></section>` : ""}
+    ${p.box_note ? `<section class="pdp-details"><h2 class="h-mini">Estado de la caja</h2><p>${esc(p.box_note)}</p></section>` : ""}
+    <p class="pdp-note">Consulta el costo y el plazo de entrega para tu ubicación. Añadir una figura a Mi selección no confirma la compra ni la reserva.</p>
     <ol class="how"><li><span>1</span>Añade la figura a Mi selección</li><li><span>2</span>Consúltala por WhatsApp</li><li><span>3</span>Coordinas pago y entrega con la tienda</li></ol>
     <button class="link-btn" type="button" data-copy-link>${icons.share}Copiar enlace de esta figura</button>
   </div>`;
@@ -71,7 +76,7 @@ export const product = {
     return {
       title,
       productId: p.id,
-      description: `${p.titulo} (${p.brand}). ${p.isPre ? "Preventa" : "En venta"} desde ${money(p.precio)}. Grooty Store Perú.`,
+      description: `${p.titulo} (${p.brand}). ${p.isPre ? "Preventa" : "En venta"} · Precio total ${money(p.precio)}. Grooty Store Perú.`,
       html: `<div class="container pdp-wrap">
         ${breadcrumb([{ label: "Catálogo", href: "/catalogo" }, { label: p.brand, href: `/marcas/${p.brandSlug}` }, { label: p.name }])}
         <div class="pdp">${gallery(p)}${info(p)}</div>

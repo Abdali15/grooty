@@ -31,13 +31,14 @@ function apply(el, s) {
 function loop() {
   let busy = false;
   items.forEach((s, el) => {
+    if (!el.isConnected) { items.delete(el); return; }
     s.cx = lerp(s.cx, s.tx, 0.12);
     s.cy = lerp(s.cy, s.ty, 0.12);
     apply(el, s);
     if (Math.abs(s.cx - s.tx) > 0.002 || Math.abs(s.cy - s.ty) > 0.002) busy = true;
     else if (s.tx === 0 && s.ty === 0) items.delete(el);
   });
-  if (busy || items.size) requestAnimationFrame(loop);
+  if (busy) requestAnimationFrame(loop);
   else running = false;
 }
 const kick = () => {
