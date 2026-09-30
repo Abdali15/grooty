@@ -5,11 +5,13 @@ import { imgUrl } from '../lib/images.js';
 import { adminRequest, acceptSession, clearSession, loadDemo, saveDemo, exportDemo, validateAdminProduct, safeImageUrl } from '../lib/admin-client.js';
 import { SITE } from '../config.js';
 import { normalizeStoreSettings, youtubeVideoId } from '../lib/cinema.js';
+import { catalogQualityIssues } from '../lib/catalog-quality.js';
 
 const options = (values, current) => values.map(v => `<option value="${esc(v)}" ${v === current ? 'selected' : ''}>${esc(v)}</option>`).join('');
 const modalHTML = () => `<dialog class="admin-dialog" data-editor aria-labelledby="editor-title">
   <form data-product-form>
     <header class="admin-dialog-head"><div><p class="eyebrow">Ficha de producto</p><h2 id="editor-title">Editar figura</h2></div><button type="button" class="close-btn" data-editor-close aria-label="Cerrar editor">${icons.close}</button></header>
+    <div class="admin-editor-quality" data-editor-quality role="status"></div>
     <div class="admin-form-grid">
       <label class="admin-field admin-field--wide">Nombre de la figura<input name="titulo" required minlength="2" maxlength="180"></label>
       <label class="admin-field">Marca<select name="marca" required></select></label>
@@ -25,7 +27,8 @@ const modalHTML = () => `<dialog class="admin-dialog" data-editor aria-labelledb
       <label class="admin-field admin-field--wide">Descripción<textarea name="description" rows="3" maxlength="3000" placeholder="Describe detalles verificados de la figura."></textarea></label>
       <label class="admin-field">Qué incluye<textarea name="includes_text" rows="3" maxlength="3000"></textarea></label>
       <label class="admin-field">Estado de la caja<textarea name="box_note" rows="3" maxlength="3000"></textarea></label>
-      <label class="admin-field admin-field--wide">Fotos · una URL HTTPS por línea<textarea name="images" rows="3" required placeholder="https://ik.imagekit.io/..."></textarea><small>De 1 a 8 fotos. La primera es la portada. Mantén el producto centrado y evita márgenes innecesarios en la imagen.</small></label>
+      <label class="admin-field admin-field--wide">Fotos · una URL HTTPS por línea<textarea name="images" rows="3" required placeholder="https://ik.imagekit.io/..."></textarea><small>De 1 a 8 fotos. La primera es la portada. Usa la figura y edición exactas, fondo neutro y encuadre 4:5 con el producto completo y centrado. Evita márgenes dentro del archivo; las tarjetas ya añaden su espacio.</small></label>
+      <p class="admin-photo-guide admin-field--wide">Recomendado: foto frontal, otra vista y detalles de caja y accesorios. Para una figura Open, muestra su estado real. Una foto de la caja no sustituye la foto de la figura.</p>
       <div class="admin-photo-preview admin-field--wide" data-photo-preview></div>
     </div>
     <footer class="admin-dialog-foot"><p data-editor-status role="status"></p><button type="submit" class="btn btn-primary" data-product-save>Guardar cambios</button></footer>
@@ -57,7 +60,7 @@ export const admin = {
     function dashboard() {
       const active = data.products.filter(p => !p.archived);
       body.innerHTML = `<div class="admin-mode-bar"><p><span class="signal-dot" aria-hidden="true"></span>${mode === 'demo' ? '<b>Demostración</b> · Borradores locales; no se publican en la tienda.' : `<b>Sesión de propietario</b> · ${esc(user.email)}`}</p><button type="button" class="link-btn" data-admin-logout>${mode === 'demo' ? 'Salir de la demostración' : 'Cerrar sesión'}</button></div>
-      <div class="admin-metrics"><article><span>Figuras activas</span><strong>${active.length}</strong></article><article><span>Publicadas</span><strong>${active.filter(p => p.published).length}</strong></article><article><span>Stock por confirmar</span><strong>${active.filter(p => p.stock == null).length}</strong></article><article><span>Agotadas</span><strong>${active.filter(p => p.stock === 0).length}</strong></article></div>
+      <div class="admin-metrics"><article><span>Figuras activas</span><strong>${active.length}</strong></article><article><span>Publicadas</span><strong>${active.filter(p => p.published).length}</strong></article><article><span>Stock por confirmar</span><strong>${active.filter(p => p.stock == null).length}</strong></article><article><span>Fichas por completar</span><strong>${active.filter(p => catalogQualityIssues(p).length).length}</strong></article></div>
       <div class="admin-workspace"><nav class="admin-tabs" aria-label="Secciones de administración">${[['products','Inventario'],['brands','Marcas'],['home','Portada'],['content','Contenido']].map(([key,name]) => `<button type="button" data-admin-tab="${key}" ${key===tab ? 'aria-current="page" class="is-on"' : ''}>${name}</button>`).join('')}<button type="button" data-admin-export>Exportar catálogo ${icons.arrow}</button></nav><div class="admin-content" data-admin-content></div></div><p class="admin-status" data-admin-status role="status"></p>`;
       renderContent();
     }
@@ -71,15 +74,15 @@ export const admin = {
       } else if (tab === 'home') {
         target.innerHTML = `<div class="admin-section-head"><div><h2>Figuras destacadas</h2><p>Selecciona hasta 5 figuras para el carrusel principal.</p></div></div><form data-home-form><div class="admin-featured-grid">${Array.from({length:5},(_,i)=>`<label class="admin-field">Destacado ${i+1}<select name="slot${i}"><option value="">Sin figura</option>${data.products.filter(p=>!p.archived && p.published).map(p=>`<option value="${p.id}" ${data.settings.heroIds?.[i]===p.id?'selected':''}>${esc(p.titulo)} · ${esc(p.marca)}</option>`).join('')}</select></label>`).join('')}</div><button type="submit" class="btn btn-primary">Guardar destacados</button></form>`;
       } else {
-        target.innerHTML = `<div class="admin-section-head"><div><h2>Inventario</h2><p>Edita la ficha completa o archiva una figura que quieras retirar.</p></div><button type="button" class="btn btn-primary" data-admin-new>${icons.plus}Nueva figura</button></div><div class="admin-inventory-tools"><label class="admin-search"><span class="sr-only">Buscar en inventario</span>${icons.search}<input type="search" data-admin-search value="${esc(search)}" placeholder="Buscar nombre, marca o código"></label><label class="admin-field"><span class="sr-only">Estado del inventario</span><select data-admin-filter>${[['all','Figuras activas'],['published','Publicadas'],['hidden','Ocultas'],['unknown','Stock por confirmar'],['empty','Agotadas'],['archived','Archivadas']].map(([v,l])=>`<option value="${v}" ${v===filter?'selected':''}>${l}</option>`).join('')}</select></label></div><p class="admin-result-count" data-admin-count aria-live="polite"></p><div class="admin-product-list" data-admin-list></div>`;
+        target.innerHTML = `<div class="admin-section-head"><div><h2>Inventario</h2><p>Edita la ficha completa o archiva una figura que quieras retirar.</p></div><button type="button" class="btn btn-primary" data-admin-new>${icons.plus}Nueva figura</button></div><div class="admin-inventory-tools"><label class="admin-search"><span class="sr-only">Buscar en inventario</span>${icons.search}<input type="search" data-admin-search value="${esc(search)}" placeholder="Buscar nombre, marca o código"></label><label class="admin-field"><span class="sr-only">Estado del inventario</span><select data-admin-filter>${[['all','Figuras activas'],['published','Publicadas'],['hidden','Ocultas'],['unknown','Stock por confirmar'],['incomplete','Fichas por completar'],['empty','Agotadas'],['archived','Archivadas']].map(([v,l])=>`<option value="${v}" ${v===filter?'selected':''}>${l}</option>`).join('')}</select></label></div><p class="admin-result-count" data-admin-count aria-live="polite"></p><div class="admin-product-list" data-admin-list></div>`;
         renderList();
       }
     }
     function renderList() {
       const q = search.toLocaleLowerCase('es').trim();
-      const list = data.products.filter(p => (filter === 'archived' ? p.archived : !p.archived) && (!q || `${p.titulo} ${p.marca} ${p.sku}`.toLocaleLowerCase('es').includes(q)) && (filter !== 'published' || p.published) && (filter !== 'hidden' || !p.published) && (filter !== 'unknown' || p.stock == null) && (filter !== 'empty' || p.stock === 0));
+      const list = data.products.filter(p => (filter === 'archived' ? p.archived : !p.archived) && (!q || `${p.titulo} ${p.marca} ${p.sku}`.toLocaleLowerCase('es').includes(q)) && (filter !== 'published' || p.published) && (filter !== 'hidden' || !p.published) && (filter !== 'unknown' || p.stock == null) && (filter !== 'empty' || p.stock === 0) && (filter !== 'incomplete' || catalogQualityIssues(p).length > 0));
       $('[data-admin-count]',root).textContent = `${list.length} ${list.length===1?'figura':'figuras'}`;
-      $('[data-admin-list]',root).innerHTML = list.length ? list.map(p => `<article class="admin-product-row"><img src="${esc(imgUrl(p.imagenes_producto?.[0]?.url || '',160))}" alt="" loading="lazy"><div class="admin-product-name"><span>${esc(p.marca)}</span><h3>${esc(p.titulo)}</h3><p>${esc(p.sku)} · ${p.tipo==='preventa'?'Preventa':'Venta'} · ${esc(p.estado)}</p></div><div class="admin-product-price">${money(p.precio)}<span>${p.tipo==='preventa' && p.precio_reserva!=null ? `Reserva ${money(p.precio_reserva)}` : 'Precio total'}</span></div><div class="admin-product-stock"><strong>${p.stock==null?'—':p.stock}</strong><span>${p.stock==null?'Por confirmar':'unidades'}</span></div><span class="admin-publish-state ${p.published && !p.archived?'is-on':''}">${p.archived?'Archivada':p.published?'Publicada':'Oculta'}</span><div class="admin-row-actions"><button type="button" class="btn btn-secondary btn-sm" data-admin-edit="${p.id}">Editar</button><button type="button" class="link-btn" data-admin-archive="${p.id}">${p.archived?'Restaurar':'Archivar'}</button></div></article>`).join('') : '<div class="zero"><p>No hay figuras con esos criterios.</p></div>';
+      $('[data-admin-list]',root).innerHTML = list.length ? list.map(p => `<article class="admin-product-row"><img src="${esc(imgUrl(p.imagenes_producto?.[0]?.url || '',160))}" alt="" loading="lazy"><div class="admin-product-name"><span>${esc(p.marca)}</span><h3>${esc(p.titulo)}</h3><p>${esc(p.sku)} · ${p.tipo==='preventa'?'Preventa':'Venta'} · ${esc(p.estado)}</p>${catalogQualityIssues(p).length ? `<p class="admin-quality-hint">Pendiente: ${esc(catalogQualityIssues(p).slice(0,3).join(', '))}${catalogQualityIssues(p).length > 3 ? '…' : ''}</p>` : '<p class="admin-quality-hint is-complete">Ficha completa</p>'}</div><div class="admin-product-price">${money(p.precio)}<span>${p.tipo==='preventa' && p.precio_reserva!=null ? `Reserva ${money(p.precio_reserva)}` : 'Precio total'}</span></div><div class="admin-product-stock"><strong>${p.stock==null?'—':p.stock}</strong><span>${p.stock==null?'Por confirmar':'unidades'}</span></div><span class="admin-publish-state ${p.published && !p.archived?'is-on':''}">${p.archived?'Archivada':p.published?'Publicada':'Oculta'}</span><div class="admin-row-actions"><button type="button" class="btn btn-secondary btn-sm" data-admin-edit="${p.id}">Editar</button><button type="button" class="link-btn" data-admin-archive="${p.id}">${p.archived?'Restaurar':'Archivar'}</button></div></article>`).join('') : '<div class="zero"><p>No hay figuras con esos criterios.</p></div>';
     }
     function persistDemo(next) { saveDemo(next); data = next; }
     function openEditor(p) {
@@ -91,7 +94,14 @@ export const admin = {
       fields.images.value = (current.imagenes_producto||[]).map(i=>i.url).join('\n');
       $('#editor-title',root).textContent = data.products.some(p=>p.id===current.id) ? 'Editar figura' : 'Nueva figura';
       $('[data-editor-status]',root).textContent = '';
-      photoPreview(); syncReserve(); dialog.showModal();
+      photoPreview(); editorQuality(); syncReserve(); dialog.showModal();
+    }
+    function editorQuality() {
+      const fields = form.elements;
+      const draft = {stock: fields.stock.value === '' ? null : Number(fields.stock.value), imagenes_producto: fields.images.value.split('\n').map(u=>u.trim()).filter(safeImageUrl)};
+      for (const key of ['franchise','character_name','description','includes_text','box_note']) draft[key] = fields[key].value;
+      const issues = catalogQualityIssues(draft);
+      $('[data-editor-quality]',root).textContent = issues.length ? `Por completar: ${issues.join(', ')}. Añade solo información confirmada; puedes guardar el borrador y continuar después.` : 'Ficha completa: stock, datos de la figura y al menos dos fotos. Revisa que coincidan con la pieza real.';
     }
     function syncReserve() { form.elements.precio_reserva.disabled = form.elements.tipo.value !== 'preventa'; }
     function photoPreview() {
@@ -174,6 +184,7 @@ export const admin = {
     root.addEventListener('input',e=>{
       if(e.target.hasAttribute('data-admin-search')){search=e.target.value;renderList();}
       if(e.target===form.elements.images)photoPreview();
+      if(e.target.closest('[data-product-form]'))editorQuality();
     },sig);
     root.addEventListener('change',e=>{
       if(e.target.hasAttribute('data-admin-filter')){filter=e.target.value;renderList();}
@@ -181,9 +192,20 @@ export const admin = {
     },sig);
     dialog.addEventListener('cancel',e=>{if(busy)e.preventDefault();},sig);
     dialog.addEventListener('close',()=>focusBefore?.isConnected && focusBefore.focus(),sig);
+    loginView();
     (async()=>{
-      try{const session=await adminRequest('/session',{signal:ac.signal});if(!alive())return;user=acceptSession(session);mode='live';await loadLive();if(alive())dashboard();}
-      catch(error){if(alive())loginView(error.status===401?'':error.message);}
+      let restoring = false;
+      try {
+        const session = await adminRequest('/session',{signal:ac.signal});
+        if (!alive() || mode !== 'login' || busy) return;
+        user = acceptSession(session); restoring = true; busy = true;
+        await loadLive();
+        if (alive()) { mode = 'live'; dashboard(); }
+      } catch(error) {
+        if (alive() && (restoring || (mode === 'login' && !busy))) {
+          clearSession(); mode = 'login'; loginView(error.status === 401 ? '' : error.message);
+        }
+      } finally { if (restoring) busy = false; }
     })();
     return ()=>{ac.abort();clearSession();if(dialog.open)dialog.close();};
   }

@@ -11,7 +11,14 @@ const K = {
 const V3 = { fav: "grooty-v3-favorites", sel: "grooty-v3-selection" };
 
 const validIds = new Set(products.map((p) => p.id));
+const stockById = new Map(products.map((p) => [p.id, p.stock]));
 const MAX_QTY = 9; // tope técnico de la interfaz; no es un dato de stock
+export function selectionLimit(id) {
+  id = Number(id);
+  if (!validIds.has(id)) return 0;
+  const stock = stockById.get(id);
+  return Number.isInteger(stock) ? Math.max(0, Math.min(MAX_QTY, stock)) : MAX_QTY;
+}
 
 function read(key, fallback) {
   try {
@@ -42,7 +49,7 @@ const clean = {
   sel: (o) => {
     const out = {};
     Object.entries(o && typeof o === "object" ? o : {}).forEach(([id, q]) => {
-      const n = Math.min(MAX_QTY, Math.floor(Number(q)));
+      const n = Math.min(selectionLimit(id), Math.floor(Number(q)));
       if (validIds.has(Number(id)) && n > 0) out[id] = n;
     });
     return out;
@@ -97,7 +104,9 @@ export const selectionCount = () => Object.values(state.selection).reduce((a, b)
 export const selectionIds = () => Object.keys(state.selection).map(Number);
 export const maxQty = MAX_QTY;
 export function setQty(id, qty) {
-  qty = Math.min(MAX_QTY, Math.floor(qty));
+  id = Number(id);
+  if (!validIds.has(id) || !Number.isFinite(Number(qty))) return;
+  qty = Math.min(selectionLimit(id), Math.floor(Number(qty)));
   if (qty <= 0) delete state.selection[id];
   else state.selection[id] = qty;
   write(K.sel, state.selection);

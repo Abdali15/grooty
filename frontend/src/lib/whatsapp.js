@@ -7,7 +7,12 @@ import { toast } from "../components/toast.js";
 export const waDirectReady = () => !!SITE.whatsappNumber;
 export const waReady = () => waDirectReady() || !!SITE.whatsappGroup;
 /** Si falta un chat directo se usa el grupo oficial; sin ningún canal, se ofrece copiar. */
-export const waLabel = (label) => (waReady() || import.meta.env.DEV ? label : "Copiar mensaje");
+export const waLabel = (label) => waDirectReady() ? label : SITE.whatsappGroup ? "Consultar en el grupo" : "Copiar mensaje";
+export const waContactNote = () => waDirectReady()
+  ? "Se abrirá el chat privado con tu consulta. Tú decides cuándo enviarla."
+  : SITE.whatsappGroup
+    ? "WhatsApp abre el grupo de la tienda. Tu consulta se copia para pegarla allí y será visible para sus integrantes."
+    : "Prepararemos tu consulta para copiarla. También puedes contactar con la tienda por Instagram.";
 
 const origin = () => location.origin;
 

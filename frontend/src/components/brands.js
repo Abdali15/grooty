@@ -14,7 +14,7 @@ export function brandMarquee() {
         </a>`
       )
       .join("")}</div>`;
-  return `<div class="marquee" role="region" aria-label="Marcas disponibles"><div class="mq-track">${set(false)}${set(true)}${set(true)}</div></div>`;
+  return `<div class="marquee-shell"><div class="marquee" role="region" aria-label="Marcas disponibles"><div class="mq-track">${set(false)}${set(true)}${set(true)}</div></div><label class="marquee-pause"><input type="checkbox" aria-label="Pausar animación de marcas"><span>Pausar</span></label></div>`;
 }
 
 const TONES = { mafex: "deep", "marvel-legends": "sage", "sh-figuarts": "olive", revoltech: "paper", inart: "sage", yolopark: "olive" };

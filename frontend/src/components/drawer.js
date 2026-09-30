@@ -3,12 +3,12 @@ import { money } from "../lib/format.js";
 import { icons } from "../lib/icons.js";
 import { thumb } from "../lib/images.js";
 import { getProduct, latest } from "../data.js";
-import { PREORDER_STEPS } from "../config.js";
-import { favoriteIds, qtyOf, maxQty, setQty, selectionCount, on, snapshotSelection, restoreSelection, clearSelection, toggleFavorite, removeFromSelection } from "../store.js";
+import { PREORDER_STEPS, SITE } from "../config.js";
+import { favoriteIds, qtyOf, selectionLimit, setQty, selectionCount, on, snapshotSelection, restoreSelection, clearSelection, toggleFavorite, removeFromSelection } from "../store.js";
 import { summarize } from "../lib/cart.js";
 import { openOverlay, overlayPanel, overlayKind, closeOverlay } from "./overlay.js";
 import { toast } from "./toast.js";
-import { waLabel, sendWhatsApp, selectionMessage, copyText } from "../lib/whatsapp.js";
+import { waLabel, waContactNote, waDirectReady, selectionMessage, copyText } from "../lib/whatsapp.js";
 import { track } from "../analytics.js";
 
 let tab = "selection";
@@ -27,7 +27,7 @@ function selectionLine(l) {
       <div class="qty" role="group" aria-label="Cantidad de ${esc(p.name)}">
         <button type="button" data-qty-dec="${p.id}" aria-label="Restar una unidad">${icons.minus}</button>
         <output aria-live="polite" data-qty-out="${p.id}">${qty}</output>
-        <button type="button" data-qty-inc="${p.id}" aria-label="Sumar una unidad" ${qty >= maxQty ? "disabled" : ""}>${icons.plus}</button>
+        <button type="button" data-qty-inc="${p.id}" aria-label="Sumar una unidad" ${qty >= selectionLimit(p.id) ? "disabled" : ""}>${icons.plus}</button>
       </div>
     </div>
     <button class="line-remove" type="button" data-remove="${p.id}" aria-label="Quitar ${esc(p.name)}">${icons.trash}</button>
@@ -40,7 +40,7 @@ function favoriteLine(p) {
       <p class="card-brand">${esc(p.brand)}${p.isPre ? ' <span class="mini-tag">Preventa</span>' : ""}</p>
       <a class="line-title" href="${p.url}" data-nav>${esc(p.name)}</a>
       <p class="line-price">${money(p.precio)}</p>
-      <button class="mini-btn" type="button" data-add="${p.id}">${icons.plus}<span>Mi selección${qtyOf(p.id) ? ` (${qtyOf(p.id)})` : ""}</span></button>
+      <button class="mini-btn" type="button" ${p.stock === 0 ? 'disabled' : ''} data-add="${p.id}">${icons.plus}<span>${p.stock === 0 ? 'Agotado' : `Mi selección${qtyOf(p.id) ? ` (${qtyOf(p.id)})` : ''}`}</span></button>
     </div>
     <button class="line-remove" type="button" data-unfav="${p.id}" aria-label="Quitar ${esc(p.name)} de favoritos">${icons.close}</button>
   </li>`;
@@ -88,6 +88,8 @@ function render(animateId = null) {
     foot.innerHTML = sel.lines.length
       ? `${summaryHTML(sel)}
          <button class="btn btn-primary btn-block" type="button" data-wa="selection">${icons.whatsapp}<span>${waLabel("Consultar selección por WhatsApp")}</span></button>
+         <p class="wa-channel-note">${esc(waContactNote())}</p>
+         ${!waDirectReady() ? `<a class="link-btn" href="${esc(SITE.instagram)}" target="_blank" rel="noopener">${icons.instagram}Consulta privada por Instagram</a>` : ''}
          <div class="foot-links"><button class="link-btn" type="button" data-copy-selection>${icons.copy}Copiar selección</button><button class="link-btn link-btn--danger" type="button" data-clear-selection>Vaciar</button></div>`
       : "";
   } else {

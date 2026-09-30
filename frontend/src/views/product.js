@@ -3,13 +3,13 @@ import { money } from "../lib/format.js";
 import { icons } from "../lib/icons.js";
 import { stage, imgUrl, imgSrcset, thumb, probeWithin } from "../lib/images.js";
 import { productFromPath, brandBySlug, moreFromBrand, related, getProduct } from "../data.js";
-import { PREORDER_POLICY } from "../config.js";
+import { PREORDER_POLICY, SITE } from "../config.js";
 import { badge, heartButton, rail } from "../components/card.js";
 import { breadcrumb, keepExploring } from "../components/blocks.js";
 import { sectionHead } from "../components/card.js";
 import { openOverlay, closeOverlay, overlayPanel } from "../components/overlay.js";
 import { recentIds, pushRecent } from "../store.js";
-import { waLabel, copyText } from "../lib/whatsapp.js";
+import { waLabel, waDirectReady, waContactNote, copyText } from "../lib/whatsapp.js";
 import { toast } from "../components/toast.js";
 import { track } from "../analytics.js";
 import { notFoundHTML } from "./notfound.js";
@@ -42,6 +42,7 @@ function info(p) {
     ${p.line ? `<p class="pdp-line">${esc(p.line)}</p>` : ""}
     <p class="pdp-price-label">Precio total de la figura</p>
     <div class="pdp-price"><strong>${money(p.precio)}</strong>${p.isPre && p.precio_reserva != null ? `<span class="pdp-reserve">Reserva ${money(p.precio_reserva)}</span>` : ""}</div>
+    <p class="pdp-availability ${p.stock === 0 ? 'is-empty' : ''}">${p.stock === 0 ? 'Agotado · puedes consultar otras opciones' : Number.isInteger(p.stock) ? `${p.stock} ${p.stock === 1 ? 'unidad disponible' : 'unidades disponibles'}` : 'Disponibilidad por confirmar con la tienda'}</p>
     ${
       p.isPre
         ? `<div class="pre-box"><p class="pre-box-title">Preventa</p>
@@ -54,10 +55,12 @@ function info(p) {
       <button class="btn btn-secondary btn-lg" type="button" data-wa="product" data-id="${p.id}">${icons.whatsapp}<span>${waLabel("Consultar por WhatsApp")}</span></button>
       ${heartButton(p, "fav-btn--inline fav-btn--lg")}
     </div>
+    <div class="pdp-contact-note"><p>${esc(waContactNote())}</p>${!waDirectReady() ? `<a class="link-btn" href="${esc(SITE.instagram)}" target="_blank" rel="noopener">${icons.instagram}Consulta privada por Instagram</a>` : ''}</div>
     <dl class="meta-row meta-row--lg"><div><dt>Marca</dt><dd>${esc(p.brand)}</dd></div>${p.line ? `<div><dt>Línea / edición</dt><dd>${esc(p.line)}</dd></div>` : ""}${Number.isInteger(p.stock) ? `<div><dt>Stock</dt><dd>${p.stock===0 ? "Agotado" : `${p.stock} ${p.stock===1 ? "unidad" : "unidades"}`}</dd></div>` : ""}${p.franchise ? `<div><dt>Franquicia</dt><dd>${esc(p.franchise)}</dd></div>` : ""}${p.character_name ? `<div><dt>Personaje</dt><dd>${esc(p.character_name)}</dd></div>` : ""}<div><dt>Fotos publicadas</dt><dd>${p.images.length}</dd></div><div><dt>Estado</dt><dd>${esc(p.estado)}</dd></div><div><dt>Modalidad</dt><dd>${p.isPre ? "Preventa" : "Venta"}</dd></div><div><dt>Código</dt><dd>${esc(p.sku)}</dd></div></dl>
     ${p.description ? `<section class="pdp-details"><h2 class="h-mini">Sobre esta figura</h2><p>${esc(p.description)}</p></section>` : ""}
     ${p.includes_text ? `<section class="pdp-details"><h2 class="h-mini">Qué incluye</h2><p>${esc(p.includes_text)}</p></section>` : ""}
     ${p.box_note ? `<section class="pdp-details"><h2 class="h-mini">Estado de la caja</h2><p>${esc(p.box_note)}</p></section>` : ""}
+    ${!p.includes_text || !p.box_note ? '<p class="pdp-note">Consulta los accesorios incluidos y el estado de la caja antes de reservar o comprar.</p>' : ''}
     <p class="pdp-note">Consulta el costo y el plazo de entrega para tu ubicación. Añadir una figura a Mi selección no confirma la compra ni la reserva.</p>
     <ol class="how"><li><span>1</span>Añade la figura a Mi selección</li><li><span>2</span>Consúltala por WhatsApp</li><li><span>3</span>Coordinas pago y entrega con la tienda</li></ol>
     <button class="link-btn" type="button" data-copy-link>${icons.share}Copiar enlace de esta figura</button>
@@ -83,7 +86,7 @@ export const product = {
       </div>
       <div class="pdp-bar" role="region" aria-label="Acciones rápidas">
         <div class="pdp-bar-price"><strong>${money(p.precio)}</strong>${p.isPre && p.precio_reserva != null ? `<span>Reserva ${money(p.precio_reserva)}</span>` : ""}</div>
-        <button class="btn btn-primary" type="button" data-add="${p.id}">${icons.plus}<span>Mi selección</span></button>
+        <button class="btn btn-primary" type="button" ${p.stock === 0 ? 'disabled' : ''} data-add="${p.id}">${icons.plus}<span>${p.stock === 0 ? 'Agotado' : 'Mi selección'}</span></button>
         <button class="icon-btn icon-btn--solid" type="button" data-wa="product" data-id="${p.id}" aria-label="${waLabel("Consultar por WhatsApp")}">${icons.whatsapp}</button>
       </div>
       ${

@@ -24,3 +24,11 @@ En el panel entra a **Contenido**. Puedes definir un número directo verificado,
 Con número directo, las consultas abren `wa.me` con el texto. Sin número, se usa el grupo publicado en el código de la tienda original: se abre WhatsApp y el mensaje se copia para pegarlo. Un grupo no permite precargar un mensaje como un chat individual y la consulta es visible para sus miembros; Instagram ofrece la alternativa privada. No se inventó un número telefónico.
 
 Los cambios de Contenido en modo demostración no se publican. Con el backend conectado, `/api/admin/settings` guarda la configuración y `/api/store/catalog` la entrega en `settings` al cargar la tienda.
+
+## Completar las fichas
+
+En **Inventario → Fichas por completar** encontrarás los productos sin stock confirmado, franquicia, personaje, descripción, accesorios, estado de caja o una segunda foto. El editor muestra qué queda pendiente mientras escribes. Es una recomendación de calidad, no una validación de autenticidad ni una obligación de inventar datos.
+
+Deja el stock vacío si todavía no está confirmado; usa 0 solo para agotado. Las cantidades de Mi selección respetan el stock informado y tienen un tope técnico de 9 unidades por figura. Las consultas siguen requiriendo confirmación de la tienda.
+
+Para homogeneizar las fotos, utiliza el producto y edición exactos, encuadre 4:5 y fondo neutro, con el objeto completo y centrado. Publica frontal, otra vista y detalles de accesorios/caja; las figuras Open necesitan fotos de su estado real. Las tarjetas ya normalizan el lienzo y mantienen las proporciones, pero no pueden igualar el tamaño de los objetos dentro de fotos con márgenes distintos.

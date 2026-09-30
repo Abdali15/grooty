@@ -1,5 +1,5 @@
 import { $, $$, motionAllowed } from "./lib/dom.js";
-import { addToSelection, toggleFavorite, isFavorite, on } from "./store.js";
+import { addToSelection, toggleFavorite, isFavorite, qtyOf, selectionLimit, on } from "./store.js";
 import { getProduct, randomProduct, productFromPath } from "./data.js";
 import { toast } from "./components/toast.js";
 import { openQuickView } from "./components/quickview.js";
@@ -37,6 +37,7 @@ export function initActions() {
       const p = getProduct(t.dataset.add);
       if (!p) return;
       if (p.stock === 0) return toast("Esta figura está agotada. Consulta otras piezas del catálogo.");
+      if (qtyOf(p.id) >= selectionLimit(p.id)) return toast(Number.isInteger(p.stock) && p.stock <= 9 ? "Ya seleccionaste el stock disponible de esta figura." : "Llegaste al límite de 9 unidades por figura en esta selección. Consulta otras cantidades con la tienda.");
       addToSelection(p.id);
       track("add_selection", { id: p.id });
       flash(t, "is-done", 950);

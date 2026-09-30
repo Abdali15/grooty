@@ -2,6 +2,7 @@ import { SITE } from "../config.js";
 import { icons } from "../lib/icons.js";
 import { $, $$ } from "../lib/dom.js";
 import { favoriteIds, selectionCount, on } from "../store.js";
+import { waDirectReady } from "../lib/whatsapp.js";
 
 const NAV = [
   ["/catalogo", "Catálogo"],
@@ -25,6 +26,13 @@ export function renderShell() {
         ${NAV.map(([href, label]) => `<a href="${href}" data-nav class="nav-link">${label}</a>`).join("")}
       </nav>
       <div class="nav-actions">
+        <div class="compact-menu">
+          <button type="button" class="icon-btn menu-toggle" aria-label="Abrir menú principal" aria-expanded="false" aria-controls="compact-navigation" data-menu-toggle><span aria-hidden="true" class="menu-lines"></span></button>
+          <nav id="compact-navigation" class="compact-navigation" aria-label="Principal en móvil y tablet" hidden>
+            <a href="/" data-nav class="nav-link">Inicio</a>
+            ${NAV.map(([href, label]) => `<a href="${href}" data-nav class="nav-link">${label}</a>`).join("")}
+          </nav>
+        </div>
         <a href="/admin" data-nav class="icon-btn admin-link" aria-label="Administrar tienda" title="Panel de administración">${icons.settings}<span>Admin</span></a>
         <button class="search-pill" type="button" data-search-open aria-label="Buscar figuras (Ctrl K)">
           ${icons.search}<span class="search-pill-text">Buscar figuras</span><kbd class="kbd">Ctrl K</kbd>
@@ -41,7 +49,7 @@ export function renderShell() {
     <button type="button" data-collection="favorites">${icons.heart}<span class="bn-count" data-fav-count hidden></span><span>Favoritos</span></button>
     <button type="button" data-collection="selection">${icons.bag}<span class="bn-count" data-sel-count hidden></span><span>Selección</span></button>
   </nav>
-  <button type="button" class="contact-float" data-wa="general" aria-label="Abrir WhatsApp de Grooty Store">${icons.whatsapp}<span>WhatsApp</span></button>`;
+  <button type="button" class="contact-float" data-wa="general" aria-label="${waDirectReady() ? 'Abrir chat privado de Grooty Store' : 'Abrir grupo de WhatsApp de Grooty Store'}">${icons.whatsapp}<span>${waDirectReady() ? 'WhatsApp' : 'Grupo de WhatsApp'}</span></button>`;
 }
 
 /* Logo original con alternativa tipográfica si el archivo no carga. */
@@ -77,6 +85,7 @@ export function updateCounts() {
 }
 
 export function updateActive(pathname) {
+  closeCompactMenu();
   $$(".nav-link").forEach((a) => {
     const h = a.getAttribute("href");
     const active = pathname === h || pathname.startsWith(h + "/") || (h === "/marcas" && pathname.startsWith("/marcas"));
@@ -91,7 +100,46 @@ export function updateActive(pathname) {
   });
 }
 
+export function closeCompactMenu({ restoreFocus = false } = {}) {
+  const button = $("[data-menu-toggle]");
+  const nav = $("#compact-navigation");
+  if (!button || !nav || nav.hidden) return;
+  nav.hidden = true;
+  button.setAttribute("aria-expanded", "false");
+  button.setAttribute("aria-label", "Abrir menú principal");
+  if (restoreFocus) button.focus();
+}
+
+export function initCompactMenu() {
+  const wrapper = $(".compact-menu");
+  const button = $("[data-menu-toggle]");
+  const nav = $("#compact-navigation");
+  if (!wrapper || !button || !nav) return;
+  button.addEventListener("click", () => {
+    const open = nav.hidden;
+    nav.hidden = !open;
+    button.setAttribute("aria-expanded", String(open));
+    button.setAttribute("aria-label", open ? "Cerrar menú principal" : "Abrir menú principal");
+  });
+  document.addEventListener("click", (e) => {
+    if (!wrapper.contains(e.target) || e.target.closest(".compact-navigation a")) closeCompactMenu();
+  });
+  wrapper.addEventListener("focusout", () => queueMicrotask(() => {
+    if (!wrapper.contains(document.activeElement)) closeCompactMenu();
+  }));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !nav.hidden) {
+      e.preventDefault();
+      closeCompactMenu({ restoreFocus: true });
+    }
+  });
+  matchMedia("(min-width: 1024px)").addEventListener("change", (e) => {
+    if (e.matches) closeCompactMenu();
+  });
+}
+
 export function initHeader() {
+  initCompactMenu();
   updateCounts();
   on("favorites", updateCounts);
   on("selection", updateCounts);

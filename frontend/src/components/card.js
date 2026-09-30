@@ -4,7 +4,7 @@ import { icons } from "../lib/icons.js";
 import { stage } from "../lib/images.js";
 import { isFavorite } from "../store.js";
 
-const SIZES = "(min-width:1200px) 300px, (min-width:768px) 31vw, 47vw";
+const SIZES = "(min-width:1200px) 300px, (min-width:768px) 31vw, (max-width:359px) 90vw, 47vw";
 
 export function badge(p) {
   if (p.isPre) return `<span class="badge badge--pre">Preventa</span>`;
@@ -30,9 +30,8 @@ export function productCard(p, { eager = false, sizes = SIZES, extra = "" } = {}
   return `<article class="card ${extra}" data-id="${p.id}" data-tone="${tone}">
     <div class="card-tile">
       <a class="card-cover" href="${p.url}" data-nav data-card tabindex="-1" aria-hidden="true"></a>
-      ${stage(p.image, "", { sizes, eager, canvas: true, probe: false })}
-      ${badge(p)}
-      ${heartButton(p)}
+      <div class="card-tools">${badge(p)}${heartButton(p)}</div>
+      <div class="card-media">${stage(p.image, "", { sizes, eager, canvas: true, probe: false })}</div>
       <button class="quick-btn" type="button" data-quick="${p.id}" aria-label="Vista rápida: ${esc(p.name)}"><span class="quick-ico">${icons.eye}</span><span class="quick-txt">Vista rápida</span></button>
     </div>
     <div class="card-body">
