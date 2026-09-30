@@ -11,9 +11,11 @@ import { brandsPage } from "./views/brands.js";
 import { product } from "./views/product.js";
 import { help } from "./views/help.js";
 import { admin } from "./views/admin.js";
+import { figureRequest } from "./views/figure-request.js";
 import { notfound } from "./views/notfound.js";
 
 defineRoutes([
+  { name: "figure-request", match: (p) => p === "/a-pedido" ? {} : null, view: figureRequest },
   { name: "admin", match: (p) => p === "/admin" ? {} : null, view: admin },
   { name: "home", match: (p) => (p === "/" ? {} : null), view: home },
   { name: "catalog", match: (p) => (p === "/catalogo" ? {} : null), view: catalogPage },

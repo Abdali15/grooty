@@ -7,6 +7,7 @@ const NAV = [
   ["/catalogo", "Catálogo"],
   ["/preventas", "Preventas"],
   ["/marcas", "Marcas"],
+  ["/a-pedido", "A pedido"],
   ["/ayuda", "Ayuda"]
 ];
 
@@ -24,6 +25,7 @@ export function renderShell() {
         ${NAV.map(([href, label]) => `<a href="${href}" data-nav class="nav-link">${label}</a>`).join("")}
       </nav>
       <div class="nav-actions">
+        <a href="/admin" data-nav class="icon-btn admin-link" aria-label="Administrar tienda" title="Panel de administración">${icons.settings}<span>Admin</span></a>
         <button class="search-pill" type="button" data-search-open aria-label="Buscar figuras (Ctrl K)">
           ${icons.search}<span class="search-pill-text">Buscar figuras</span><kbd class="kbd">Ctrl K</kbd>
         </button>

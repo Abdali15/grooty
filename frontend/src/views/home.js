@@ -9,6 +9,7 @@ import { recentIds } from "../store.js";
 import { SITE } from "../config.js";
 import { waLabel } from "../lib/whatsapp.js";
 import { probeWithin } from "../lib/images.js";
+import { figureRequestPanel, mountFigureRequest } from "../components/figure-request.js";
 
 export const home = {
   render() {
@@ -28,6 +29,7 @@ export const home = {
           <a href="/preventas" data-nav><strong>${preorders.length}</strong><span>Preventas para descubrir</span>${icons.arrow}</a>
           <a href="/marcas" data-nav><strong>${brands.length}</strong><span>Marcas de colección</span>${icons.arrow}</a>
         </nav>
+        <a href="/a-pedido" data-nav class="request-teaser"><span>${icons.search} ¿Buscas una figura que no está aquí?</span><strong>Consúltanos a pedido ${icons.arrow}</strong></a>
       </div>
       <div class="band band--sage band--marquee">${brandMarquee()}</div>
 
@@ -76,6 +78,8 @@ export const home = {
         </div>
       </section>
 
+      <div class="container request-home" id="figuras-a-pedido">${figureRequestPanel()}</div>
+
       ${
         seen.length
           ? `<section class="band band--paper" aria-labelledby="seen-title"><div class="container">${sectionHead({ title: '<span id="seen-title">Vuelve a verlas</span>', sub: "Las últimas figuras que revisaste." })}${rail(seen, { label: "Vistas recientemente" })}</div></section>`
@@ -98,6 +102,8 @@ export const home = {
   },
   mount(root, ctx) {
     probeWithin(root);
-    return mountHero(root, { intro: true });
+    const stopHero = mountHero(root, { intro: true });
+    const stopRequest = mountFigureRequest(root);
+    return () => { stopHero?.(); stopRequest(); };
   }
 };

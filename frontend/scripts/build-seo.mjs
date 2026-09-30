@@ -25,6 +25,7 @@ const money = (n) => new Intl.NumberFormat("es-PE", { style: "currency", currenc
 const ogImg = (u) => (/^https:\/\/ik\.imagekit\.io\//.test(u) ? `${u}${u.includes("?") ? "&" : "?"}tr=w-1000,q-80,f-jpg` : u);
 
 const routes = []; // { path, title, description, image?, ld?, private? }
+routes.push({ path: "/a-pedido", title: "Figuras a pedido · Grooty Store", description: "Consulta si podemos conseguir la figura que buscas. Confirma disponibilidad, precio y plazo con Grooty Store." });
 routes.push({ path: "/admin", title: "Administración · Grooty Store", description: "Acceso de propietarios.", private: true });
 routes.push({ path: "/catalogo", title: "Catálogo · Grooty Store", description: `Catálogo de figuras de colección de Grooty Store: ${data.length} piezas.` });
 routes.push({ path: "/preventas", title: "Preventas · Grooty Store", description: "Figuras en preventa: reserva con el monto indicado. Condiciones claras." });

@@ -6,6 +6,7 @@ import "./styles/views.css";
 import "./styles/motion.css";
 import "./styles/future.css";
 import "./styles/admin.css";
+import "./styles/request.css";
 
 import { loadPublicCatalog } from "./lib/catalog-source.js";
 
