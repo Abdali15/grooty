@@ -14,6 +14,7 @@ import { toast } from "../components/toast.js";
 import { track } from "../analytics.js";
 import { notFoundHTML } from "./notfound.js";
 import { brands } from "../data.js";
+import { purchaseDetails } from "../components/purchase-details.js";
 
 export const prefetchProduct = () => import("./product-gallery.js");
 
@@ -24,13 +25,17 @@ function gallery(p) {
   const sizes = "(min-width:1024px) 640px, 100vw";
   const one = (u, i) =>
     `<div class="gallery-slide card-tile" data-tone="${tone}" data-zoom-open="${i}" role="button" tabindex="0" aria-label="Ampliar foto ${i + 1}">${stage(u, alt(p), { sizes, eager: i === 0, widths: [640, 960, 1280, 1600], vtMain: i === 0 })}<span class="zoom-hint" aria-hidden="true">${icons.zoom}</span></div>`;
-  if (p.images.length <= 1) return `<div class="gallery">${one(p.image, 0)}${badge(p)}</div>`;
+  const help = `<div class="gallery-help"><p>Imágenes publicadas por la tienda. Toca una foto para ampliarla.</p><button type="button" class="link-btn" data-wa="product-details" data-id="${p.id}">${icons.zoom}${waDirectReady() ? 'Pedir fotos y detalles' : 'Pedir fotos en el grupo de WhatsApp'}</button></div>`;
+  if (p.images.length <= 1) return `<div class="gallery"><div class="gallery-main">${one(p.image, 0)}${badge(p)}</div>${help}</div>`;
   return `<div class="gallery">
-    <div class="swiper gallery-swiper"><div class="swiper-wrapper">${p.images.map((u, i) => `<div class="swiper-slide">${one(u, i)}</div>`).join("")}</div>
-      <div class="swiper-pagination"></div></div>
-    ${badge(p)}
-    <div class="gallery-nav"><button class="round-btn" type="button" data-g-prev aria-label="Foto anterior">${icons.arrowLeft}</button><button class="round-btn" type="button" data-g-next aria-label="Foto siguiente">${icons.arrow}</button></div>
+    <div class="gallery-main">
+      <div class="swiper gallery-swiper"><div class="swiper-wrapper">${p.images.map((u, i) => `<div class="swiper-slide">${one(u, i)}</div>`).join("")}</div></div>
+      ${badge(p)}
+      <div class="gallery-nav"><button class="round-btn" type="button" data-g-prev aria-label="Foto anterior">${icons.arrowLeft}</button><button class="round-btn" type="button" data-g-next aria-label="Foto siguiente">${icons.arrow}</button></div>
+    </div>
+    <div class="swiper-pagination"></div>
     <div class="thumbs" role="group" aria-label="Fotos">${p.images.map((u, i) => `<button class="thumb-btn ${i === 0 ? "is-on" : ""}" type="button" data-thumb="${i}" aria-label="Ver foto ${i + 1}" aria-current="${i === 0}">${thumb(u, 160)}</button>`).join("")}</div>
+    ${help}
   </div>`;
 }
 
@@ -58,11 +63,7 @@ function info(p) {
     <div class="pdp-contact-note"><p>${esc(waContactNote())}</p>${!waDirectReady() ? `<a class="link-btn" href="${esc(SITE.instagram)}" target="_blank" rel="noopener">${icons.instagram}Consulta privada por Instagram</a>` : ''}</div>
     <dl class="meta-row meta-row--lg"><div><dt>Marca</dt><dd>${esc(p.brand)}</dd></div>${p.line ? `<div><dt>Línea / edición</dt><dd>${esc(p.line)}</dd></div>` : ""}${Number.isInteger(p.stock) ? `<div><dt>Stock</dt><dd>${p.stock===0 ? "Agotado" : `${p.stock} ${p.stock===1 ? "unidad" : "unidades"}`}</dd></div>` : ""}${p.franchise ? `<div><dt>Franquicia</dt><dd>${esc(p.franchise)}</dd></div>` : ""}${p.character_name ? `<div><dt>Personaje</dt><dd>${esc(p.character_name)}</dd></div>` : ""}<div><dt>Fotos publicadas</dt><dd>${p.images.length}</dd></div><div><dt>Estado</dt><dd>${esc(p.estado)}</dd></div><div><dt>Modalidad</dt><dd>${p.isPre ? "Preventa" : "Venta"}</dd></div><div><dt>Código</dt><dd>${esc(p.sku)}</dd></div></dl>
     ${p.description ? `<section class="pdp-details"><h2 class="h-mini">Sobre esta figura</h2><p>${esc(p.description)}</p></section>` : ""}
-    ${p.includes_text ? `<section class="pdp-details"><h2 class="h-mini">Qué incluye</h2><p>${esc(p.includes_text)}</p></section>` : ""}
-    ${p.box_note ? `<section class="pdp-details"><h2 class="h-mini">Estado de la caja</h2><p>${esc(p.box_note)}</p></section>` : ""}
-    ${!p.includes_text || !p.box_note ? '<p class="pdp-note">Consulta los accesorios incluidos y el estado de la caja antes de reservar o comprar.</p>' : ''}
-    <p class="pdp-note">Consulta el costo y el plazo de entrega para tu ubicación. Añadir una figura a Mi selección no confirma la compra ni la reserva.</p>
-    <ol class="how"><li><span>1</span>Añade la figura a Mi selección</li><li><span>2</span>Consúltala por WhatsApp</li><li><span>3</span>Coordinas pago y entrega con la tienda</li></ol>
+    ${purchaseDetails(p)}
     <button class="link-btn" type="button" data-copy-link>${icons.share}Copiar enlace de esta figura</button>
   </div>`;
 }
@@ -110,7 +111,9 @@ export const product = {
     const ac = new AbortController();
     const sig = { signal: ac.signal };
     let sw = null;
-    if (p.images.length > 1) import("./product-gallery.js").then((m) => (sw = m.initGallery(root))).catch(() => {});
+    if (p.images.length > 1) import("./product-gallery.js").then((m) => {
+      if (!ac.signal.aborted) sw = m.initGallery(root);
+    }).catch(() => {});
 
     const open = (i) => openLightbox(p, i, sw);
     root.addEventListener("click", (e) => {
@@ -125,7 +128,7 @@ export const product = {
         open(Number(z.dataset.zoomOpen));
       }
     }, sig);
-    return () => ac.abort();
+    return () => { ac.abort(); sw?.destroy(true, true); };
   }
 };
 

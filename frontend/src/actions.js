@@ -6,7 +6,7 @@ import { openQuickView } from "./components/quickview.js";
 import { openCollection } from "./components/drawer.js";
 import { openPalette } from "./components/palette.js";
 import { isOverlayOpen } from "./components/overlay.js";
-import { sendWhatsApp, productMessage, selectionMessage, generalMessage } from "./lib/whatsapp.js";
+import { sendWhatsApp, productMessage, productDetailsMessage, selectionMessage, generalMessage } from "./lib/whatsapp.js";
 import { navigate, currentPath } from "./router.js";
 import { prefetchProduct } from "./views/product.js";
 import { track } from "./analytics.js";
@@ -67,9 +67,10 @@ export function initActions() {
     }
     if (t.dataset.wa) {
       e.preventDefault();
-      if (t.dataset.wa === "product") {
+      if (t.dataset.wa === "product" || t.dataset.wa === "product-details") {
         const p = getProduct(t.dataset.id);
-        if (p) sendWhatsApp(() => productMessage(p), "product");
+        const details = t.dataset.wa === "product-details";
+        if (p) sendWhatsApp(() => details ? productDetailsMessage(p) : productMessage(p), details ? "product_details" : "product");
       } else if (t.dataset.wa === "selection") sendWhatsApp((links) => selectionMessage({ links }), "selection");
       else sendWhatsApp(() => generalMessage(), "general");
       return;

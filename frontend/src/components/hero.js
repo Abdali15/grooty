@@ -7,7 +7,7 @@ import { badge } from "./card.js";
 import { motion, EASE } from "../motion/index.js";
 
 const SALE_TONES = ["sage", "olive", "dark"];
-const AUTOPLAY_MS = 6500;
+const AUTOPLAY_MS = 8500;
 
 export function heroHTML() {
   const list = heroProducts(5);
@@ -29,7 +29,7 @@ export function heroHTML() {
           <p class="hero-brand"><span class="mask"><span class="mask-in">${esc(p.brand)}</span></span></p>
           <p class="hero-title" data-hero-title>${esc(p.name)}</p>
           ${p.line ? `<p class="hero-line">${esc(p.line)}</p>` : ""}
-          <div class="hero-meta">${badge(p)}<span class="hero-sku">${esc(p.stock === 0 ? "Agotado" : p.isPre ? "Reserva tu pieza" : "Disponible en catálogo")}</span></div>
+          <div class="hero-meta">${badge(p)}<span class="hero-sku">${esc(p.stock === 0 ? "Agotado" : p.isPre ? "Consulta esta preventa" : Number.isInteger(p.stock) ? "Stock informado" : "Consulta disponibilidad")}</span></div>
           <div class="hero-price"><strong>${money(p.precio)}</strong>${p.isPre && p.precio_reserva != null ? `<span>Reserva ${money(p.precio_reserva)}</span>` : ""}</div>
           <div class="hero-actions">
             <a class="btn btn-hero" href="${p.url}" data-nav data-magnetic>Ver figura ${icons.arrow}</a>
@@ -71,18 +71,36 @@ export function mountHero(root, { intro = false } = {}) {
   const len = slides.length;
   const ac = new AbortController();
   const sig = { signal: ac.signal };
-  const anim = motionAllowed();
-  const flags = { hover: false, focus: false, drag: false, hidden: document.hidden, user: false, off: false };
+  let anim = motionAllowed();
+  const flags = { hover: false, focus: false, drag: false, hidden: document.hidden, user: len <= 1, off: false };
   let idx = 0;
   let busy = false;
   const timeline = [];
+  let introTimeline = null;
+  hero.style.setProperty('--hero-wait', `${AUTOPLAY_MS}ms`);
 
   hero.classList.toggle("is-static", !anim);
   const toggleBtn = $("[data-hero-toggle]", hero);
-  if (!anim) toggleBtn.hidden = true;
+  toggleBtn.hidden = !anim || len <= 1;
+  if (len <= 1) $('.hero-ui',hero).hidden = true;
 
   const paused = () => Object.values(flags).some(Boolean);
   const syncPause = () => hero.classList.toggle("is-paused", paused() || !anim);
+  const pauseByUser = () => {
+    flags.user = true;
+    toggleBtn.dataset.playing = 'false';
+    toggleBtn.setAttribute('aria-label', 'Reanudar rotación automática');
+    syncPause();
+  };
+  const media = matchMedia('(prefers-reduced-motion: reduce)');
+  const refreshMotion = () => {
+    anim = motionAllowed();
+    if (!anim) { timeline.forEach(t => t.progress(1)); introTimeline?.progress(1); }
+    hero.classList.toggle('is-static', !anim);
+    toggleBtn.hidden = !anim || len <= 1;
+    syncPause();
+  };
+  media.addEventListener('change', refreshMotion);
 
   function setDots(n) {
     dots.forEach((d, i) => {
@@ -98,7 +116,8 @@ export function mountHero(root, { intro = false } = {}) {
     });
   }
 
-  function goTo(n, dir = 1) {
+  function goTo(n, dir = 1, { manual = false } = {}) {
+    if (manual) pauseByUser();
     n = (n + len) % len;
     if (n === idx) return;
     if (busy && anim) {
@@ -110,7 +129,7 @@ export function mountHero(root, { intro = false } = {}) {
     const tone = to.dataset.tone;
     hero.dataset.tone = tone;
     $("[data-hero-cur]", hero).textContent = String(n + 1).padStart(2, "0");
-    $("[data-hero-live]", hero).textContent = `Figura ${n + 1} de ${len}: ${$(".hero-title", to).textContent}`;
+    if (manual) $("[data-hero-live]", hero).textContent = `Figura ${n + 1} de ${len}: ${$(".hero-title", to).textContent}`;
     setDots(n);
 
     to.removeAttribute("aria-hidden");
@@ -165,17 +184,17 @@ export function mountHero(root, { intro = false } = {}) {
     tl.from($$(".hero-line, .hero-meta, .hero-price, .hero-actions > *", to), { opacity: 0, y: 16, duration: 0.55, stagger: 0.07, clearProps: "opacity,transform" }, 0.5);
     idx = n;
   }
-  const next = () => goTo(idx + 1, 1);
-  const prev = () => goTo(idx - 1, -1);
+  const next = (manual = false) => goTo(idx + 1, 1, { manual });
+  const prev = () => goTo(idx - 1, -1, { manual: true });
 
   /* Autoplay: la barra CSS es el temporizador; pausar la animación pausa el tiempo */
   hero.addEventListener("animationend", (e) => {
-    if (e.target.classList?.contains("dot-fill") && anim && !paused()) next();
+    if (e.target.classList?.contains("dot-fill") && anim && motionAllowed() && !paused()) next();
   }, sig);
 
-  $("[data-hero-next]", hero).addEventListener("click", () => next(), sig);
+  $("[data-hero-next]", hero).addEventListener("click", () => next(true), sig);
   $("[data-hero-prev]", hero).addEventListener("click", () => prev(), sig);
-  dots.forEach((d, i) => d.addEventListener("click", () => goTo(i, i > idx ? 1 : -1), sig));
+  dots.forEach((d, i) => d.addEventListener("click", () => goTo(i, i > idx ? 1 : -1, { manual: true }), sig));
   toggleBtn.addEventListener(
     "click",
     () => {
@@ -190,14 +209,17 @@ export function mountHero(root, { intro = false } = {}) {
   hero.addEventListener("pointerenter", (e) => e.pointerType === "mouse" && ((flags.hover = true), syncPause()), sig);
   hero.addEventListener("pointerleave", () => ((flags.hover = false), syncPause()), sig);
   hero.addEventListener("focusin", (e) => e.target.matches(":focus-visible") && ((flags.focus = true), syncPause()), sig);
-  hero.addEventListener("focusout", () => ((flags.focus = false), syncPause()), sig);
+  hero.addEventListener("focusout", () => queueMicrotask(() => {
+    if (!ac.signal.aborted && !hero.contains(document.activeElement)) { flags.focus = false; syncPause(); }
+  }), sig);
   document.addEventListener("visibilitychange", () => ((flags.hidden = document.hidden), syncPause()), sig);
   const observer = new IntersectionObserver(([e]) => ((flags.off = !e.isIntersecting), syncPause()), { threshold: 0.25 });
   observer.observe(hero);
 
   hero.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowRight") next();
-    else if (e.key === "ArrowLeft") prev();
+    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (e.key === "ArrowRight") { e.preventDefault(); next(true); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); prev(); }
   }, sig);
 
   /* Swipe / arrastre */
@@ -224,11 +246,13 @@ export function mountHero(root, { intro = false } = {}) {
     if (!down) return;
     down = false;
     flags.drag = false;
-    if (moved && Math.abs(dx) > 50) dx < 0 ? next() : prev();
+    if (moved && Math.abs(dx) > 50) dx < 0 ? next(true) : prev();
     syncPause();
   };
   area.addEventListener("pointerup", end, sig);
   area.addEventListener("pointercancel", end, sig);
+  window.addEventListener("pointerup", end, sig);
+  window.addEventListener("pointercancel", end, sig);
   area.addEventListener("click", (e) => moved && (e.preventDefault(), e.stopPropagation()), { ...sig, capture: true });
 
   syncPause();
@@ -238,9 +262,9 @@ export function mountHero(root, { intro = false } = {}) {
     const gsap = motion.gsap;
     const s = slides[0];
     document.fonts.ready.then(() => {
-      if (ac.signal.aborted) return;
+      if (ac.signal.aborted || !anim) return;
       const split = motion.SplitText.create($("[data-hero-title]", s), { type: "lines", mask: "lines" });
-      gsap.timeline({ defaults: { ease: EASE } })
+      introTimeline = gsap.timeline({ defaults: { ease: EASE } })
         .from($(".mask-in", s), { yPercent: 115, duration: 0.6, clearProps: "transform" }, 0.05)
         .from(split.lines, { yPercent: 110, duration: 0.8, stagger: 0.08, onComplete: () => split.revert() }, 0.1)
         .from($$(".hero-line, .hero-meta, .hero-price, .hero-actions > *", s), { opacity: 0, y: 16, duration: 0.6, stagger: 0.07, clearProps: "opacity,transform" }, 0.3)
@@ -252,6 +276,8 @@ export function mountHero(root, { intro = false } = {}) {
   return () => {
     ac.abort();
     observer.disconnect();
+    media.removeEventListener('change', refreshMotion);
+    introTimeline?.kill();
     timeline.forEach((t) => t.kill());
   };
 }

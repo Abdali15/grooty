@@ -48,7 +48,7 @@
 .hero-dot { position: relative; flex: 1; height: 44px; display: grid; align-items: center; }
 .hero-dot::before { content: ""; height: 3px; border-radius: 3px; background: color-mix(in srgb, var(--hero-fg) 22%, transparent); }
 .dot-fill { position: absolute; left: 0; right: 0; top: 50%; height: 3px; margin-top: -1.5px; border-radius: 3px; background: var(--hero-fg); transform: scaleX(0); transform-origin: left; }
-.hero-dot.is-active .dot-fill { animation: heroFill 6500ms linear forwards; }
+.hero-dot.is-active .dot-fill { animation: heroFill var(--hero-wait,8500ms) linear forwards; }
 .hero.is-paused .hero-dot.is-active .dot-fill { animation-play-state: paused; }
 .hero.is-static .hero-dot.is-active .dot-fill { animation: none; transform: scaleX(1); }
 @keyframes heroFill { to { transform: scaleX(1); } }

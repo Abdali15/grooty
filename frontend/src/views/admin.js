@@ -6,12 +6,13 @@ import { adminRequest, acceptSession, clearSession, loadDemo, saveDemo, exportDe
 import { SITE } from '../config.js';
 import { normalizeStoreSettings, youtubeVideoId } from '../lib/cinema.js';
 import { catalogQualityIssues } from '../lib/catalog-quality.js';
+import { imageLines, selectCover } from '../lib/photo-editor.js';
 
 const options = (values, current) => values.map(v => `<option value="${esc(v)}" ${v === current ? 'selected' : ''}>${esc(v)}</option>`).join('');
 const modalHTML = () => `<dialog class="admin-dialog" data-editor aria-labelledby="editor-title">
   <form data-product-form>
     <header class="admin-dialog-head"><div><p class="eyebrow">Ficha de producto</p><h2 id="editor-title">Editar figura</h2></div><button type="button" class="close-btn" data-editor-close aria-label="Cerrar editor">${icons.close}</button></header>
-    <div class="admin-editor-quality" data-editor-quality role="status"></div>
+    <div class="admin-editor-quality" data-editor-quality role="note" aria-label="Información pendiente de la ficha"></div>
     <div class="admin-form-grid">
       <label class="admin-field admin-field--wide">Nombre de la figura<input name="titulo" required minlength="2" maxlength="180"></label>
       <label class="admin-field">Marca<select name="marca" required></select></label>
@@ -105,8 +106,8 @@ export const admin = {
     }
     function syncReserve() { form.elements.precio_reserva.disabled = form.elements.tipo.value !== 'preventa'; }
     function photoPreview() {
-      const urls=form.elements.images.value.split('\n').map(v=>v.trim()).filter(Boolean).slice(0,8);
-      $('[data-photo-preview]',root).innerHTML=urls.filter(safeImageUrl).map((u,i)=>`<figure><img src="${esc(imgUrl(u,160))}" alt="Vista previa de foto ${i+1}" loading="lazy"><figcaption>${i===0?'Portada':`Foto ${i+1}`}</figcaption></figure>`).join('');
+      const urls = imageLines(form.elements.images.value).slice(0,8);
+      $('[data-photo-preview]',root).innerHTML=urls.map((u,i)=>safeImageUrl(u) ? `<figure><img src="${esc(imgUrl(u,240,{canvas:true}))}" alt="Vista previa de foto ${i+1}" loading="lazy" width="120" height="150"><figcaption>${i===0?'Portada':`Foto ${i+1}`}</figcaption><button type="button" data-photo-cover="${i}" aria-pressed="${i===0}" aria-label="${i===0?'Foto 1: portada actual':`Foto ${i+1}: usar como portada`}">${i===0?'Portada actual':'Usar portada'}</button></figure>` : '').join('');
     }
     async function handleExpired(error) {
       if(error.status===401){ mode='login'; clearSession(); loginView('Tu sesión terminó. Vuelve a entrar para guardar cambios.'); }
@@ -161,6 +162,15 @@ export const admin = {
     },sig);
     root.addEventListener('click', async e=>{
       const t=e.target.closest('button');if(!t || busy)return;
+      if(t.dataset.photoCover !== undefined){
+        try {
+          form.elements.images.value = selectCover(form.elements.images.value,Number(t.dataset.photoCover));
+          photoPreview(); editorQuality();
+          $('[data-photo-cover="0"]',root)?.focus();
+          $('[data-editor-status]',root).textContent = 'Portada seleccionada. Pulsa Guardar cambios para conservar el nuevo orden.';
+        } catch(error) { $('[data-editor-status]',root).textContent = error.message; }
+        return;
+      }
       if(t.hasAttribute('data-admin-demo')){mode='demo';data=loadDemo();tab='products';dashboard();return;}
       if(t.hasAttribute('data-editor-close')){dialog.close();return;}
       if(t.dataset.adminTab){tab=t.dataset.adminTab;dashboard();return;}

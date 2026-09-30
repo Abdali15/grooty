@@ -14,7 +14,7 @@ export function initGallery(root, { onIndex } = {}) {
     slidesPerView: 1,
     spaceBetween: 12,
     keyboard: { enabled: true, onlyInViewport: true },
-    pagination: { el: $(".swiper-pagination", el), clickable: true },
+    pagination: { el: $(".gallery > .swiper-pagination", root), clickable: true },
     navigation: { prevEl: $("[data-g-prev]", root), nextEl: $("[data-g-next]", root) },
     a11y: { prevSlideMessage: "Foto anterior", nextSlideMessage: "Foto siguiente", paginationBulletMessage: "Ir a la foto {{index}}", containerMessage: "Galería de fotos del producto" },
     on: {

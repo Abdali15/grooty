@@ -21,6 +21,10 @@ export function productMessage(p) {
   return `Hola Grooty Store 👋 Quisiera consultar por esta figura:\n\n${p.brand} — ${p.titulo}\n${p.isPre ? "Preventa" : "En venta"} · ${p.estado} · ${money(p.precio)}${res}\nCódigo ${p.sku}\n${origin()}${p.url}\n\n¿Me confirman disponibilidad, pago y entrega?`;
 }
 
+export function productDetailsMessage(p) {
+  return `${productMessage(p)}\n\nTambién quisiera fotos adicionales de la figura y la caja, confirmar los accesorios incluidos y cualquier detalle de su estado.${p.isPre ? ' ¿Cuál es el plazo estimado de llegada?' : ''}`;
+}
+
 export function selectionMessage({ links = true } = {}) {
   const s = summarize();
   const row = (l) => {

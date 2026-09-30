@@ -2,7 +2,7 @@ import { esc } from "../lib/dom.js";
 import { icons } from "../lib/icons.js";
 import { SITE, PREORDER_POLICY } from "../config.js";
 import { preorderSteps } from "../components/blocks.js";
-import { waLabel } from "../lib/whatsapp.js";
+import { waLabel, waContactNote } from "../lib/whatsapp.js";
 
 export const help = {
   render() {
@@ -38,6 +38,8 @@ export const help = {
               <details><summary>¿Qué significa Sellado y Open?</summary><p>Sellado indica que la publicación está registrada como sellada. Open indica que está registrada como abierta. Confirma cualquier detalle del estado con la tienda antes de comprar.</p></details>
               <details><summary>¿Qué precio se muestra?</summary><p>El precio de la figura completa. En preventas también verás el monto de reserva.</p></details>
               <details><summary>¿Puedo pedir más fotos?</summary><p>Sí, puedes solicitarlas por WhatsApp. Si una figura tiene más de una foto publicada, aparece una galería en su ficha.</p></details>
+              <details><summary>¿Cómo reviso una figura Open?</summary><p>Solicita fotos actuales de la pieza, los accesorios y la caja. Confirma si tiene piezas faltantes, marcas o reparaciones; que la publicación diga Open no describe por sí solo su estado completo.</p></details>
+              <details><summary>¿Cómo funcionan las consultas por WhatsApp?</summary><p>${esc(waContactNote())} El botón solo prepara la consulta: tú decides si enviarla. Para una conversación privada también puedes usar el Instagram de Grooty.</p></details>
               <details><summary>¿Añadir una figura confirma mi compra?</summary><p>No. Mi selección prepara tu consulta. La disponibilidad, el pago y la confirmación del pedido o reserva se coordinan con la tienda.</p></details>
               <details><summary>¿El envío está incluido en el precio?</summary><p>El catálogo muestra el precio de la figura. Consulta con la tienda el costo y el plazo de entrega para tu ubicación antes de pagar.</p></details>
               <details><summary>¿Cuándo pago el saldo de una preventa?</summary><p>${esc(PREORDER_POLICY.text)}</p></details>
@@ -51,6 +53,7 @@ export const help = {
             <h2 class="h-mini">¿Hablamos?</h2>
             <p>Escríbenos y resolvemos tus dudas sobre disponibilidad, pago y entrega.</p>
             <button class="btn btn-primary btn-block" type="button" data-wa="general" data-magnetic>${icons.whatsapp}<span>${waLabel("Hablar por WhatsApp")}</span></button>
+            <p class="wa-channel-note">${esc(waContactNote())}</p>
             <a class="btn btn-secondary btn-block" href="${SITE.instagram}" target="_blank" rel="noopener">${icons.instagram}<span>${esc(SITE.instagramHandle)}</span></a>
           </div>
         </aside>

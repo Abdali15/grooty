@@ -32,3 +32,7 @@ En **Inventario → Fichas por completar** encontrarás los productos sin stock 
 Deja el stock vacío si todavía no está confirmado; usa 0 solo para agotado. Las cantidades de Mi selección respetan el stock informado y tienen un tope técnico de 9 unidades por figura. Las consultas siguen requiriendo confirmación de la tienda.
 
 Para homogeneizar las fotos, utiliza el producto y edición exactos, encuadre 4:5 y fondo neutro, con el objeto completo y centrado. Publica frontal, otra vista y detalles de accesorios/caja; las figuras Open necesitan fotos de su estado real. Las tarjetas ya normalizan el lienzo y mantienen las proporciones, pero no pueden igualar el tamaño de los objetos dentro de fotos con márgenes distintos.
+
+En el editor, cada foto muestra una vista previa 4:5. Pulsa **Usar portada** en la fotografía frontal más adecuada y luego **Guardar cambios**. Esto reordena las URLs sin borrar ni alterar ninguna fotografía. En demostración solo cambia el borrador del navegador.
+
+La ficha pública distingue información confirmada de datos por completar. El botón para pedir fotos prepara una consulta de la figura, accesorios y caja; para preventas también pregunta la llegada estimada. No envía mensajes ni confirma compras automáticamente.
