@@ -16,7 +16,7 @@ Todas las respuestas usan `Content-Type: application/json`. Los errores usan `{ 
 
 | Método | Ruta | Respuesta / comportamiento |
 |---|---|---|
-| GET | /api/store/catalog | `{ products: [...], settings: { heroIds: [93,92], whatsapp: "número real" } }`; solo publicados/no archivados. |
+| GET | /api/store/catalog | `{ products: [...], settings: { heroIds: [93,92], whatsapp: "número real", cinema: { enabled, title, summary, videoId, source, query } } }`; solo publicados/no archivados. |
 | GET | /api/admin/session | `{ user: { email, role: "owner" }, csrf: "token aleatorio de al menos 16 caracteres" }`; 401 si no hay sesión. |
 | POST | /api/admin/login | Recibe `{ email, password }`. Valida cuenta/rol, crea cookie de sesión y devuelve la misma estructura de session. |
 | POST | /api/admin/logout | Revoca sesión en servidor y limpia cookie. Devuelve `{ ok: true }`. |
@@ -68,3 +68,11 @@ Para adaptar el esquema `supabase/schema.sql`: `title→titulo`, `condition→es
 - No devuelvas contraseñas, hash, cookies o tokens privados en el catálogo. No expongas tablas administrativas públicamente.
 
 Supabase proporciona PostgreSQL; pgAdmin es una herramienta para administrar PostgreSQL, no un proveedor alternativo de base de datos. El SQL adjunto está preparado y no se ejecutó contra una base remota.
+
+## Configuración editorial y contacto
+
+Admin → Contenido guarda `settings.whatsapp` y `settings.cinema`. El número directo es opcional; el valor vacío mantiene el enlace al grupo original. `cinema` contiene `enabled` (boolean), `title` (2–120 caracteres), `summary` (2–500), `videoId` (11 caracteres de YouTube), `source` (URL HTTPS oficial de Disney/Marvel) y `query` (hasta 80 caracteres). El backend debe validar todo, comprobar el rol y preservar los restantes settings cuando recibe actualizaciones parciales.
+
+Almacena la configuración pública en `public.store_settings`, fila `key=storefront`. Este campo nunca contiene secretos, cookies ni contraseñas. Entrega su `value` como `settings` en el catálogo público. Gestiona revisión y escrituras atómicas. No hay un proceso automático de renovación de tráileres: el dueño verifica la fuente y actualiza Contenido.
+
+Para activar usuarios reales, consulta `ACCESO-ADMIN.md`.

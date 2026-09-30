@@ -30,7 +30,7 @@ export function productCard(p, { eager = false, sizes = SIZES, extra = "" } = {}
   return `<article class="card ${extra}" data-id="${p.id}" data-tone="${tone}">
     <div class="card-tile">
       <a class="card-cover" href="${p.url}" data-nav data-card tabindex="-1" aria-hidden="true"></a>
-      ${stage(p.image, "", { sizes, eager })}
+      ${stage(p.image, "", { sizes, eager, canvas: true, probe: false })}
       ${badge(p)}
       ${heartButton(p)}
       <button class="quick-btn" type="button" data-quick="${p.id}" aria-label="Vista rápida: ${esc(p.name)}"><span class="quick-ico">${icons.eye}</span><span class="quick-txt">Vista rápida</span></button>

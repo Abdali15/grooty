@@ -93,3 +93,16 @@ alter table public.products add column if not exists revision integer not null d
 -- Las escrituras siguen bloqueadas para visitantes. El backend debe comprobar
 -- owner/admin, CSRF y revision antes de usar su conexión privada.
 -- Nunca incluyas service_role ni una conexión PostgreSQL en el frontend.
+
+-- Configuración pública de contacto, destacados y contenido editorial.
+-- No guardar secretos, contraseñas ni tokens dentro de value.
+create table if not exists public.store_settings (
+  key text primary key check (key = 'storefront'),
+  value jsonb not null default '{}'::jsonb check (jsonb_typeof(value) = 'object'),
+  revision integer not null default 1 check (revision > 0),
+  updated_at timestamptz not null default now()
+);
+alter table public.store_settings enable row level security;
+drop policy if exists "public read storefront settings" on public.store_settings;
+create policy "public read storefront settings" on public.store_settings for select using (key = 'storefront');
+-- Las escrituras se realizan únicamente desde el backend autorizado.

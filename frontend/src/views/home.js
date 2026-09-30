@@ -10,6 +10,7 @@ import { SITE } from "../config.js";
 import { waLabel } from "../lib/whatsapp.js";
 import { probeWithin } from "../lib/images.js";
 import { figureRequestPanel, mountFigureRequest } from "../components/figure-request.js";
+import { cinemaPanel, mountCinema } from "../components/cinema.js";
 
 export const home = {
   render() {
@@ -79,6 +80,7 @@ export const home = {
       </section>
 
       <div class="container request-home" id="figuras-a-pedido">${figureRequestPanel()}</div>
+      <div class="container">${cinemaPanel()}</div>
 
       ${
         seen.length
@@ -104,6 +106,7 @@ export const home = {
     probeWithin(root);
     const stopHero = mountHero(root, { intro: true });
     const stopRequest = mountFigureRequest(root);
-    return () => { stopHero?.(); stopRequest(); };
+    const stopCinema = mountCinema(root);
+    return () => { stopHero?.(); stopRequest(); stopCinema(); };
   }
 };

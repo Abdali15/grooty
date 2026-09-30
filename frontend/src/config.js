@@ -18,6 +18,9 @@ export const SITE = {
   country: "Perú",
   instagram: "https://www.instagram.com/grootystore10",
   instagramHandle: "@grootystore10",
+  whatsappGroup: "https://chat.whatsapp.com/BDxHh2RdsVMLBrIgOUgBVf?s=sh&p=i&mlu=4&ilr=4",
+  facebook: "https://www.facebook.com/share/1AZcxL96gg/",
+  tiktok: "https://www.tiktok.com/@grooty.store",
   whatsappNumber: clean(WHATSAPP_NUMBER) || clean(import.meta.env.VITE_WHATSAPP_NUMBER),
   announcement: "",
   currency: "PEN",
@@ -32,6 +35,16 @@ export const SITE = {
 
   // 4) Figuras del hero (ids de catalog.json). Puedes cambiarlas cuando quieras.
   heroIds: [93, 92, 78, 76, 68],
+
+  // Tráiler enlazado por Disney en su comunicado oficial de agosto de 2026.
+  cinema: {
+    enabled: true,
+    title: "Avengers: Doomsday",
+    summary: "Del próximo universo en pantalla a tu próxima pieza en colección. Descubre figuras de personajes de Marvel en nuestro catálogo.",
+    videoId: "gcjnEYJ4OB8",
+    source: "https://prensa.disney.es/noticias/yadisponibleelnuevotr%C3%A1ilerdevengadores:doomsdaypresentadodurantelad23:theultimatedisneyfanevent",
+    query: "Doom"
+  },
 
   recentLimit: 12
 };

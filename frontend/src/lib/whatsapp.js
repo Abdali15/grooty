@@ -4,8 +4,9 @@ import { summarize } from "./cart.js";
 import { track } from "../analytics.js";
 import { toast } from "../components/toast.js";
 
-export const waReady = () => !!SITE.whatsappNumber;
-/** Sin número en producción el CTA se convierte en "Copiar mensaje" (nunca abre un wa.me inválido). */
+export const waDirectReady = () => !!SITE.whatsappNumber;
+export const waReady = () => waDirectReady() || !!SITE.whatsappGroup;
+/** Si falta un chat directo se usa el grupo oficial; sin ningún canal, se ofrece copiar. */
 export const waLabel = (label) => (waReady() || import.meta.env.DEV ? label : "Copiar mensaje");
 
 const origin = () => location.origin;
@@ -61,6 +62,13 @@ export async function copyText(text) {
 export async function sendWhatsApp(build, source) {
   track("whatsapp_click", { source });
   const text = build(true);
+  if (!waDirectReady() && SITE.whatsappGroup) {
+    // Abre durante el gesto del usuario, antes del await, para evitar bloqueo de popups.
+    window.open(SITE.whatsappGroup, "_blank", "noopener");
+    const ok = await copyText(text);
+    toast(ok ? "Abrimos el grupo de WhatsApp. Tu consulta se copió para que puedas pegarla allí." : "Abrimos el grupo de WhatsApp. Copia tu consulta desde la vista previa.");
+    return;
+  }
   if (!waReady()) {
     const ok = await copyText(text);
     toast(

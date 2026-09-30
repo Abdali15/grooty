@@ -3,6 +3,8 @@ import { money } from '../lib/format.js';
 import { icons } from '../lib/icons.js';
 import { imgUrl } from '../lib/images.js';
 import { adminRequest, acceptSession, clearSession, loadDemo, saveDemo, exportDemo, validateAdminProduct, safeImageUrl } from '../lib/admin-client.js';
+import { SITE } from '../config.js';
+import { normalizeStoreSettings, youtubeVideoId } from '../lib/cinema.js';
 
 const options = (values, current) => values.map(v => `<option value="${esc(v)}" ${v === current ? 'selected' : ''}>${esc(v)}</option>`).join('');
 const modalHTML = () => `<dialog class="admin-dialog" data-editor aria-labelledby="editor-title">
@@ -43,26 +45,29 @@ export const admin = {
     const alive = () => !ac.signal.aborted;
     function notice(text, error = false) { const p = $('[data-admin-status]', root); if (p) { p.textContent = text; p.classList.toggle('is-error', error); } }
     function loginView(message = '') {
-      body.innerHTML = `<div class="admin-access-grid"><article class="admin-access-card"><p class="eyebrow">Acceso restringido</p><h2>Gestiona tu colección.</h2><p>Entra con tu cuenta de propietario para actualizar el catálogo publicado.</p><form data-login-form class="admin-login-form"><label class="admin-field">Correo<input name="email" type="email" autocomplete="username" required maxlength="254"></label><label class="admin-field">Contraseña<input name="password" type="password" autocomplete="current-password" required maxlength="128"></label><button class="btn btn-primary btn-block" type="submit">Entrar al panel ${icons.arrow}</button></form><p class="admin-status" data-admin-status role="status">${esc(message)}</p></article><article class="admin-access-card admin-access-card--demo"><p class="eyebrow">Vista previa del panel</p><h2>Prueba cómo funciona.</h2><p>Explora las 88 figuras y prueba crear productos, cambiar stock, agregar marcas y elegir destacados.</p><div class="admin-demo-note">La demostración guarda borradores en este navegador. No cambia los productos de la tienda.</div><button type="button" class="btn btn-secondary btn-block" data-admin-demo>Probar demostración ${icons.arrow}</button><p class="admin-access-fine">Para activar la gestión real, conecta tu backend con autenticación de propietarios. No existen cuentas ni contraseñas predeterminadas.</p></article></div>`;
+      body.innerHTML = `<div class="admin-access-grid"><article class="admin-access-card"><p class="eyebrow">Acceso restringido</p><h2>Gestiona tu colección.</h2><p>Entra con tu cuenta de propietario para actualizar el catálogo publicado.</p><form data-login-form class="admin-login-form"><label class="admin-field">Correo<input name="email" type="email" autocomplete="username" required maxlength="254"></label><label class="admin-field">Contraseña<input name="password" type="password" autocomplete="current-password" required maxlength="128"></label><button class="btn btn-primary btn-block" type="submit">Entrar al panel ${icons.arrow}</button></form><p class="admin-status" data-admin-status role="status">${esc(message)}</p></article><article class="admin-access-card admin-access-card--demo"><p class="eyebrow">Vista previa del panel</p><h2>Prueba cómo funciona.</h2><p>Explora el inventario y prueba productos, stock, marcas, destacados y el tráiler de la portada.</p><div class="admin-demo-note">La demostración guarda borradores en este navegador. No cambia los productos de la tienda.</div><button type="button" class="btn btn-primary btn-block" data-admin-demo>Probar demostración ${icons.arrow}</button><p class="admin-access-fine">Para activar la gestión real, conecta tu backend con autenticación de propietarios. La demostración no necesita contraseña.</p><details class="admin-setup"><summary>¿Cómo activo cuentas reales?</summary><ol><li>Conecta el backend con PostgreSQL o Supabase y autenticación de propietarios.</li><li>Crea una cuenta privada para cada dueño y asígnale el rol owner.</li><li>Usa su correo y contraseña en el formulario de acceso. Las cuentas y los cambios se validan en el servidor.</li></ol><p>No se han creado credenciales reales. La tienda pública no debe guardar contraseñas.</p></details></article></div>`;
     }
     async function loadLive() {
       const result = await adminRequest('/catalog', { signal: ac.signal });
       if (!Array.isArray(result.products) || !Array.isArray(result.brands)) throw new Error('El servidor no devolvió un catálogo válido.');
       if (result.brands.some(b => typeof b !== 'string' || b.length < 2 || b.length > 60)) throw new Error('El servidor devolvió marcas no válidas.');
       const products = result.products.map(p => validateAdminProduct({ description: '', includes_text: '', box_note: '', franchise: '', character_name: '', ...p }, result.brands));
-      data = { products, brands: result.brands, settings: result.settings || { heroIds: [] } };
+      data = { products, brands: result.brands, settings: normalizeStoreSettings(result.settings || { heroIds: [] }, {whatsapp:SITE.whatsappNumber,cinema:SITE.cinema}) };
     }
     function dashboard() {
       const active = data.products.filter(p => !p.archived);
       body.innerHTML = `<div class="admin-mode-bar"><p><span class="signal-dot" aria-hidden="true"></span>${mode === 'demo' ? '<b>Demostración</b> · Borradores locales; no se publican en la tienda.' : `<b>Sesión de propietario</b> · ${esc(user.email)}`}</p><button type="button" class="link-btn" data-admin-logout>${mode === 'demo' ? 'Salir de la demostración' : 'Cerrar sesión'}</button></div>
       <div class="admin-metrics"><article><span>Figuras activas</span><strong>${active.length}</strong></article><article><span>Publicadas</span><strong>${active.filter(p => p.published).length}</strong></article><article><span>Stock por confirmar</span><strong>${active.filter(p => p.stock == null).length}</strong></article><article><span>Agotadas</span><strong>${active.filter(p => p.stock === 0).length}</strong></article></div>
-      <div class="admin-workspace"><nav class="admin-tabs" aria-label="Secciones de administración">${[['products','Inventario'],['brands','Marcas'],['home','Portada']].map(([key,name]) => `<button type="button" data-admin-tab="${key}" ${key===tab ? 'aria-current="page" class="is-on"' : ''}>${name}</button>`).join('')}<button type="button" data-admin-export>Exportar catálogo ${icons.arrow}</button></nav><div class="admin-content" data-admin-content></div></div><p class="admin-status" data-admin-status role="status"></p>`;
+      <div class="admin-workspace"><nav class="admin-tabs" aria-label="Secciones de administración">${[['products','Inventario'],['brands','Marcas'],['home','Portada'],['content','Contenido']].map(([key,name]) => `<button type="button" data-admin-tab="${key}" ${key===tab ? 'aria-current="page" class="is-on"' : ''}>${name}</button>`).join('')}<button type="button" data-admin-export>Exportar catálogo ${icons.arrow}</button></nav><div class="admin-content" data-admin-content></div></div><p class="admin-status" data-admin-status role="status"></p>`;
       renderContent();
     }
     function renderContent() {
       const target = $('[data-admin-content]', root);
       if (tab === 'brands') {
         target.innerHTML = `<div class="admin-section-head"><div><h2>Marcas de la colección</h2><p>Crea una marca antes de añadir sus figuras.</p></div></div><form data-brand-form class="admin-brand-form"><label class="admin-field">Nueva marca<input name="name" minlength="2" maxlength="60" required placeholder="Nombre de la marca"></label><button class="btn btn-primary" type="submit">Añadir marca ${icons.plus}</button></form><div class="admin-brand-grid">${data.brands.map(b => `<article><h3>${esc(b)}</h3><p>${data.products.filter(p=>p.marca===b && !p.archived).length} figuras activas</p></article>`).join('')}</div>`;
+      } else if (tab === 'content') {
+        const feature=data.settings.cinema;
+        target.innerHTML = `<div class="admin-section-head"><div><h2>Contacto y universos en pantalla</h2><p>Actualiza el tráiler cuando haya una publicación oficial y elige qué figuras mostrar.</p></div></div><form data-content-form class="admin-content-form"><fieldset><legend>WhatsApp directo</legend><label class="admin-field">Número con código de país<input name="whatsapp" type="tel" inputmode="tel" maxlength="22" value="${esc(data.settings.whatsapp||'')}" placeholder="Número verificado de la tienda"><small>Vacío: se usa el grupo publicado por Grooty. Con número: las consultas abren el chat privado con el mensaje preparado.</small></label></fieldset><fieldset><legend>Tráiler destacado</legend><label class="admin-field">Mostrar sección<select name="enabled"><option value="true" ${feature.enabled?'selected':''}>Visible</option><option value="false" ${!feature.enabled?'selected':''}>Oculta</option></select></label><label class="admin-field">Película o serie<input name="title" required minlength="2" maxlength="120" value="${esc(feature.title)}"></label><label class="admin-field">Descripción<textarea name="summary" required maxlength="500" rows="3">${esc(feature.summary)}</textarea></label><label class="admin-field">Enlace del tráiler oficial en YouTube<input name="video" type="url" required maxlength="500" value="https://www.youtube.com/watch?v=${feature.videoId}"><small>Verifica que sea del canal oficial de Marvel o Disney. Se reproduce solo cuando el visitante pulsa Ver tráiler.</small></label><label class="admin-field">Fuente oficial de Marvel / Disney<input name="source" type="url" required maxlength="1000" value="${esc(feature.source)}"></label><label class="admin-field">Personaje o palabra para relacionar figuras<input name="query" maxlength="80" value="${esc(feature.query)}" placeholder="Ej. Doom"><small>Busca en títulos, personaje y franquicia. No asocia automáticamente una figura con una versión de la película.</small></label></fieldset><button type="submit" class="btn btn-primary">Guardar contacto y contenido</button><p class="admin-access-fine">${mode==='demo'?'Esta demostración guarda contenido en un borrador local; no modifica la portada publicada.':'El catálogo público leerá estos datos desde tu backend.'}</p></form>`;
       } else if (tab === 'home') {
         target.innerHTML = `<div class="admin-section-head"><div><h2>Figuras destacadas</h2><p>Selecciona hasta 5 figuras para el carrusel principal.</p></div></div><form data-home-form><div class="admin-featured-grid">${Array.from({length:5},(_,i)=>`<label class="admin-field">Destacado ${i+1}<select name="slot${i}"><option value="">Sin figura</option>${data.products.filter(p=>!p.archived && p.published).map(p=>`<option value="${p.id}" ${data.settings.heroIds?.[i]===p.id?'selected':''}>${esc(p.titulo)} · ${esc(p.marca)}</option>`).join('')}</select></label>`).join('')}</div><button type="submit" class="btn btn-primary">Guardar destacados</button></form>`;
       } else {
@@ -101,7 +106,8 @@ export const admin = {
       const login=e.target.closest('[data-login-form]');
       const brandForm=e.target.closest('[data-brand-form]');
       const homeForm=e.target.closest('[data-home-form]');
-      if(!login && !brandForm && !homeForm && e.target!==form)return;
+      const contentForm=e.target.closest('[data-content-form]');
+      if(!login && !brandForm && !homeForm && !contentForm && e.target!==form)return;
       e.preventDefault(); if(busy)return;
       busy=true; const button=e.target.querySelector('button[type="submit"]'); if(button)button.disabled=true;
       try {
@@ -115,6 +121,12 @@ export const admin = {
           if(mode==='demo')persistDemo({...data,brands:[...data.brands,name]});
           else { await adminRequest('/brands',{method:'POST',body:{name},signal:ac.signal}); await loadLive(); }
           if(alive()){dashboard();notice(mode==='demo'?'Marca añadida al borrador.':'Marca guardada.');}
+        } else if(contentForm){
+          const f=contentForm.elements;
+          const settings=normalizeStoreSettings({...data.settings,whatsapp:f.whatsapp.value,cinema:{enabled:f.enabled.value==='true',title:f.title.value,summary:f.summary.value,videoId:youtubeVideoId(f.video.value),source:f.source.value,query:f.query.value}},data.settings);
+          if(mode==='demo')persistDemo({...data,settings});
+          else{await adminRequest('/settings',{method:'PUT',body:settings,signal:ac.signal});await loadLive();}
+          if(alive()){dashboard();notice(mode==='demo'?'Contacto y estreno guardados en el borrador local.':'Contacto y estreno actualizados.');}
         } else if(homeForm){
           const ids=Array.from({length:5},(_,i)=>Number(homeForm.elements[`slot${i}`].value)).filter(Boolean);
           if(new Set(ids).size!==ids.length)throw Error('Elige figuras distintas para cada destacado.');

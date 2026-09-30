@@ -2,7 +2,6 @@ import { esc } from "../lib/dom.js";
 import { icons } from "../lib/icons.js";
 import { thumb } from "../lib/images.js";
 import { brands } from "../data.js";
-import { plural } from "../lib/format.js";
 
 /** Franja de marcas: marquee CSS infinito y lento; se pausa con hover/foco. */
 export function brandMarquee() {
@@ -11,7 +10,6 @@ export function brandMarquee() {
       .map(
         (b) => `<a class="mq-item" href="${b.url}" data-nav data-brand="${b.slug}" ${hidden ? 'tabindex="-1"' : ""}>
           <span class="mq-name">${esc(b.name)}</span>
-          <span class="mq-count">${plural(b.count, "figura", "figuras")}</span>
           <span class="mq-arrow">${icons.arrow}</span>
         </a>`
       )

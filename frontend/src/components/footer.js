@@ -18,6 +18,8 @@ export function footer() {
         <div><h3>Contacto</h3>
           <button type="button" class="footer-link" data-wa="general">${icons.whatsapp}${waLabel("WhatsApp")}</button>
           <a href="${SITE.instagram}" target="_blank" rel="noopener" class="footer-link">${icons.instagram}${SITE.instagramHandle}</a>
+          <a href="${SITE.facebook}" target="_blank" rel="noopener" class="footer-link">Facebook ${icons.external}</a>
+          <a href="${SITE.tiktok}" target="_blank" rel="noopener" class="footer-link">TikTok ${icons.external}</a>
           <p class="footer-country">${SITE.country}</p>
         </div>
       </div>

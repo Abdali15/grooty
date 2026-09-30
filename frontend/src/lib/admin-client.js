@@ -1,5 +1,6 @@
 import raw from '../data/catalog.json';
 import { SITE } from '../config.js';
+import { normalizeStoreSettings } from './cinema.js';
 const KEY = 'grooty:v5:admin-demo';
 const configured = import.meta.env.VITE_ADMIN_API_BASE || '/api/admin';
 // Only a same-origin path: cookies and CSRF values never go to arbitrary servers.
@@ -27,7 +28,7 @@ export function acceptSession(session) {
 }
 export function clearSession() { csrf = ''; }
 export function seedDemo() {
-  return { version: 1, products: raw.map(p => ({ ...structuredClone(p), stock: null, published: true, archived: false, revision: 0 })), brands: [...new Set(raw.map(p => p.marca))], settings: { heroIds: [...SITE.heroIds] } };
+  return { version: 1, products: raw.map(p => ({ ...structuredClone(p), stock: null, published: true, archived: false, revision: 0 })), brands: [...new Set(raw.map(p => p.marca))], settings: { heroIds: [...SITE.heroIds], whatsapp:SITE.whatsappNumber, cinema:structuredClone(SITE.cinema) } };
 }
 export function safeImageUrl(value) {
   if (typeof value !== 'string' || value.length > 2048) return false;
@@ -53,6 +54,7 @@ export function loadDemo() {
     const value = JSON.parse(localStorage.getItem(KEY));
     if (value?.version === 1 && Array.isArray(value.products) && Array.isArray(value.brands) && value.settings && value.brands.every(b => typeof b === 'string' && b.length <= 60)) {
       value.products = value.products.map(p => validateAdminProduct({ description: '', includes_text: '', box_note: '', franchise: '', character_name: '', ...p }, value.brands));
+      value.settings=normalizeStoreSettings(value.settings,{whatsapp:SITE.whatsappNumber,cinema:SITE.cinema});
       return value;
     }
   } catch {}

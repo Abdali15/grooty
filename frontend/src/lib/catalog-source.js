@@ -1,5 +1,6 @@
 import original from '../data/catalog.json';
 import { SITE } from '../config.js';
+import { validateCinema } from './cinema.js';
 let catalog = original;
 export const catalogSource = () => catalog;
 export function validatePublicCatalog(value) {
@@ -33,6 +34,7 @@ export async function loadPublicCatalog() {
     const settings = value.settings || {};
     if (Array.isArray(settings.heroIds)) SITE.heroIds = [...new Set(settings.heroIds)].filter(id=>next.some(p=>p.id===id));
     if (typeof settings.whatsapp === 'string' && /^[1-9]\d{7,14}$/.test(settings.whatsapp)) SITE.whatsappNumber = settings.whatsapp;
+    if (settings.cinema) { try { SITE.cinema=validateCinema(settings.cinema); } catch { SITE.cinema.enabled=false; } }
   } catch {
     SITE.announcement = 'No pudimos actualizar el catálogo en este momento. Confirma precio y disponibilidad con la tienda.';
   }

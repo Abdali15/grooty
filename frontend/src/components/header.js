@@ -40,7 +40,8 @@ export function renderShell() {
     <a href="/preventas" data-nav data-match="/preventas">${icons.tag}<span>Preventas</span></a>
     <button type="button" data-collection="favorites">${icons.heart}<span class="bn-count" data-fav-count hidden></span><span>Favoritos</span></button>
     <button type="button" data-collection="selection">${icons.bag}<span class="bn-count" data-sel-count hidden></span><span>Selección</span></button>
-  </nav>`;
+  </nav>
+  <button type="button" class="contact-float" data-wa="general" aria-label="Abrir WhatsApp de Grooty Store">${icons.whatsapp}<span>WhatsApp</span></button>`;
 }
 
 /* Logo original con alternativa tipográfica si el archivo no carga. */

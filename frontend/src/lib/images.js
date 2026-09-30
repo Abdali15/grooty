@@ -4,13 +4,15 @@ import { esc } from "./dom.js";
 /* ───────────── URLs (ImageKit) ───────────── */
 const isIK = (u) => /^https?:\/\/ik\.imagekit\.io\//.test(u || "");
 
-export function imgUrl(url, w) {
+export function imgUrl(url, w, { canvas = false } = {}) {
   if (!url || !SITE.imageTransforms || !isIK(url)) return url;
-  return `${url}${url.includes("?") ? "&" : "?"}tr=w-${w},q-80,f-auto`;
+  const u = new URL(url);
+  u.searchParams.set('tr', `w-${w},${canvas ? `h-${Math.round(w*1.25)},cm-pad_resize,bg-E8EDE2,` : ''}q-80,f-auto`);
+  return u.href;
 }
-export function imgSrcset(url, widths) {
+export function imgSrcset(url, widths, options) {
   if (!url || !SITE.imageTransforms || !isIK(url)) return "";
-  return widths.map((w) => `${imgUrl(url, w)} ${w}w`).join(", ");
+  return widths.map((w) => `${imgUrl(url, w, options)} ${w}w`).join(", ");
 }
 
 /* CORS anónimo permite leer píxeles para detectar el fondo. Si el CDN no lo permite,
@@ -27,9 +29,9 @@ const corsOk = () => {
  * Imagen de producto dentro de un "image stage".
  * El stage es un contenedor cuadrado-relativo; la imagen nunca se deforma ni se recorta.
  */
-export function stage(url, alt, { sizes = "300px", widths = [320, 480, 720, 960], eager = false, probe = true, cls = "", vtMain = false } = {}) {
-  const srcset = imgSrcset(url, widths);
-  const src = imgUrl(url, widths[Math.min(1, widths.length - 1)]);
+export function stage(url, alt, { sizes = "300px", widths = [320, 480, 720, 960], eager = false, probe = true, cls = "", vtMain = false, canvas = false } = {}) {
+  const srcset = imgSrcset(url, widths, { canvas });
+  const src = imgUrl(url, widths[Math.min(1, widths.length - 1)], { canvas });
   const cors = probe && corsOk() ? ' crossorigin="anonymous"' : "";
   return `<div class="image-stage ${cls}"${vtMain ? " data-vt-main" : ""}>
     <img src="${esc(src)}" ${srcset ? `srcset="${esc(srcset)}" sizes="${esc(sizes)}"` : ""} data-orig="${esc(url)}" data-probe="${probe ? 1 : 0}"${cors}

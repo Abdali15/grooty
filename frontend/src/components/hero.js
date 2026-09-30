@@ -25,7 +25,7 @@ export function heroHTML() {
         .map(
           ({ p, tone }, i) => `<article class="hero-slide ${i === 0 ? "is-active" : ""}" data-slide="${i}" data-tone="${tone}" data-word="${esc(p.brand)}" role="group" aria-roledescription="diapositiva" aria-label="${i + 1} de ${slides.length}" ${i === 0 ? "" : 'aria-hidden="true" inert'}>
         <div class="hero-copy">
-          <p class="hero-eyebrow"><span class="signal-dot" aria-hidden="true"></span>Selección Grooty / ${String(i+1).padStart(2,"0")}</p>
+          <p class="hero-eyebrow"><span class="signal-dot" aria-hidden="true"></span>Selección Grooty</p>
           <p class="hero-brand"><span class="mask"><span class="mask-in">${esc(p.brand)}</span></span></p>
           <p class="hero-title" data-hero-title>${esc(p.name)}</p>
           ${p.line ? `<p class="hero-line">${esc(p.line)}</p>` : ""}
@@ -40,7 +40,7 @@ export function heroHTML() {
           <div class="hero-frame" data-tilt>
             <span class="frame-corner frame-corner--tl" aria-hidden="true"></span><span class="frame-corner frame-corner--br" aria-hidden="true"></span>
             ${stage(p.image, `${p.brand} — ${p.titulo}`, { sizes: "(min-width:1024px) 520px, 88vw", widths: [480, 720, 960, 1200], eager: i === 0, cls: "hero-stage" })}
-            <span class="hero-frame-label" aria-hidden="true">${esc(p.sku)} / GROOTY COLLECTION</span>
+            <span class="hero-frame-label" aria-hidden="true">GROOTY / FIGURAS DE COLECCIÓN</span>
             <span class="hero-glare" aria-hidden="true"></span>
           </div>
         </div>
@@ -49,7 +49,7 @@ export function heroHTML() {
         .join("")}
     </div>
     <div class="hero-ui">
-      <div class="hero-count" aria-hidden="true"><b data-hero-cur>01</b><span>/ ${n}</span></div>
+      <div class="hero-count sr-only" aria-hidden="true"><b data-hero-cur>01</b><span>/ ${n}</span></div>
       <div class="hero-dots" role="group" aria-label="Elegir figura destacada">
         ${slides.map(({ p }, i) => `<button class="hero-dot ${i === 0 ? "is-active" : ""}" type="button" data-dot="${i}" aria-label="Ver figura ${i + 1}: ${esc(p.name)}" ${i === 0 ? 'aria-current="true"' : ""}><span class="dot-fill"></span></button>`).join("")}
       </div>

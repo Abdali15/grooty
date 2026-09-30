@@ -2,7 +2,7 @@ import { esc } from '../lib/dom.js';
 import { icons } from '../lib/icons.js';
 import { brands } from '../data.js';
 import { SITE } from '../config.js';
-import { waReady, sendWhatsApp } from '../lib/whatsapp.js';
+import { waReady, waDirectReady, sendWhatsApp } from '../lib/whatsapp.js';
 import { normalizeFigureRequest, figureRequestMessage } from '../lib/figure-request.js';
 
 export function figureRequestPanel({ standalone = false } = {}) {
@@ -25,7 +25,7 @@ export function figureRequestPanel({ standalone = false } = {}) {
         <label class="request-field">Versión, escala u otros detalles<textarea name="details" rows="3" maxlength="600" placeholder="Marca, edición, tamaño o accesorios que buscas"></textarea></label>
       </div></details>
       <button class="btn btn-primary btn-block request-submit" type="submit">${waReady() ? icons.whatsapp : icons.copy}<span>${waReady() ? 'Consultar por WhatsApp' : 'Preparar y copiar consulta'}</span>${icons.arrow}</button>
-      <p class="request-fine">${waReady() ? 'Abriremos WhatsApp con tu consulta. Tú decides cuándo enviarla.' : 'Copia el mensaje y envíalo al chat de la tienda o a nuestro Instagram.'} La disponibilidad, el precio y el plazo se confirman con Grooty.</p>
+      <p class="request-fine">${waDirectReady() ? 'Abriremos el chat de la tienda con tu consulta. Tú decides cuándo enviarla.' : waReady() ? 'Abriremos el grupo de WhatsApp de la tienda y copiaremos tu consulta para pegarla allí. Si prefieres una consulta privada, usa Instagram.' : 'Copia el mensaje y envíalo al chat de la tienda o a nuestro Instagram.'} La disponibilidad, el precio y el plazo se confirman con Grooty.</p>
       <p class="request-status" role="status" aria-live="polite" data-request-status></p>
       <div class="request-preview" data-request-preview hidden><label class="request-field">Tu consulta preparada<textarea name="preview" readonly rows="7" aria-label="Consulta preparada para copiar"></textarea></label><a class="btn btn-secondary btn-block" href="${esc(SITE.instagram)}" target="_blank" rel="noopener">${icons.instagram} Abrir ${esc(SITE.instagramHandle)}</a></div>
     </form>
@@ -47,7 +47,7 @@ export function mountFigureRequest(root) {
       const message = figureRequestMessage(request);
       form.elements.preview.value = message;
       form.querySelector('[data-request-preview]').hidden = false;
-      status.textContent = waReady() ? 'Consulta preparada. Revisa el mensaje en WhatsApp antes de enviarlo.' : 'Consulta preparada. También puedes seleccionar y copiar el mensaje de abajo.';
+      status.textContent = waDirectReady() ? 'Consulta preparada. Revisa el mensaje en el chat antes de enviarlo.' : waReady() ? 'Consulta preparada. Abrimos el grupo de WhatsApp; pega allí el mensaje si deseas compartirlo con el grupo.' : 'Consulta preparada. También puedes seleccionar y copiar el mensaje de abajo.';
       await sendWhatsApp(links => figureRequestMessage(request, { links }), 'figure_request');
     } catch (error) {
       if (!disposed) status.textContent = error.message || 'No se pudo preparar la consulta. Vuelve a intentarlo.';
