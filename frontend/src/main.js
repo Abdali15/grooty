@@ -4,36 +4,15 @@ import "./styles/layout.css";
 import "./styles/components.css";
 import "./styles/views.css";
 import "./styles/motion.css";
+import "./styles/future.css";
+import "./styles/admin.css";
 
-import { initImages } from "./lib/images.js";
-import { renderShell, initHeader, updateActive } from "./components/header.js";
-import { initOverlays } from "./components/overlay.js";
-import { initActions } from "./actions.js";
-import { defineRoutes, startRouter } from "./router.js";
-import { motion } from "./motion/index.js";
+import { loadPublicCatalog } from "./lib/catalog-source.js";
 
-import { home } from "./views/home.js";
-import { catalogPage, brandPage, preordersPage } from "./views/catalog.js";
-import { brandsPage } from "./views/brands.js";
-import { product } from "./views/product.js";
-import { help } from "./views/help.js";
-import { notfound } from "./views/notfound.js";
-
-defineRoutes([
-  { name: "home", match: (p) => (p === "/" ? {} : null), view: home },
-  { name: "catalog", match: (p) => (p === "/catalogo" ? {} : null), view: catalogPage },
-  { name: "preorders", match: (p) => (p === "/preventas" ? {} : null), view: preordersPage },
-  { name: "brands", match: (p) => (p === "/marcas" ? {} : null), view: brandsPage },
-  { name: "brand", match: (p) => (p.match(/^\/marcas\/([^/]+)$/) ? { slug: p.split("/")[2] } : null), view: brandPage },
-  { name: "product", match: (p) => (p.startsWith("/figura/") ? {} : null), view: product },
-  { name: "help", match: (p) => (p === "/ayuda" ? {} : null), view: help },
-  { name: "notfound", match: () => null, view: notfound }
-]);
-
-initImages();
-document.getElementById("shell").innerHTML = renderShell();
-initHeader();
-initOverlays();
-initActions();
-motion.init();
-startRouter();
+// Los módulos del catálogo se evalúan después de cargar los datos públicos.
+loadPublicCatalog().then(() => import("./bootstrap.js")).catch(error => {
+  console.error("No se pudo iniciar la tienda", error);
+  const app = document.getElementById("app");
+  app.innerHTML = `<div class="container notfound"><h1 class="h-page">Volvemos en un momento</h1><p>No se pudo cargar la tienda. Recarga la página para volver a intentarlo.</p><button class="btn btn-primary" type="button" id="retry-store">Reintentar</button></div>`;
+  document.getElementById("retry-store").addEventListener("click", () => location.reload());
+});

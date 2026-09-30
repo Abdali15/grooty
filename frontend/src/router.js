@@ -79,6 +79,9 @@ const setVTName = (el, on) => el && (el.style.viewTransitionName = on ? "product
 
 function setMeta(out) {
   document.title = out.title;
+  let robots = document.querySelector('meta[name="robots"]');
+  if (!robots) { robots = document.createElement("meta"); robots.name = "robots"; document.head.appendChild(robots); }
+  robots.content = currentPath() === "/admin" ? "noindex,nofollow" : "index,follow";
   let m = document.querySelector('meta[name="description"]');
   if (m && out.description) m.setAttribute("content", out.description);
 }

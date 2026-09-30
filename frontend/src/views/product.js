@@ -50,11 +50,11 @@ function info(p) {
         : `<p class="pdp-note">Confirma disponibilidad, pago y entrega con la tienda antes de comprar.</p>`
     }
     <div class="pdp-actions">
-      <button class="btn btn-primary btn-lg" type="button" data-add="${p.id}" data-add-label>${icons.plus}<span>Añadir a Mi selección</span></button>
+      <button class="btn btn-primary btn-lg" type="button" ${p.stock===0 ? "disabled" : ""} data-add="${p.id}" data-add-label>${icons.plus}<span>${p.stock===0 ? "Agotado" : "Añadir a Mi selección"}</span></button>
       <button class="btn btn-secondary btn-lg" type="button" data-wa="product" data-id="${p.id}">${icons.whatsapp}<span>${waLabel("Consultar por WhatsApp")}</span></button>
       ${heartButton(p, "fav-btn--inline fav-btn--lg")}
     </div>
-    <dl class="meta-row meta-row--lg"><div><dt>Marca</dt><dd>${esc(p.brand)}</dd></div>${p.line ? `<div><dt>Línea / edición</dt><dd>${esc(p.line)}</dd></div>` : ""}<div><dt>Fotos publicadas</dt><dd>${p.images.length}</dd></div><div><dt>Estado</dt><dd>${esc(p.estado)}</dd></div><div><dt>Modalidad</dt><dd>${p.isPre ? "Preventa" : "Venta"}</dd></div><div><dt>Código</dt><dd>${esc(p.sku)}</dd></div></dl>
+    <dl class="meta-row meta-row--lg"><div><dt>Marca</dt><dd>${esc(p.brand)}</dd></div>${p.line ? `<div><dt>Línea / edición</dt><dd>${esc(p.line)}</dd></div>` : ""}${Number.isInteger(p.stock) ? `<div><dt>Stock</dt><dd>${p.stock===0 ? "Agotado" : `${p.stock} ${p.stock===1 ? "unidad" : "unidades"}`}</dd></div>` : ""}${p.franchise ? `<div><dt>Franquicia</dt><dd>${esc(p.franchise)}</dd></div>` : ""}${p.character_name ? `<div><dt>Personaje</dt><dd>${esc(p.character_name)}</dd></div>` : ""}<div><dt>Fotos publicadas</dt><dd>${p.images.length}</dd></div><div><dt>Estado</dt><dd>${esc(p.estado)}</dd></div><div><dt>Modalidad</dt><dd>${p.isPre ? "Preventa" : "Venta"}</dd></div><div><dt>Código</dt><dd>${esc(p.sku)}</dd></div></dl>
     ${p.description ? `<section class="pdp-details"><h2 class="h-mini">Sobre esta figura</h2><p>${esc(p.description)}</p></section>` : ""}
     ${p.includes_text ? `<section class="pdp-details"><h2 class="h-mini">Qué incluye</h2><p>${esc(p.includes_text)}</p></section>` : ""}
     ${p.box_note ? `<section class="pdp-details"><h2 class="h-mini">Estado de la caja</h2><p>${esc(p.box_note)}</p></section>` : ""}

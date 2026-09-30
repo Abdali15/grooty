@@ -13,6 +13,7 @@ const NAV = [
 export function renderShell() {
   return `
   ${SITE.announcement ? `<div class="announcement">${SITE.announcement}</div>` : ""}
+  <div class="reading-progress" aria-hidden="true"><span></span></div>
   <header class="site-header" id="site-header">
     <div class="container navbar">
       <a href="/" data-nav class="brand" aria-label="Grooty Store — Inicio">

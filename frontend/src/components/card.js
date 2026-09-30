@@ -21,6 +21,7 @@ export function priceBlock(p, { compact = false } = {}) {
 }
 
 export function addButton(p, cls = "") {
+  if (p.stock === 0) return `<span class="stock-empty">Agotado</span>`;
   return `<button class="add-btn ${cls}" type="button" data-add="${p.id}" aria-label="Añadir ${esc(p.name)} a Mi selección"><span class="add-ico add-ico--plus">${icons.plus}</span><span class="add-ico add-ico--check">${icons.check}</span></button>`;
 }
 
@@ -37,7 +38,7 @@ export function productCard(p, { eager = false, sizes = SIZES, extra = "" } = {}
     <div class="card-body">
       <p class="card-brand">${esc(p.brand)}</p>
       <h3 class="card-title"><a href="${p.url}" data-nav data-card>${esc(p.name)}</a></h3>
-      <p class="card-line">${esc(p.line || (p.isPre ? `Estado: ${p.estado}` : "Figura de colección"))}</p>
+      <p class="card-line">${esc(p.line || (p.isPre ? `Estado: ${p.estado}` : "Figura de colección"))}</p>${Number.isInteger(p.stock) ? `<p class="card-stock ${p.stock===0 ? "is-empty" : ""}">${p.stock===0 ? "Agotado" : `${p.stock} ${p.stock===1 ? "unidad" : "unidades"}`}</p>` : ""}
       <div class="card-foot">
         <div class="card-price">${priceBlock(p)}</div>
         ${addButton(p)}

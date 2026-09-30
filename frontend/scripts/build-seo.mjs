@@ -24,7 +24,8 @@ const slugify = (s) => String(s).normalize("NFD").replace(/[\u0300-\u036f]/g, ""
 const money = (n) => new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(n);
 const ogImg = (u) => (/^https:\/\/ik\.imagekit\.io\//.test(u) ? `${u}${u.includes("?") ? "&" : "?"}tr=w-1000,q-80,f-jpg` : u);
 
-const routes = []; // { path, title, description, image?, ld? }
+const routes = []; // { path, title, description, image?, ld?, private? }
+routes.push({ path: "/admin", title: "Administración · Grooty Store", description: "Acceso de propietarios.", private: true });
 routes.push({ path: "/catalogo", title: "Catálogo · Grooty Store", description: `Catálogo de figuras de colección de Grooty Store: ${data.length} piezas.` });
 routes.push({ path: "/preventas", title: "Preventas · Grooty Store", description: "Figuras en preventa: reserva con el monto indicado. Condiciones claras." });
 routes.push({ path: "/marcas", title: "Marcas · Grooty Store", description: "Explora las marcas del catálogo de Grooty Store." });
@@ -60,6 +61,7 @@ function shell(r) {
     .replace(/<meta property="og:title" content=".*?" \/>/, `<meta property="og:title" content="${esc(r.title)}" />`)
     .replace(/<meta property="og:description" content=".*?" \/>/, `<meta property="og:description" content="${esc(r.description)}" />`);
   const extra = [];
+  if (r.private) extra.push('<meta name="robots" content="noindex,nofollow" />');
   if (r.image) extra.push(`<meta property="og:image" content="${esc(ogImg(r.image))}" />`);
   if (site) extra.push(`<meta property="og:url" content="${esc(site + r.path)}" />`, `<link rel="canonical" href="${esc(site + r.path)}" />`);
   if (r.ld) extra.push(`<script type="application/ld+json">${JSON.stringify(r.ld).replace(/</g, "\\u003c")}</script>`);
@@ -72,9 +74,9 @@ routes.forEach((r) => {
   writeFileSync(join(dir, "index.html"), shell(r));
 });
 
-const urls = ["/", ...routes.map((r) => r.path)];
+const urls = ["/", ...routes.filter(r => !r.private).map((r) => r.path)];
 if (site) {
   writeFileSync(join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u) => `  <url><loc>${site}${u}</loc></url>`).join("\n")}\n</urlset>\n`);
 }
-writeFileSync(join(dist, "robots.txt"), `User-agent: *\nAllow: /\n${site ? `Sitemap: ${site}/sitemap.xml\n` : ""}`);
+writeFileSync(join(dist, "robots.txt"), `User-agent: *\nAllow: /\nDisallow: /admin\n${site ? `Sitemap: ${site}/sitemap.xml\n` : ""}`);
 console.log(`✔ SEO: ${routes.length} shells HTML${site ? ` + sitemap (${site})` : " (sin SITE_URL: sin sitemap ni canonical)"}`);

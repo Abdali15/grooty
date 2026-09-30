@@ -23,9 +23,10 @@ create table if not exists public.products (
   sale_type text not null check (sale_type in ('venta','preventa')),
   price numeric(10,2) not null check (price >= 0),
   reservation_price numeric(10,2),
-  stock integer not null default 0 check (stock >= 0),
+  stock integer default null check (stock is null or stock >= 0),
   published boolean not null default true,
   archived boolean not null default false,
+  revision integer not null default 1 check (revision >= 0),
   franchise text,
   character_name text,
   includes_text text,
@@ -76,10 +77,19 @@ drop policy if exists "public read products" on public.products;
 create policy "public read products" on public.products for select using (published = true and archived = false);
 
 drop policy if exists "public read product images" on public.product_images;
-create policy "public read product images" on public.product_images for select using (true);
+create policy "public read product images" on public.product_images for select using (exists (select 1 from public.products p where p.id = product_id and p.published = true and p.archived = false));
 
 drop policy if exists "public read hero" on public.hero_slides;
 create policy "public read hero" on public.hero_slides for select using (active = true);
 
 -- analytics_events no tiene lectura pública.
 -- Crear inserción controlada mediante Edge Function o endpoint server-side antes de producción.
+
+-- V5: stock desconocido se representa con NULL; no se cambian valores existentes.
+alter table public.products alter column stock drop not null;
+alter table public.products alter column stock set default null;
+alter table public.products add column if not exists revision integer not null default 1;
+
+-- Las escrituras siguen bloqueadas para visitantes. El backend debe comprobar
+-- owner/admin, CSRF y revision antes de usar su conexión privada.
+-- Nunca incluyas service_role ni una conexión PostgreSQL en el frontend.

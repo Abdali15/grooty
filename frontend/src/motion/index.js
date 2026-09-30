@@ -66,6 +66,12 @@ export const motion = {
           gsap.from(".site-header .navbar > *", { y: -10, opacity: 0, duration: 0.5, stagger: 0.06, ease: EASE, clearProps: "all" });
         }
 
+        // Escena orbital: se ejecuta solo mientras entra en el viewport.
+        const orbits = $$(".hero-orbit", root);
+        if (orbits.length) gsap.fromTo(orbits, { rotate: -5, scale: 0.96 }, { rotate: 7, scale: 1.04, ease: "none", scrollTrigger: { trigger: root.querySelector(".hero"), start: "top top", end: "bottom top", scrub: 1 } });
+        const discovery = root.querySelector(".discovery-panel");
+        if (discovery) gsap.fromTo(discovery, { backgroundPosition: "50% 40%" }, { backgroundPosition: "50% 65%", ease: "none", scrollTrigger: { trigger: discovery, start: "top bottom", end: "bottom top", scrub: 1 } });
+
         // Títulos con SplitText (solo los marcados)
         $$("[data-split]", root).forEach((el) => {
           if (vt && inView(el) && !first) return;

@@ -14,7 +14,7 @@ export function footer() {
           <p>Figuras de colección en Perú. Explora, guarda tus favoritas y consulta tu selección por WhatsApp.</p>
         </div>
         <div><h3>Explorar</h3><a href="/catalogo" data-nav>Catálogo</a><a href="/preventas" data-nav>Preventas</a><a href="/marcas" data-nav>Marcas</a></div>
-        <div><h3>Ayuda</h3><a href="/ayuda#como-comprar" data-nav>Cómo comprar</a><a href="/ayuda#preventas" data-nav>Cómo reservar</a><a href="/ayuda#pagos" data-nav>Pagos y entrega</a></div>
+        <div><h3>Ayuda</h3><a href="/ayuda#como-comprar" data-nav>Cómo comprar</a><a href="/ayuda#preventas" data-nav>Cómo reservar</a><a href="/ayuda#pagos" data-nav>Pagos y entrega</a><a href="/admin" data-nav>Acceso de propietarios</a></div>
         <div><h3>Contacto</h3>
           <button type="button" class="footer-link" data-wa="general">${icons.whatsapp}${waLabel("WhatsApp")}</button>
           <a href="${SITE.instagram}" target="_blank" rel="noopener" class="footer-link">${icons.instagram}${SITE.instagramHandle}</a>

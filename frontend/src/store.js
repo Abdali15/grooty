@@ -1,4 +1,5 @@
-import products from "./data/catalog.json";
+import { catalogSource } from "./lib/catalog-source.js";
+const products = catalogSource();
 import { SITE } from "./config.js";
 
 const K = {

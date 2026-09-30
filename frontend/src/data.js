@@ -1,4 +1,5 @@
-import raw from "./data/catalog.json";
+import { catalogSource } from "./lib/catalog-source.js";
+const raw = catalogSource();
 import { SITE } from "./config.js";
 import { norm, slugify, compact } from "./lib/format.js";
 

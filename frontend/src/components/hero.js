@@ -18,25 +18,29 @@ export function heroHTML() {
   return `<section class="hero" data-hero data-tone="${slides[0].tone}" data-parallax aria-roledescription="carrusel" aria-label="Figuras destacadas">
     <h1 class="sr-only">Grooty Store: figuras de colección, preventas y novedades en Perú</h1>
     <div class="hero-bgword layer-far" aria-hidden="true"><span data-hero-word>${esc(list[0].brand)}</span></div>
+    <div class="hero-orbit" aria-hidden="true"><i></i><i></i></div>
     <div class="hero-grain" aria-hidden="true"></div>
     <div class="hero-slides">
       ${slides
         .map(
           ({ p, tone }, i) => `<article class="hero-slide ${i === 0 ? "is-active" : ""}" data-slide="${i}" data-tone="${tone}" data-word="${esc(p.brand)}" role="group" aria-roledescription="diapositiva" aria-label="${i + 1} de ${slides.length}" ${i === 0 ? "" : 'aria-hidden="true" inert'}>
         <div class="hero-copy">
+          <p class="hero-eyebrow"><span class="signal-dot" aria-hidden="true"></span>Selección Grooty / ${String(i+1).padStart(2,"0")}</p>
           <p class="hero-brand"><span class="mask"><span class="mask-in">${esc(p.brand)}</span></span></p>
           <p class="hero-title" data-hero-title>${esc(p.name)}</p>
           ${p.line ? `<p class="hero-line">${esc(p.line)}</p>` : ""}
-          <div class="hero-meta">${badge(p)}<span class="hero-sku">${esc(p.isPre ? "Reserva tu pieza" : "Disponible en catálogo")}</span></div>
+          <div class="hero-meta">${badge(p)}<span class="hero-sku">${esc(p.stock === 0 ? "Agotado" : p.isPre ? "Reserva tu pieza" : "Disponible en catálogo")}</span></div>
           <div class="hero-price"><strong>${money(p.precio)}</strong>${p.isPre && p.precio_reserva != null ? `<span>Reserva ${money(p.precio_reserva)}</span>` : ""}</div>
           <div class="hero-actions">
             <a class="btn btn-hero" href="${p.url}" data-nav data-magnetic>Ver figura ${icons.arrow}</a>
-            <button class="btn btn-ghost" type="button" data-add="${p.id}">${icons.plus}<span>Mi selección</span></button>
+            <button class="btn btn-ghost" type="button" ${p.stock===0 ? "disabled" : ""} data-add="${p.id}">${icons.plus}<span>Mi selección</span></button>
           </div>
         </div>
         <div class="hero-visual layer-near">
           <div class="hero-frame" data-tilt>
+            <span class="frame-corner frame-corner--tl" aria-hidden="true"></span><span class="frame-corner frame-corner--br" aria-hidden="true"></span>
             ${stage(p.image, `${p.brand} — ${p.titulo}`, { sizes: "(min-width:1024px) 520px, 88vw", widths: [480, 720, 960, 1200], eager: i === 0, cls: "hero-stage" })}
+            <span class="hero-frame-label" aria-hidden="true">${esc(p.sku)} / GROOTY COLLECTION</span>
             <span class="hero-glare" aria-hidden="true"></span>
           </div>
         </div>

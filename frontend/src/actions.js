@@ -36,6 +36,7 @@ export function initActions() {
       e.preventDefault();
       const p = getProduct(t.dataset.add);
       if (!p) return;
+      if (p.stock === 0) return toast("Esta figura está agotada. Consulta otras piezas del catálogo.");
       addToSelection(p.id);
       track("add_selection", { id: p.id });
       flash(t, "is-done", 950);
