@@ -223,3 +223,18 @@ body[data-route="admin"] .contact-float { display: none; }
   .pdp-bar .btn { font-size: 12px; padding-inline: 10px; }
   .pdp-bar-price strong { font-size: 20px; }
 }
+
+/* Production mobile polish: controls remain reachable at narrow widths. */
+@media(max-width:767.98px) {
+  .pdp-bar { display: grid; grid-template-columns: minmax(0,1fr) auto auto; }
+  .pdp-bar-price { min-width: 0; margin-right: 0; }
+  .pdp-bar-price span { white-space: normal; line-height: 1.35; }
+  .qv-actions .btn { white-space: normal; line-height: 1.4; }
+  .qv-copy > .btn-block { white-space: normal; line-height: 1.4; padding-block: 14px; }
+}
+@media(max-width:359.98px) {
+  .pdp-bar { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+  .pdp-bar-price { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 10px; }
+  .pdp-bar .btn { min-width: 0; width: 100%; }
+  body[data-route="product"] { padding-bottom: calc(var(--bottomnav-h) + var(--safe-b) + 120px); }
+}

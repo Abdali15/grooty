@@ -9,16 +9,19 @@ export function validatePublicCatalog(value) {
   return value.products.filter(p => p.published !== false && !p.archived).map(p => {
     if (!Number.isSafeInteger(p.id) || p.id < 1 || ids.has(p.id)) throw Error('ID inválido');
     ids.add(p.id);
-    if (typeof p.titulo !== 'string' || !p.titulo.trim() || typeof p.marca !== 'string' || !p.marca.trim()) throw Error('Producto inválido');
-    if (!['Sellado','Open'].includes(p.estado) || !['venta','preventa'].includes(p.tipo) || !Number.isFinite(p.precio) || p.precio <= 0) throw Error('Datos comerciales inválidos');
-    if (p.stock != null && (!Number.isInteger(p.stock) || p.stock < 0)) throw Error('Stock inválido');
+    if (typeof p.titulo !== 'string' || !p.titulo.trim() || p.titulo.length > 180 || typeof p.marca !== 'string' || !p.marca.trim() || p.marca.length > 60) throw Error('Producto inválido');
+    if (!['Sellado','Open'].includes(p.estado) || !['venta','preventa'].includes(p.tipo) || !Number.isFinite(p.precio) || p.precio <= 0 || p.precio > 999999) throw Error('Datos comerciales inválidos');
+    if (p.stock != null && (!Number.isInteger(p.stock) || p.stock < 0 || p.stock > 9999)) throw Error('Stock inválido');
     if (!Array.isArray(p.imagenes_producto) || !p.imagenes_producto.length || p.imagenes_producto.length > 8) throw Error('Imágenes inválidas');
     for (const image of p.imagenes_producto) {
-      if (typeof image.url !== 'string') throw Error('Imagen inválida');
+      if (typeof image.url !== 'string' || image.url.length > 2048) throw Error('Imagen inválida');
       const u = new URL(image.url,'https://grooty.invalid');
       if (u.protocol !== 'https:' || u.username || u.password) throw Error('URL inválida');
     }
     if (p.tipo === 'preventa' && p.precio_reserva != null && (!Number.isFinite(p.precio_reserva) || p.precio_reserva < 0 || p.precio_reserva > p.precio)) throw Error('Reserva inválida');
+    for (const key of ['description','includes_text','box_note','franchise','character_name']) {
+      if (p[key] != null && (typeof p[key] !== 'string' || p[key].length > 3000)) throw Error('Texto de producto inválido');
+    }
     return {...p, stock: p.stock ?? null};
   });
 }

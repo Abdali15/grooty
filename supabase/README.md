@@ -1,14 +1,11 @@
-# Supabase
+# Base de datos de Grooty
 
-La tienda incluida en este ZIP funciona sin Supabase y usa el catálogo JSON actual.
+La tienda pública usa el catálogo JSON y el administrador es una demostración local. No hay una base nueva ni usuarios creados automáticamente.
 
-Cuando quieras pasar a base de datos:
+Para una base NUEVA: ejecuta schema.sql y luego seed-catalog.sql. El seed contiene 88 productos, 6 marcas, URLs de fotos y contacto; rechaza una base con datos para evitar sobrescrituras. No es un backup de la base original.
 
-1. Crea un proyecto en Supabase.
-2. Ejecuta `schema.sql` desde SQL Editor.
-3. Crea usuarios de administración separados para Danfer y Luis mediante Supabase Auth.
-4. No publiques `service_role` ni otras claves privadas en el frontend.
-5. Guarda originales en Supabase Storage y usa ImageKit para entrega/transformación.
-6. Sustituye gradualmente `src/data/catalog.json` por consultas públicas a Supabase.
+Regenerar: node supabase/scripts/generate-seed.mjs.
 
-El panel administrativo no se publica todavía porque primero debe quedar protegido con Auth y RLS.
+Para cuentas y gestión real implementa backend/README.md y backend/ACCESO-ADMIN.md. Usa PostgreSQL/Supabase, cuentas privadas y permisos verificados en servidor. Nunca publiques service_role ni credenciales en VITE_*.
+
+La entrega comercial, el respaldo completo de una base real y la migración de fotos se explican en ENTREGA-PRODUCCION.md.

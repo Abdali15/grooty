@@ -8,12 +8,12 @@
     "build": "npm run validate:data && vite build && node scripts/build-seo.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "validate:data": "node scripts/validate-data.mjs",
-    "test": "node tests/catalog-search.mjs"
+    "test": "node tests/catalog-search.mjs && node tests/security.mjs"
   },
   "dependencies": {
     "fuse.js": "^7.0.0",
     "gsap": "^3.13.0",
-    "swiper": "^11.2.10"
+    "swiper": "12.1.2"
   },
   "devDependencies": {
     "vite": "6.4.3"

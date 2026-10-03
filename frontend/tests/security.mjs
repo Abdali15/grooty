@@ -1,0 +1,34 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { createServer } from 'vite';
+const server=await createServer({server:{middlewareMode:true},appType:'custom',optimizeDeps:{noDiscovery:true,include:[]}});
+try {
+ const {esc}=await server.ssrLoadModule('/src/lib/dom.js');
+ assert.equal(esc('<img src=x onerror="alert(1)">'), '&lt;img src=x onerror=&quot;alert(1)&quot;&gt;');
+ const {normalizeFigureRequest}=await server.ssrLoadModule('/src/lib/figure-request.js');
+ for(const reference of ['javascript:alert(1)','data:text/html,attack','https://user:secret@example.test']) assert.throws(()=>normalizeFigureRequest({figure:'Venom',reference}));
+ assert.throws(()=>normalizeFigureRequest({figure:'Venom',budget:'-1'}));
+ const {validatePublicCatalog}=await server.ssrLoadModule('/src/lib/catalog-source.js');
+ const raw=JSON.parse(readFileSync('src/data/catalog.json','utf8'));
+ assert.equal(validatePublicCatalog({products:raw}).length,88);
+ const first=raw[0];
+ const invalid=[{...first,stock:-1},{...first,stock:1.5},{...first,precio:Infinity},{...first,description:'x'.repeat(3001)},{...first,imagenes_producto:[{url:'javascript:alert(1)'}]},{...first,imagenes_producto:[{url:'https://u:p@example.test/a.jpg'}]}];
+ for(const p of invalid) assert.throws(()=>validatePublicCatalog({products:[p]}));
+ assert.throws(()=>validatePublicCatalog({products:[first,first]}));
+ assert.equal(validatePublicCatalog({products:[{...first,published:false}]}).length,0);
+ assert.equal(validatePublicCatalog({products:[{...first,archived:true}]}).length,0);
+ const {acceptSession,clearSession}=await server.ssrLoadModule('/src/lib/admin-client.js');
+ assert.throws(()=>acceptSession({user:{role:'customer'},csrf:'x'.repeat(32)}));
+ assert.throws(()=>acceptSession({user:{role:'owner'},csrf:'short'}));
+ clearSession();
+ const conf=JSON.parse(readFileSync('../vercel.json','utf8'));
+ const headers=new Map(conf.headers[0].headers.map(h=>[h.key,h.value]));
+ const csp=headers.get('Content-Security-Policy');
+ assert(csp.includes("script-src 'self'"));
+ assert(!csp.includes("'unsafe-eval'"));
+ assert(!/script-src[^;]*unsafe-inline/.test(csp));
+ assert(csp.includes("frame-ancestors 'none'"));
+ assert(csp.includes('frame-src https://www.youtube-nocookie.com'));
+ assert.equal(headers.get('X-Content-Type-Options'),'nosniff');
+ console.log('PASS: XSS escaping, hostile links, invalid catalog data, hidden products, role/CSRF shape, CSP and headers. Server authorization remains pending backend.');
+} finally {await server.close();}

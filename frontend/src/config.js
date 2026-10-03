@@ -9,7 +9,7 @@
 //    También puedes definir VITE_WHATSAPP_NUMBER en Vercel / .env
 //    NO se inventa ningún número: si queda vacío, no se abre ningún wa.me.
 // ─────────────────────────────────────────────────────────────
-const WHATSAPP_NUMBER = "";
+const WHATSAPP_NUMBER = "51936804577";
 
 const clean = (v) => String(v || "").replace(/\D/g, "");
 
@@ -21,7 +21,7 @@ export const SITE = {
   whatsappGroup: "https://chat.whatsapp.com/BDxHh2RdsVMLBrIgOUgBVf?s=sh&p=i&mlu=4&ilr=4",
   facebook: "https://www.facebook.com/share/1AZcxL96gg/",
   tiktok: "https://www.tiktok.com/@grooty.store",
-  whatsappNumber: clean(WHATSAPP_NUMBER) || clean(import.meta.env.VITE_WHATSAPP_NUMBER),
+  whatsappNumber: clean(import.meta.env.VITE_WHATSAPP_NUMBER) || clean(WHATSAPP_NUMBER),
   announcement: "",
   currency: "PEN",
 

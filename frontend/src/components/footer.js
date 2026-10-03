@@ -16,7 +16,7 @@ export function footer() {
         <div><h3>Explorar</h3><a href="/catalogo" data-nav>Catálogo</a><a href="/preventas" data-nav>Preventas</a><a href="/marcas" data-nav>Marcas</a><a href="/a-pedido" data-nav>Solicitar figura a pedido</a></div>
         <div><h3>Ayuda</h3><a href="/ayuda#como-comprar" data-nav>Cómo comprar</a><a href="/ayuda#preventas" data-nav>Cómo reservar</a><a href="/ayuda#pagos" data-nav>Pagos y entrega</a><a href="/admin" data-nav>Administración · Propietarios</a></div>
         <div><h3>Contacto</h3>
-          <button type="button" class="footer-link" data-wa="general">${icons.whatsapp}${waLabel("WhatsApp")}</button>
+          <button type="button" class="footer-link" data-wa="general">${icons.whatsapp}${waLabel(`WhatsApp · +${SITE.whatsappNumber}`)}</button>
           <a href="${SITE.instagram}" target="_blank" rel="noopener" class="footer-link">${icons.instagram}${SITE.instagramHandle}</a>
           <a href="${SITE.facebook}" target="_blank" rel="noopener" class="footer-link">Facebook ${icons.external}</a>
           <a href="${SITE.tiktok}" target="_blank" rel="noopener" class="footer-link">TikTok ${icons.external}</a>

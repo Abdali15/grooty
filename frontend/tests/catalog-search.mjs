@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { createServer } from 'vite';
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom', optimizeDeps: { noDiscovery: true, include: [] } });
 try {
+  const { SITE } = await server.ssrLoadModule('/src/config.js');
+  assert.equal(SITE.whatsappNumber, '51936804577');
   const search = await server.ssrLoadModule('/src/search.js');
   const { products, byId, related } = await server.ssrLoadModule('/src/data.js');
   const ids = q => search.searchIds(q).map(r => r.id);
