@@ -27,7 +27,7 @@ function idle() {
   const rec = recentSearches();
   return `${rec.length ? `<div class="pal-block"><div class="pal-block-head"><p>Búsquedas recientes</p><button type="button" class="link-btn" data-pal-clear>Borrar</button></div><div class="chip-row">${chips(rec)}</div></div>` : ""}
     <div class="pal-block"><p class="pal-block-title">Prueba con</p><div class="chip-row">${chips(SUGGESTIONS)}</div></div>
-    <div class="pal-block"><p class="pal-block-title">Recién llegadas</p><div class="pal-list" role="listbox" aria-label="Recién llegadas">${latest(4).map((p, i) => row(p, i)).join("")}</div></div>`;
+    <div class="pal-block"><p class="pal-block-title">Novedades del catálogo</p><div class="pal-list" role="listbox" aria-label="Novedades del catálogo">${latest(4).map((p, i) => row(p, i)).join("")}</div></div>`;
 }
 
 function paint() {
@@ -64,7 +64,8 @@ function announce() {
   const live = $("#pal-live", overlayPanel());
   if (!live) return;
   const q = query.trim();
-  live.textContent = q ? (results.length ? `${results.length} resultados` : "Sin resultados") : "";
+  const count = q ? searchIds(q).length : 0;
+  live.textContent = q ? (count ? `${results.length} de ${count} resultados` : results.length ? "Sin resultados exactos. Hay una sugerencia de búsqueda." : "Sin resultados") : "";
 }
 
 function setActive(i) {

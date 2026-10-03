@@ -7,7 +7,7 @@ import { norm, slugify, compact } from "./lib/format.js";
  * Catálogo normalizado. `catalog.json` NO se modifica: aquí solo se derivan campos.
  * Orden del array = orden de incorporación (los más recientes primero).
  */
-const STOP = new Set(["the", "and", "ver", "version", "series", "serie", "legends", "marvel", "figura", "de", "del", "la", "el", "vs", "con"]);
+const STOP = new Set(["the", "and", "ver", "version", "series", "serie", "legends", "marvel", "figura", "de", "del", "la", "el", "vs", "con", "comic", "bonus", "limited", "costume", "classic", "reissue", "renewal", "movie", "suit", "black", "blue", "figure"]);
 
 export const products = raw.map((p, index) => {
   const [name, ...rest] = String(p.titulo).split(" - ");
@@ -76,15 +76,19 @@ export function related(p, n = 8, exclude = new Set()) {
   const scored = products
     .filter((x) => x.id !== p.id && !exclude.has(x.id))
     .map((x) => {
+      const sameCharacter = p.character_name && x.character_name && norm(p.character_name).trim() === norm(x.character_name).trim();
+      const sameFranchise = p.franchise && x.franchise && norm(p.franchise).trim() === norm(x.franchise).trim();
       const shared = x.tokens.filter((t) => p.tokens.includes(t)).length;
-      const score = shared * 3 + (x.isPre === p.isPre ? 1 : 0) + (x.brandSlug === p.brandSlug ? 0.5 : 0);
+      const score = (sameCharacter ? 20 : 0) + (sameFranchise ? 10 : 0) + shared * 3 + (x.isPre === p.isPre ? 1 : 0) + (x.brandSlug === p.brandSlug ? 0.5 : 0);
       return { x, score };
     })
     .filter((s) => s.score >= 3)
     .sort((a, b) => b.score - a.score || a.x.index - b.x.index)
     .map((s) => s.x);
   if (scored.length >= 4) return scored.slice(0, n);
-  const fill = products.filter((x) => x.id !== p.id && !exclude.has(x.id) && !scored.includes(x)).slice(0, n - scored.length);
+  const fill = products.filter((x) => x.id !== p.id && !exclude.has(x.id) && !scored.includes(x))
+    .sort((a, b) => Number(b.brandSlug === p.brandSlug) - Number(a.brandSlug === p.brandSlug) || a.index - b.index)
+    .slice(0, n - scored.length);
   return [...scored, ...fill].slice(0, n);
 }
 

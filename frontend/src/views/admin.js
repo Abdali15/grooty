@@ -44,12 +44,13 @@ export const admin = {
     const ac = new AbortController(); const sig = { signal: ac.signal };
     const body = $('[data-admin-body]', root); const dialog = $('[data-editor]', root);
     const form = $('[data-product-form]', root);
+    let connection = 'checking';
     let mode = 'login', user = null, data = null, current = null, tab = 'products', busy = false;
     let search = '', filter = 'all', focusBefore = null;
     const alive = () => !ac.signal.aborted;
     function notice(text, error = false) { const p = $('[data-admin-status]', root); if (p) { p.textContent = text; p.classList.toggle('is-error', error); } }
     function loginView(message = '') {
-      body.innerHTML = `<div class="admin-access-grid"><article class="admin-access-card"><p class="eyebrow">Acceso restringido</p><h2>Gestiona tu colección.</h2><p>Entra con tu cuenta de propietario para actualizar el catálogo publicado.</p><form data-login-form class="admin-login-form"><label class="admin-field">Correo<input name="email" type="email" autocomplete="username" required maxlength="254"></label><label class="admin-field">Contraseña<input name="password" type="password" autocomplete="current-password" required maxlength="128"></label><button class="btn btn-primary btn-block" type="submit">Entrar al panel ${icons.arrow}</button></form><p class="admin-status" data-admin-status role="status">${esc(message)}</p></article><article class="admin-access-card admin-access-card--demo"><p class="eyebrow">Vista previa del panel</p><h2>Prueba cómo funciona.</h2><p>Explora el inventario y prueba productos, stock, marcas, destacados y el tráiler de la portada.</p><div class="admin-demo-note">La demostración guarda borradores en este navegador. No cambia los productos de la tienda.</div><button type="button" class="btn btn-primary btn-block" data-admin-demo>Probar demostración ${icons.arrow}</button><p class="admin-access-fine">Para activar la gestión real, conecta tu backend con autenticación de propietarios. La demostración no necesita contraseña.</p><details class="admin-setup"><summary>¿Cómo activo cuentas reales?</summary><ol><li>Conecta el backend con PostgreSQL o Supabase y autenticación de propietarios.</li><li>Crea una cuenta privada para cada dueño y asígnale el rol owner.</li><li>Usa su correo y contraseña en el formulario de acceso. Las cuentas y los cambios se validan en el servidor.</li></ol><p>No se han creado credenciales reales. La tienda pública no debe guardar contraseñas.</p></details></article></div>`;
+      body.innerHTML = `<div class="admin-access-grid"><article class="admin-access-card"><p class="eyebrow">Acceso restringido</p><h2>Gestiona tu colección.</h2><p>${connection === "ready" ? "Entra con tu cuenta de propietario para actualizar el catálogo publicado." : connection === "checking" ? "Estamos comprobando la conexión del panel." : "La gestión real todavía no está disponible. Puedes explorar la demostración sin contraseña."}</p>${connection === "ready" ? `<form data-login-form class="admin-login-form"><label class="admin-field">Correo<input name="email" type="email" autocomplete="username" required maxlength="254"></label><label class="admin-field">Contraseña<input name="password" type="password" autocomplete="current-password" required maxlength="128"></label><button class="btn btn-primary btn-block" type="submit">Entrar al panel ${icons.arrow}</button></form>` : '<p class="admin-demo-note">El formulario de acceso se habilitará cuando el backend de propietarios esté conectado.</p>'}<p class="admin-status" data-admin-status role="status">${esc(message)}</p></article><article class="admin-access-card admin-access-card--demo"><p class="eyebrow">Vista previa del panel</p><h2>Prueba cómo funciona.</h2><p>Explora el inventario y prueba productos, stock, marcas, destacados y el tráiler de la portada.</p><div class="admin-demo-note">La demostración guarda borradores en este navegador. No cambia los productos de la tienda.</div><button type="button" class="btn btn-primary btn-block" data-admin-demo>Probar demostración ${icons.arrow}</button><p class="admin-access-fine">Para activar la gestión real, conecta tu backend con autenticación de propietarios. La demostración no necesita contraseña.</p><details class="admin-setup"><summary>¿Cómo activo cuentas reales?</summary><ol><li>Conecta el backend con PostgreSQL o Supabase y autenticación de propietarios.</li><li>Crea una cuenta privada para cada dueño y asígnale el rol owner.</li><li>Usa su correo y contraseña en el formulario de acceso. Las cuentas y los cambios se validan en el servidor.</li></ol><p>No se han creado credenciales reales. La tienda pública no debe guardar contraseñas.</p></details></article></div>`;
     }
     async function loadLive() {
       const result = await adminRequest('/catalog', { signal: ac.signal });
@@ -123,6 +124,7 @@ export const admin = {
       busy=true; const button=e.target.querySelector('button[type="submit"]'); if(button)button.disabled=true;
       try {
         if(login){
+          if(connection !== 'ready') throw new Error('El backend de administración todavía no está disponible.');
           const session=await adminRequest('/login',{method:'POST',body:{email:login.elements.email.value.trim(),password:login.elements.password.value},signal:ac.signal});
           login.elements.password.value='';
           if(!alive())return;user=acceptSession(session);mode='live';await loadLive();if(alive())dashboard();
@@ -208,11 +210,12 @@ export const admin = {
       try {
         const session = await adminRequest('/session',{signal:ac.signal});
         if (!alive() || mode !== 'login' || busy) return;
-        user = acceptSession(session); restoring = true; busy = true;
+        connection = 'ready'; user = acceptSession(session); restoring = true; busy = true;
         await loadLive();
         if (alive()) { mode = 'live'; dashboard(); }
       } catch(error) {
         if (alive() && (restoring || (mode === 'login' && !busy))) {
+          connection = error.status === 401 ? 'ready' : 'unavailable';
           clearSession(); mode = 'login'; loginView(error.status === 401 ? '' : error.message);
         }
       } finally { if (restoring) busy = false; }

@@ -56,8 +56,8 @@ function info(p) {
         : `<p class="pdp-note">Confirma disponibilidad, pago y entrega con la tienda antes de comprar.</p>`
     }
     <div class="pdp-actions">
-      <button class="btn btn-primary btn-lg" type="button" ${p.stock===0 ? "disabled" : ""} data-add="${p.id}" data-add-label>${icons.plus}<span>${p.stock===0 ? "Agotado" : "Añadir a Mi selección"}</span></button>
-      <button class="btn btn-secondary btn-lg" type="button" data-wa="product" data-id="${p.id}">${icons.whatsapp}<span>${waLabel("Consultar por WhatsApp")}</span></button>
+      <button class="btn btn-secondary btn-lg" type="button" ${p.stock===0 ? "disabled" : ""} data-add="${p.id}" data-add-label>${icons.plus}<span>${p.stock===0 ? "Agotado" : "Añadir a Mi selección"}</span></button>
+      <button class="btn btn-primary btn-lg" type="button" data-wa="product" data-id="${p.id}">${icons.whatsapp}<span>${waLabel("Consultar por WhatsApp")}</span></button>
       ${heartButton(p, "fav-btn--inline fav-btn--lg")}
     </div>
     <div class="pdp-contact-note"><p>${esc(waContactNote())}</p>${!waDirectReady() ? `<a class="link-btn" href="${esc(SITE.instagram)}" target="_blank" rel="noopener">${icons.instagram}Consulta privada por Instagram</a>` : ''}</div>
@@ -87,15 +87,15 @@ export const product = {
       </div>
       <div class="pdp-bar" role="region" aria-label="Acciones rápidas">
         <div class="pdp-bar-price"><strong>${money(p.precio)}</strong>${p.isPre && p.precio_reserva != null ? `<span>Reserva ${money(p.precio_reserva)}</span>` : ""}</div>
-        <button class="btn btn-primary" type="button" ${p.stock === 0 ? 'disabled' : ''} data-add="${p.id}">${icons.plus}<span>${p.stock === 0 ? 'Agotado' : 'Mi selección'}</span></button>
-        <button class="icon-btn icon-btn--solid" type="button" data-wa="product" data-id="${p.id}" aria-label="${waLabel("Consultar por WhatsApp")}">${icons.whatsapp}</button>
+        <button class="btn btn-secondary pdp-bar-selection" type="button" ${p.stock === 0 ? 'disabled' : ''} data-add="${p.id}">${icons.plus}<span>${p.stock === 0 ? 'Agotado' : 'Mi selección'}</span></button>
+        <button class="btn btn-primary pdp-bar-contact" type="button" data-wa="product" data-id="${p.id}" aria-label="${waLabel("Consultar por WhatsApp")}">${icons.whatsapp}<span>Consultar</span></button>
       </div>
       ${
         more.length
           ? `<section class="band band--sage"><div class="container">${sectionHead({ title: `Más de ${esc(p.brand)}`, sub: `Otras piezas de ${esc(p.brand)}.`, action: `<a class="link-arrow" href="/marcas/${p.brandSlug}" data-nav>Ver toda la marca ${icons.arrow}</a>` })}${rail(more, { label: `Más de ${p.brand}` })}</div></section>`
           : ""
       }
-      ${rel.length ? `<section class="band"><div class="container">${sectionHead({ title: "También puede interesarte", sub: "Figuras que comparten personaje o línea." })}${rail(rel, { label: "También puede interesarte" })}</div></section>` : ""}
+      ${rel.length ? `<section class="band"><div class="container">${sectionHead({ title: "También puede interesarte", sub: "Explora otras piezas del catálogo para tu colección." })}${rail(rel, { label: "También puede interesarte" })}</div></section>` : ""}
       ${seen.length ? `<section class="band band--olive"><div class="container">${sectionHead({ title: "Vuelve a verlas", sub: "Las últimas figuras que revisaste." })}${rail(seen, { label: "Vistas recientemente" })}</div></section>` : ""}
       <div class="container">${keepExploring({ brands: others, showPre: true })}</div>`
     };

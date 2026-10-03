@@ -51,7 +51,7 @@ function variants(nq) {
 }
 
 function simple(nq) {
-  const toks = nq.split(/\s+/).filter(Boolean);
+  const toks = nq.split(/[^a-z0-9]+/).filter(Boolean);
   const c = compact(nq);
   return searchDocs
     .filter((d) => {
@@ -69,21 +69,9 @@ export function searchIds(q) {
   const put = (id, score) => {
     if (!best.has(id) || best.get(id) > score) best.set(id, score);
   };
-  if (!fuse) {
-    variants(nq).forEach((v) => simple(v).forEach((r) => put(r.id, r.score)));
-  } else {
-    const c = compact(nq);
-    for (const v of variants(nq)) {
-      fuse.search(v).forEach((r) => {
-        const d = searchDocs[r.refIndex];
-        const exact = d.name.includes(v) || d.compact.includes(compact(v)) || d.brand.includes(v);
-        put(d.id, exact ? r.score * 0.4 : r.score);
-      });
-    }
-    // asegura coincidencias literales aunque Fuse las puntúe bajo
-    simple(nq).forEach((r) => put(r.id, Math.min(best.get(r.id) ?? 1, 0.12)));
-    if (c.length > 2) searchDocs.forEach((d) => d.compact.includes(c) && put(d.id, Math.min(best.get(d.id) ?? 1, 0.1)));
-  }
+  // Literal and alias matches are authoritative. Typo recovery is offered
+  // separately by didYouMean, never mixed with a successful search.
+  variants(nq).forEach((v) => simple(v).forEach((r) => put(r.id, r.score)));
   return [...best.entries()].map(([id, score]) => ({ id, score })).sort((a, b) => a.score - b.score || byId.get(a.id).index - byId.get(b.id).index);
 }
 

@@ -7,7 +7,8 @@
     "dev": "vite --host 0.0.0.0",
     "build": "npm run validate:data && vite build && node scripts/build-seo.mjs",
     "preview": "vite preview --host 0.0.0.0",
-    "validate:data": "node scripts/validate-data.mjs"
+    "validate:data": "node scripts/validate-data.mjs",
+    "test": "node tests/catalog-search.mjs"
   },
   "dependencies": {
     "fuse.js": "^7.0.0",

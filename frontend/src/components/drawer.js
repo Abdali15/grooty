@@ -52,7 +52,7 @@ function emptyState(kind) {
     <p class="empty-title">${kind === "selection" ? "Tu selección está vacía" : "Aún no guardas favoritas"}</p>
     <p class="empty-sub">${kind === "selection" ? "Añade figuras con el botón + y consúltalas juntas por WhatsApp." : "Toca el corazón en cualquier figura para guardarla aquí."}</p>
     <div class="empty-actions"><a class="btn btn-primary" href="/catalogo" data-nav>Explorar el catálogo</a><a class="btn btn-secondary" href="/preventas" data-nav>Ver preventas</a></div>
-    <p class="empty-hint">Recién llegadas</p>
+    <p class="empty-hint">Novedades del catálogo</p>
     <ul class="lines lines--compact">${sugg.map((p) => `<li class="line">${lineImg(p)}<div class="line-info"><a class="line-title" href="${p.url}" data-nav>${esc(p.name)}</a><p class="line-price">${money(p.precio)}</p></div><button class="mini-btn mini-btn--icon" type="button" data-add="${p.id}" aria-label="Añadir ${esc(p.name)}">${icons.plus}</button></li>`).join("")}</ul>
   </div>`;
 }

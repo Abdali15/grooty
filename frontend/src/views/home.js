@@ -33,7 +33,7 @@ export const home = {
         <div class="container">
           ${sectionHead({
             title: '<span id="new-title">Novedades del catálogo</span>',
-            sub: "Descubre las últimas piezas incorporadas a Grooty.",
+            sub: "Explora las figuras incorporadas o actualizadas recientemente.",
             action: `<a class="link-arrow" href="/catalogo" data-nav>Ver todo el catálogo ${icons.arrow}</a><button class="btn btn-ghost btn-sm" type="button" data-surprise>${icons.dice}<span>Sorpréndeme</span></button>`
           })}
           <div class="product-grid" data-reveal-group>${fresh.map((p, i) => productCard(p, { eager: i < 4, extra: "" }).replace('class="card ', 'data-reveal-item class="card ')).join("")}</div>

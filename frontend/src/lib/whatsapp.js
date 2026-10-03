@@ -4,7 +4,7 @@ import { summarize } from "./cart.js";
 import { track } from "../analytics.js";
 import { toast } from "../components/toast.js";
 
-export const waDirectReady = () => !!SITE.whatsappNumber;
+export const waDirectReady = () => /^[1-9]\d{7,14}$/.test(SITE.whatsappNumber);
 export const waReady = () => waDirectReady() || !!SITE.whatsappGroup;
 /** Si falta un chat directo se usa el grupo oficial; sin ningún canal, se ofrece copiar. */
 export const waLabel = (label) => waDirectReady() ? label : SITE.whatsappGroup ? "Consultar en el grupo" : "Copiar mensaje";

@@ -213,3 +213,13 @@ body[data-route="admin"] .contact-float { display: none; }
   .purchase-details summary { gap: 8px; font-size: 13px; }
   .purchase-condition { flex-direction: column; gap: 10px; }
 }
+
+/* Consistent product hierarchy, with editorial serif accents preserved. */
+.qv-title { font-family: var(--font-ui); font-weight: 600; line-height: 1.08; letter-spacing: -.035em; overflow-wrap: anywhere; }
+.pdp-bar-contact { white-space: nowrap; }
+@media(max-width:399.98px) {
+  .pdp-bar-selection { padding-inline: 10px; }
+  .pdp-bar-selection .ico { display: none; }
+  .pdp-bar .btn { font-size: 12px; padding-inline: 10px; }
+  .pdp-bar-price strong { font-size: 20px; }
+}

@@ -1,0 +1,30 @@
+import assert from 'node:assert/strict';
+import { createServer } from 'vite';
+const server = await createServer({ server: { middlewareMode: true }, appType: 'custom', optimizeDeps: { noDiscovery: true, include: [] } });
+try {
+  const search = await server.ssrLoadModule('/src/search.js');
+  const { products, byId, related } = await server.ssrLoadModule('/src/data.js');
+  const ids = q => search.searchIds(q).map(r => r.id);
+  const baseline = ids('spiderman');
+  assert(baseline.length > 0);
+  assert.deepEqual(ids('Spider-Man'), baseline);
+  assert.deepEqual(ids('spider man'), baseline);
+  assert(!baseline.some(id => /superman|batman/i.test(byId.get(id).titulo)));
+  await search.ensureFuse();
+  assert.deepEqual(ids('spiderman'), baseline, 'Loading typo suggestions must not pollute exact results');
+  assert.equal(ids('zzzzzzzzzz').length, 0);
+  assert.equal(ids('spidermna').length, 0);
+  assert(search.didYouMean('spidermna'), 'Typos retain a separate correction suggestion');
+  assert(ids('gambito').length > 0);
+  assert.deepEqual(ids('gambito'), ids('gambit'));
+  assert(ids('preventa').every(id => byId.get(id).isPre));
+  const p = byId.get(1);
+  assert(!p.tokens.includes('comic'));
+  const recommendations = related(p);
+  assert(!recommendations.some(x => x.id === p.id));
+  assert.equal(new Set(recommendations.map(x => x.id)).size, recommendations.length);
+  const excluded = new Set(recommendations.slice(0,2).map(x => x.id));
+  assert(related(p,8,excluded).every(x => !excluded.has(x.id)));
+  assert.equal(products.length,88);
+  console.log(`PASS: aliases, exact precedence, typo suggestions, preorder search and recommendations (${baseline.length} Spider-Man matches, 88 products)`);
+} finally { await server.close(); }
