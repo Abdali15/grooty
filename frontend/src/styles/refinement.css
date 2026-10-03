@@ -23,11 +23,11 @@ body { background-color: #0e1712; background-image: radial-gradient(ellipse at 9
 .card-tools .badge { position: static; min-height: 28px; padding-inline: 10px; font-size: 12px; letter-spacing: 0; }
 .card-tools .fav-btn { position: relative; top: auto; right: auto; flex: 0 0 44px; }
 .card-media { position: relative; aspect-ratio: 4 / 5; width: 100%; }
-.card .image-stage { inset: 4px; }
+.card .image-stage { inset: 8%; background: #e8ede2; }
 .card .quick-btn { position: relative; left: auto; right: auto; bottom: auto; width: 100%; min-height: 44px; height: auto; margin-top: 4px; opacity: 1; transform: none; pointer-events: auto; background: transparent; border-top: 1px solid #c9d1c2; border-radius: 0 0 12px 12px; font-size: 13px; }
 .card .quick-btn .quick-txt { display: inline; }
 .card .quick-btn:hover { background: #f2f5ee; }
-.card .image-stage img { border-radius: 10px; mix-blend-mode: normal; }
+.card .image-stage img { width: 100%; height: 100%; aspect-ratio: 4 / 5; object-fit: contain; object-position: center; border-radius: 10px; mix-blend-mode: normal; }
 .card-title { font-weight: 600; font-size: 15px; }
 .card-brand { font-size: 12px; letter-spacing: .08em; }
 .card-foot { padding-top: 16px; }
@@ -94,7 +94,7 @@ body[data-route="admin"] .contact-float { display: none; }
   .cinema-products > .card { flex: 0 0 clamp(220px,65vw,290px); width: clamp(220px,65vw,290px); scroll-snap-align: start; }
 }
 @media(max-width:639.98px) {
-  .card .image-stage { inset: 4px; }
+  .card .image-stage { inset: 8%; }
   .hero-dots { max-width: none; }
   .cinema-layout { padding: 18px; border-radius: 22px; gap: 24px; }
   .cinema-media { border-radius: 14px; }

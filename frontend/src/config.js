@@ -34,7 +34,7 @@ export const SITE = {
   imageTransforms: true,
 
   // 4) Figuras del hero (ids de catalog.json). Puedes cambiarlas cuando quieras.
-  heroIds: [93, 92, 78, 76, 68],
+  heroIds: [103, 101, 100, 99, 95],
 
   // Tráiler enlazado por Disney en su comunicado oficial de agosto de 2026.
   cinema: {

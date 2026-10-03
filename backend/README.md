@@ -2,6 +2,12 @@
 
 El propietario desarrollará el backend. Esta carpeta define el contrato que ya consume el frontend; no contiene un servidor activo ni credenciales. El administrador está en `/admin` y existe una demostración con borradores locales independiente del catálogo público.
 
+## Catálogo público sincronizado
+
+Actualizado el 2 de octubre de 2026 (Lima) desde el catálogo que muestra https://tienda-grooty.vercel.app/: 88 productos, 6 marcas y 11 preventas. Se incorporaron 9 figuras, se retiraron del rediseño 9 que ya no figuran como publicadas y se actualizó Iron Man Mark 85. Se conservan IDs, SKU, precios, estado y fotografías de la fuente; no se deduce stock ni se escribe en la base de datos original.
+
+Las portadas y miniaturas usan un lienzo 4:5 con ajuste proporcional y márgenes comunes. ImageKit elimina únicamente bordes casi idénticos con umbral mínimo antes del ajuste; las imágenes ampliadas conservan el encuadre original. Las fotos de cajas, figuras y escenarios siguen siendo las publicadas por la tienda. Una foto de caja no equivale a una foto de figura sin caja.
+
 ## Activar la conexión
 
 1. Implementa los endpoints de esta guía con PostgreSQL/Supabase y autenticación de propietarios.

@@ -4,10 +4,12 @@ import { esc } from "./dom.js";
 /* ───────────── URLs (ImageKit) ───────────── */
 const isIK = (u) => /^https?:\/\/ik\.imagekit\.io\//.test(u || "");
 
-export function imgUrl(url, w, { canvas = false } = {}) {
+export function imgUrl(url, w, { canvas = false, trim = canvas } = {}) {
   if (!url || !SITE.imageTransforms || !isIK(url)) return url;
   const u = new URL(url);
-  u.searchParams.set('tr', `w-${w},${canvas ? `h-${Math.round(w*1.25)},cm-pad_resize,bg-E8EDE2,` : ''}q-80,f-auto`);
+  // Trim only near-identical edge pixels, then fit the full photo into the
+  // shared 4:5 canvas. Never crop the figure or replace its published photo.
+  u.searchParams.set('tr', `${trim ? 't-1:' : ''}w-${w},${canvas ? `h-${Math.round(w*1.25)},cm-pad_resize,bg-E8EDE2,` : ''}q-80,f-auto`);
   return u.href;
 }
 export function imgSrcset(url, widths, options) {
@@ -34,7 +36,7 @@ export function stage(url, alt, { sizes = "300px", widths = [320, 480, 720, 960]
   const src = imgUrl(url, widths[Math.min(1, widths.length - 1)], { canvas });
   const cors = probe && corsOk() ? ' crossorigin="anonymous"' : "";
   return `<div class="image-stage ${cls}"${vtMain ? " data-vt-main" : ""}>
-    <img src="${esc(src)}" ${srcset ? `srcset="${esc(srcset)}" sizes="${esc(sizes)}"` : ""} data-orig="${esc(url)}" data-probe="${probe ? 1 : 0}"${cors}
+    <img src="${esc(src)}" ${srcset ? `srcset="${esc(srcset)}" sizes="${esc(sizes)}"` : ""}${canvas ? ' width="480" height="600"' : ''} data-orig="${esc(url)}" data-probe="${probe ? 1 : 0}"${cors}
       alt="${esc(alt)}" ${eager ? 'fetchpriority="high" decoding="async"' : 'loading="lazy" decoding="async"'}>
   </div>`;
 }
@@ -162,5 +164,5 @@ export function probeWithin(root) {
 
 /** Miniatura simple (listas, drawer, búsqueda): sin detección de fondo. */
 export function thumb(url, w = 160, cls = "") {
-  return `<span class="thumb ${cls}"><img src="${esc(imgUrl(url, w))}" data-orig="${esc(url)}" alt="" loading="lazy" decoding="async"></span>`;
+  return `<span class="thumb ${cls}"><img src="${esc(imgUrl(url, w, { canvas: true }))}" data-orig="${esc(url)}" alt="" loading="lazy" decoding="async"></span>`;
 }
