@@ -6,7 +6,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "/api/:path*"
+      "destination": "/api/index?__route=:path*"
     },
     {
       "source": "/(.*)",
@@ -67,7 +67,7 @@
     }
   ],
   "functions": {
-    "api/[...path].js": {
+    "api/index.js": {
       "maxDuration": 30
     }
   }

@@ -16,6 +16,7 @@ Actualizado: 3 de octubre de 2026. Esta lista distingue código preparado de ser
 ## Necesario para activar en servicios reales
 
 - [ ] Confirmar dominio final del proyecto y cuentas propietarias de GitHub/Vercel/Google Cloud/Supabase.
+- [ ] Revisar Settings → Build and Deployment: Root Directory vacío (raíz), Framework Other, comandos/output según vercel.json. GET /api/health debe devolver JSON, nunca index.html; GET /api/auth/config debe mostrar enabled=false hasta configurar.
 - [ ] Crear DB remota, guardar conexión administrativa privada y revisar certificados/pooler.
 - [ ] Aplicar schema.sql → admin.sql → seed-catalog.sql; no ejecutar seed sobre DB con datos.
 - [ ] Habilitar la conexión de runtime restringida grooty_app y configurar DATABASE_URL en Vercel.

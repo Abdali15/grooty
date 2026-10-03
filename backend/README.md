@@ -6,7 +6,7 @@ Implementación Node.js con API del mismo origen, Google OpenID Connect y Postgr
 
 - `frontend/`: tienda Vite y panel existente, preservando diseño y animaciones.
 - `backend/`: API, autenticación, validadores, comandos privados y pruebas.
-- `api/[...path].js`: adaptador para Vercel Functions. Desplegar desde la raíz del repositorio, NO solo frontend.
+- `api/index.js`: adaptador para Vercel Functions. Desplegar desde la raíz del repositorio, NO solo frontend.
 - `supabase/schema.sql`, `admin.sql`: tablas públicas, RLS y tablas privadas.
 - `supabase/seed-catalog.sql`: importación inicial de 88 figuras, 6 marcas, 100 URLs de fotografías. Solo en base nueva y vacía; no es backup ni incluye archivos de fotografías.
 
