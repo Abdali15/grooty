@@ -1,84 +1,55 @@
-# Backend para Grooty V5
+# Grooty backend — Google + PostgreSQL
 
-El propietario desarrollará el backend. Esta carpeta define el contrato que ya consume el frontend; no contiene un servidor activo ni credenciales. El administrador está en `/admin` y existe una demostración con borradores locales independiente del catálogo público.
+Implementación Node.js con API del mismo origen, Google OpenID Connect y PostgreSQL compatible con Supabase. Los endpoints y migraciones están probados localmente. No hay base remota ni OAuth configurados por este cambio; el acceso queda cerrado por defecto. No hay contraseñas predeterminadas ni correos autorizados incluidos en GitHub.
 
-## Catálogo público sincronizado
+## Carpetas y ejecución
 
-Actualizado el 2 de octubre de 2026 (Lima) desde el catálogo que muestra https://tienda-grooty.vercel.app/: 88 productos, 6 marcas y 11 preventas. Se incorporaron 9 figuras, se retiraron del rediseño 9 que ya no figuran como publicadas y se actualizó Iron Man Mark 85. Se conservan IDs, SKU, precios, estado y fotografías de la fuente; no se deduce stock ni se escribe en la base de datos original.
+- `frontend/`: tienda Vite y panel existente, preservando diseño y animaciones.
+- `backend/`: API, autenticación, validadores, comandos privados y pruebas.
+- `api/[...path].js`: adaptador para Vercel Functions. Desplegar desde la raíz del repositorio, NO solo frontend.
+- `supabase/schema.sql`, `admin.sql`: tablas públicas, RLS y tablas privadas.
+- `supabase/seed-catalog.sql`: importación inicial de 88 figuras, 6 marcas, 100 URLs de fotografías. Solo en base nueva y vacía; no es backup ni incluye archivos de fotografías.
 
-Las portadas y miniaturas usan un lienzo 4:5 con ajuste proporcional y márgenes comunes. ImageKit elimina únicamente bordes casi idénticos con umbral mínimo antes del ajuste; las imágenes ampliadas conservan el encuadre original. Las fotos de cajas, figuras y escenarios siguen siendo las publicadas por la tienda. Una foto de caja no equivale a una foto de figura sin caja.
+Requiere Node >=22. `npm ci --prefix backend`; `npm ci --prefix frontend`; `npm test`; `npm run build`.
+Para desarrollo copia `.env.example` a `.env` dentro de backend, con NODE_ENV=development y APP_ORIGIN=http://localhost:5173. Ejecuta backend en 3000 y Vite en 5173; Vite proxy envía /api a loopback. El backend no sirve archivos del frontend.
 
-## Activar la conexión
+## Activación
 
-1. Implementa los endpoints de esta guía con PostgreSQL/Supabase y autenticación de propietarios.
-2. Sirve `/api` detrás del mismo dominio de la tienda mediante un proxy. El frontend acepta rutas del mismo origen para evitar enviar cookies/CSRF a servidores arbitrarios.
-3. Define `VITE_CATALOG_API=/api/store/catalog` y opcionalmente `VITE_ADMIN_API_BASE=/api/admin` al compilar. Son rutas públicas, no secretos. No se han configurado variables en Vercel durante este cambio.
-4. Crea las cuentas de los propietarios por un procedimiento privado del servidor. No hay contraseñas predeterminadas. Nunca incluyas `service_role`, credenciales PostgreSQL ni claves privadas en variables `VITE_*`.
-5. Verifica que un visitante no pueda consultar ni escribir endpoints administrativos. Después de guardar, la siguiente carga de la tienda leerá los cambios desde la API.
+Sigue `../CIERRE-PRODUCCION.md` y `ACCESO-ADMIN.md`. La lista de cuentas vive en `grooty_private.admin_accounts`; el servidor vincula el correo verificado al identificador Google `sub` tras el primer acceso. Una cuenta autenticada no obtiene rol automáticamente. `owner` y `admin` gestionan catálogo/contenido; los permisos solo se conceden o revocan con el comando privado, fuera del navegador.
 
-## Contrato HTTP
+Google procesa el inicio de sesión directamente. Supabase se usa como PostgreSQL; esta implementación no requiere Supabase Auth. No se solicita acceso a Gmail, Drive ni contactos: scopes openid/email.
 
-Todas las respuestas usan `Content-Type: application/json`. Los errores usan `{ "error": "Mensaje comprensible" }` con el estado HTTP correcto.
+## Contrato API
 
-| Método | Ruta | Respuesta / comportamiento |
+| Método | Ruta | Función |
 |---|---|---|
-| GET | /api/store/catalog | `{ products: [...], settings: { heroIds: [93,92], whatsapp: "número real", cinema: { enabled, title, summary, videoId, source, query } } }`; solo publicados/no archivados. |
-| GET | /api/admin/session | `{ user: { email, role: "owner" }, csrf: "token aleatorio de al menos 16 caracteres" }`; 401 si no hay sesión. |
-| POST | /api/admin/login | Recibe `{ email, password }`. Valida cuenta/rol, crea cookie de sesión y devuelve la misma estructura de session. |
-| POST | /api/admin/logout | Revoca sesión en servidor y limpia cookie. Devuelve `{ ok: true }`. |
-| GET | /api/admin/catalog | `{ products: [...], brands: ["Mafex",...], settings: { heroIds: [...] } }`; incluye ocultos y archivados. |
-| POST | /api/admin/products | Recibe el producto de abajo. Autoriza al propietario, valida y crea con ID y revisión controlados por servidor. |
-| PUT | /api/admin/products/:id | Actualiza e incrementa revision solo si `revision` coincide. Devuelve `{ product }`; 409 ante edición concurrente. |
-| PATCH | /api/admin/products/:id | Recibe `{ archived: true/false, revision }`. Retiro reversible; no borrado físico. |
-| POST | /api/admin/brands | Recibe `{ name }`; valida duplicados/caso, genera slug y devuelve `{ brand }`. |
-| PUT | /api/admin/settings | Recibe `{ heroIds: [...] }` más campos previamente entregados; valida máximo 5 IDs únicos, publicados y no archivados. |
+| GET | /api/health | Proceso disponible; no prueba la base ni Google. |
+| GET | /api/auth/config | Proveedor y disponibilidad de configuración, sin secretos. |
+| GET | /api/auth/google/start | State, nonce y PKCE; redirección a Google. |
+| GET | /api/auth/google/callback | Verifica JWT Google, cuenta autorizada y crea sesión. |
+| GET | /api/store/catalog | Catálogo publicado y configuración pública. |
+| GET | /api/admin/session | Usuario, rol y CSRF; 401 sin sesión. |
+| GET | /api/admin/catalog | Catálogo completo, marcas y settingsRevision. |
+| POST | /api/admin/logout | Revoca cookie/sesión. |
+| POST | /api/admin/products | Alta; ID definitivo asignado por DB. |
+| PUT | /api/admin/products/:id | Edición + fotos en transacción; exige ID coincidente y revision. |
+| PATCH | /api/admin/products/:id | Archivar/restaurar con revision; no elimina físicamente. |
+| POST | /api/admin/brands | Marca nueva; rechaza duplicados sin distinguir mayúsculas. |
+| PUT | /api/admin/settings | Destacados, WhatsApp y cine; exige settingsRevision. |
 
-El servidor asigna ID definitivo en altas: el ID propuesto por el cliente solo es provisional. No uses `MAX(id)+1` en SQL; usa la identity/sequence. Para modificaciones exige que el ID de ruta coincida y usa revisión en una transacción.
+JSON compatible con `frontend/src/lib/admin-client.js`. Errores {error}; 409 por cambios concurrentes/duplicados. Precio en soles, stock null significa desconocido, 0 significa agotado. Todos los endpoints administrativos comprueban sesión y permiso vigente. POST/PUT/PATCH requieren Origin exacto y X-CSRF-Token. El endpoint anterior de email/password se retiró: nunca captures contraseñas Google en el panel.
 
-## Producto (contrato público y administrativo)
+## Seguridad aplicada
 
-```json
-{
-  "id": 93,
-  "sku": "GRT-93",
-  "marca": "Mafex",
-  "titulo": "Nombre exacto de la figura - Línea o edición",
-  "estado": "Sellado",
-  "tipo": "venta",
-  "precio": 250,
-  "precio_reserva": null,
-  "stock": null,
-  "published": true,
-  "archived": false,
-  "revision": 1,
-  "franchise": "",
-  "character_name": "",
-  "description": "",
-  "includes_text": "",
-  "box_note": "",
-  "imagenes_producto": [{ "url": "https://tu-cdn.com/foto.webp", "posicion": 0 }]
-}
-```
+Firma JWT RS256/JWKS oficiales, issuer/audience/expiry/maxTokenAge/nonce/email_verified/azp, cuentas exclusivamente gmail.com autorizadas y vinculación sub; OAuth state ligado a cookie de navegador y consumido una sola vez; PKCE; sin refresh/access tokens persistidos.
+Sesiones opacas de 8 horas, hash SHA256 en PostgreSQL y cookie HttpOnly/Secure/SameSite=Lax con prefijo __Host- en HTTPS. Logout y revocación de cuenta bloquean la sesión; role se consulta en cada petición. Origin + CSRF obligatorio en escrituras. Consultas parametrizadas; validación servidor, límite 64 KiB, TLS verificado a DB, transacciones y revisiones para productos/contenido, auditoría sin secretos, rate limit persistente. Credenciales exclusivamente servidor.
 
-`stock: null` = por confirmar. `stock: 0` = agotado. No conviertas datos desconocidos a cero. Los importes son números en soles; reserva entre cero y precio total, solo en preventa. Los campos de descripción se muestran únicamente cuando los propietarios los completan. No se hacen cobros, reservas ni descuentos automáticos de stock por añadir a Mi selección.
+La cuenta `grooty_app` se crea NOLOGIN con permisos restringidos. No concede roles ni borra auditoría. La configuración privada debe habilitar LOGIN con contraseña fuerte, fuera de GitHub, y usar el pooler/certificado del proveedor. `DATABASE_ADMIN_URL` se reserva al equipo encargado de migraciones y autorizaciones; no se instala en Vercel runtime.
 
-Para adaptar el esquema `supabase/schema.sql`: `title→titulo`, `condition→estado`, `sale_type→tipo`, `price→precio`, `reservation_price→precio_reserva`, nombre de brands→marca y product_images→imagenes_producto. El resto conserva su nombre.
+Las imágenes se gestionan por URLs HTTPS y orden de portada; NO hay uploader binario. La API no descarga URLs proporcionadas por usuarios. Si se agrega subida, validar bytes/tamaño/MIME, reencodear y configurar almacenamiento por separado. Mi selección abre una consulta; no cobra ni descuenta stock.
 
-## Seguridad que debe implementar el servidor
+## Límites de validación
 
-- Sesiones revocables con cookies HttpOnly/Secure/SameSite; autorización owner/admin en **cada** endpoint administrativo. La revisión de rol del frontend no es un control de seguridad del servidor.
-- CSRF con `X-CSRF-Token` y comprobación del Origin en escrituras; rate limit en login y contraseña hasheada con algoritmo adecuado.
-- Validación completa de IDs, estado, modalidad, importes, stock, longitudes, URLs y revisión; consultas parametrizadas y operaciones atómicas.
-- Retirar productos mediante archived. Mantener auditoría (actor, fecha y cambio) y copias de seguridad.
-- Solo el backend publica imágenes verificadas. Para uploads futuros: validar bytes/MIME/tamaño, reencodear y almacenar en Supabase Storage/ImageKit con permisos adecuados. El editor actual admite URLs HTTPS de imágenes reales.
-- No devuelvas contraseñas, hash, cookies o tokens privados en el catálogo. No expongas tablas administrativas públicamente.
+Pruebas SQL sobre PostgreSQL embebido PGlite y HTTP local, no una conexión Supabase remota. Token Google firmado de prueba/JWKS locales para casos hostiles; no hubo inicio de sesión con una cuenta Google real. Falta comprobar OAuth real, TLS/pooler del proveedor, Vercel Functions, móvil físico y recuperación de backup antes de activar.
 
-Supabase proporciona PostgreSQL; pgAdmin es una herramienta para administrar PostgreSQL, no un proveedor alternativo de base de datos. El SQL adjunto está preparado y no se ejecutó contra una base remota.
-
-## Configuración editorial y contacto
-
-Admin → Contenido guarda `settings.whatsapp` y `settings.cinema`. El número directo es opcional; el valor vacío mantiene el enlace al grupo original. `cinema` contiene `enabled` (boolean), `title` (2–120 caracteres), `summary` (2–500), `videoId` (11 caracteres de YouTube), `source` (URL HTTPS oficial de Disney/Marvel) y `query` (hasta 80 caracteres). El backend debe validar todo, comprobar el rol y preservar los restantes settings cuando recibe actualizaciones parciales.
-
-Almacena la configuración pública en `public.store_settings`, fila `key=storefront`. Este campo nunca contiene secretos, cookies ni contraseñas. Entrega su `value` como `settings` en el catálogo público. Gestiona revisión y escrituras atómicas. No hay un proceso automático de renovación de tráileres: el dueño verifica la fuente y actualiza Contenido.
-
-Para activar usuarios reales, consulta `ACCESO-ADMIN.md`.
+No se incluye checkout, gestión de pedidos, pagos ni sincronización automática del catálogo original. El SEO estático usa el catálogo exportado: regenerar el build o implementar SEO dinámico cuando cambien las figuras. El catálogo público consulta DB en la siguiente carga al activar VITE_CATALOG_API=/api/store/catalog; no actualiza pestañas ya abiertas en tiempo real. Si API falla se conserva catálogo importado y se muestra aviso de confirmar precio/disponibilidad.

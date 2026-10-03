@@ -50,7 +50,7 @@ export const admin = {
     const alive = () => !ac.signal.aborted;
     function notice(text, error = false) { const p = $('[data-admin-status]', root); if (p) { p.textContent = text; p.classList.toggle('is-error', error); } }
     function loginView(message = '') {
-      body.innerHTML = `<div class="admin-access-grid"><article class="admin-access-card"><p class="eyebrow">Acceso restringido</p><h2>Gestiona tu colección.</h2><p>${connection === "ready" ? "Entra con tu cuenta de propietario para actualizar el catálogo publicado." : connection === "checking" ? "Estamos comprobando la conexión del panel." : "La gestión real todavía no está disponible. Puedes explorar la demostración sin contraseña."}</p>${connection === "ready" ? `<form data-login-form class="admin-login-form"><label class="admin-field">Correo<input name="email" type="email" autocomplete="username" required maxlength="254"></label><label class="admin-field">Contraseña<input name="password" type="password" autocomplete="current-password" required maxlength="128"></label><button class="btn btn-primary btn-block" type="submit">Entrar al panel ${icons.arrow}</button></form>` : '<p class="admin-demo-note">El formulario de acceso se habilitará cuando el backend de propietarios esté conectado.</p>'}<p class="admin-status" data-admin-status role="status">${esc(message)}</p></article><article class="admin-access-card admin-access-card--demo"><p class="eyebrow">Vista previa del panel</p><h2>Prueba cómo funciona.</h2><p>Explora el inventario y prueba productos, stock, marcas, destacados y el tráiler de la portada.</p><div class="admin-demo-note">La demostración guarda borradores en este navegador. No cambia los productos de la tienda.</div><button type="button" class="btn btn-primary btn-block" data-admin-demo>Probar demostración ${icons.arrow}</button><p class="admin-access-fine">Para activar la gestión real, conecta tu backend con autenticación de propietarios. La demostración no necesita contraseña.</p><details class="admin-setup"><summary>¿Cómo activo cuentas reales?</summary><ol><li>Conecta el backend con PostgreSQL o Supabase y autenticación de propietarios.</li><li>Crea una cuenta privada para cada dueño y asígnale el rol owner.</li><li>Usa su correo y contraseña en el formulario de acceso. Las cuentas y los cambios se validan en el servidor.</li></ol><p>No se han creado credenciales reales. La tienda pública no debe guardar contraseñas.</p></details></article></div>`;
+      body.innerHTML = `<div class="admin-access-grid"><article class="admin-access-card"><p class="eyebrow">Acceso restringido</p><h2>Gestiona tu colección.</h2><p>${connection === "ready" ? "Entra con tu cuenta de propietario para actualizar el catálogo publicado." : connection === "checking" ? "Estamos comprobando la conexión del panel." : "La gestión real todavía no está disponible. Puedes explorar la demostración sin contraseña."}</p>${connection === "ready" ? `<a href="/api/auth/google/start" class="btn btn-primary btn-block">Continuar con Google ${icons.arrow}</a><p class="admin-access-fine">Solo cuentas Gmail autorizadas por los propietarios.</p>` : '<p class="admin-demo-note">El acceso con Google se habilitará cuando el backend y las cuentas autorizadas estén configurados.</p>'}<p class="admin-status" data-admin-status role="status">${esc(message)}</p></article><article class="admin-access-card admin-access-card--demo"><p class="eyebrow">Vista previa del panel</p><h2>Prueba cómo funciona.</h2><p>Explora el inventario y prueba productos, stock, marcas, destacados y el tráiler de la portada.</p><div class="admin-demo-note">La demostración guarda borradores en este navegador. No cambia los productos de la tienda.</div><button type="button" class="btn btn-primary btn-block" data-admin-demo>Probar demostración ${icons.arrow}</button><p class="admin-access-fine">Para activar la gestión real, conecta tu backend con autenticación de propietarios. La demostración no necesita contraseña.</p><details class="admin-setup"><summary>¿Cómo activo cuentas reales?</summary><ol><li>Conecta el backend con PostgreSQL o Supabase y autenticación de propietarios.</li><li>Autoriza el Gmail de cada dueño en la tabla privada del servidor.</li><li>Pulsa Continuar con Google. El servidor comprueba la identidad y los permisos en cada operación.</li></ol><p>No se han creado credenciales reales. La tienda pública no debe guardar contraseñas.</p></details></article></div>`;
     }
     async function loadLive() {
       const result = await adminRequest('/catalog', { signal: ac.signal });
@@ -115,20 +115,14 @@ export const admin = {
       else notice(error.message,true);
     }
     root.addEventListener('submit', async e => {
-      const login=e.target.closest('[data-login-form]');
       const brandForm=e.target.closest('[data-brand-form]');
       const homeForm=e.target.closest('[data-home-form]');
       const contentForm=e.target.closest('[data-content-form]');
-      if(!login && !brandForm && !homeForm && !contentForm && e.target!==form)return;
+      if(!brandForm && !homeForm && !contentForm && e.target!==form)return;
       e.preventDefault(); if(busy)return;
       busy=true; const button=e.target.querySelector('button[type="submit"]'); if(button)button.disabled=true;
       try {
-        if(login){
-          if(connection !== 'ready') throw new Error('El backend de administración todavía no está disponible.');
-          const session=await adminRequest('/login',{method:'POST',body:{email:login.elements.email.value.trim(),password:login.elements.password.value},signal:ac.signal});
-          login.elements.password.value='';
-          if(!alive())return;user=acceptSession(session);mode='live';await loadLive();if(alive())dashboard();
-        } else if(brandForm){
+        if(brandForm){
           const name=brandForm.elements.name.value.trim();
           if(name.length<2 || name.length>60 || data.brands.some(b=>b.toLowerCase()===name.toLowerCase()))throw Error('Escribe una marca nueva de 2 a 60 caracteres.');
           if(mode==='demo')persistDemo({...data,brands:[...data.brands,name]});
@@ -204,7 +198,8 @@ export const admin = {
     },sig);
     dialog.addEventListener('cancel',e=>{if(busy)e.preventDefault();},sig);
     dialog.addEventListener('close',()=>focusBefore?.isConnected && focusBefore.focus(),sig);
-    loginView();
+    const authError=new URLSearchParams(location.search).get('auth_error');
+    loginView(authError==='denied'?'Acceso cancelado o cuenta no autorizada.':authError?'No se pudo completar el acceso. Vuelve a intentarlo.':'');
     (async()=>{
       let restoring = false;
       try {
@@ -216,7 +211,7 @@ export const admin = {
       } catch(error) {
         if (alive() && (restoring || (mode === 'login' && !busy))) {
           connection = error.status === 401 ? 'ready' : 'unavailable';
-          clearSession(); mode = 'login'; loginView(error.status === 401 ? '' : error.message);
+          clearSession(); mode = 'login'; loginView(error.status === 401 ? (authError==='denied'?'Acceso cancelado o cuenta no autorizada.':'') : error.message);
         }
       } finally { if (restoring) busy = false; }
     })();

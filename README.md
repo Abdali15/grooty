@@ -1,7 +1,9 @@
+> Backend y activación de cuentas Google: ver CIERRE-PRODUCCION.md y backend/README.md. No hay credenciales ni cuentas autorizadas predeterminadas.
+
 # Grooty Store — V4
 
 Rediseño funcional y de experiencia del catálogo de figuras de colección. Sigue siendo
-Vite + JavaScript (ES Modules), SPA con History API, sin backend ni pagos: la tienda es
+Vite + JavaScript (ES Modules), SPA con History API y backend Google/PostgreSQL preparado; sin pagos automáticos: la tienda es
 una vitrina y todo se coordina por WhatsApp.
 
 ## Qué cambió respecto a V3
