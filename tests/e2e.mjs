@@ -16,9 +16,9 @@ server.on('request',async(req,res)=>{
 });
 let browser;
 try{
- browser=await chromium.launch({headless:true,executablePath:chromium.executablePath(),args:['--no-sandbox']});
+ browser=await chromium.launch({headless:true,args:['--no-sandbox']});
  for(const viewport of [{width:390,height:844},{width:768,height:1024},{width:1440,height:900}]){
-  const context=await browser.newContext({viewport,reducedMotion:'reduce'}),page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
+  const context=await browser.newContext({viewport,reducedMotion:'reduce'}),page=await context.newPage(),apiRequests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(new URL(r.url()).pathname.startsWith('/api/'))apiRequests.push(new URL(r.url()).pathname);});
   // Test local UI only: do not send load to ImageKit, YouTube, Google or live storefront.
   await page.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
   for(const route of ['/','/catalogo','/cuenta','/checkout','/admin','/operaciones','/a-pedido']){
@@ -27,7 +27,8 @@ try{
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);assert.equal(overflow,false,`Overflow ${route} ${viewport.width}`);
    report.push({route,width:viewport.width,heading:await page.locator('h1').innerText(),overflow});
   }
-  await page.goto(origin+'/cuenta');await page.waitForTimeout(400);assert.equal(await page.getByText('Continuar con Google',{exact:true}).count(),0);assert.equal(await page.getByText('Continuar con Microsoft',{exact:true}).count(),0);
+  apiRequests.length=0;await page.goto(origin+'/cuenta');await page.getByText('El acceso con cuentas está pendiente de configuración.',{exact:false}).waitFor();assert.equal(await page.getByText('Continuar con Google',{exact:true}).count(),0);assert.equal(await page.getByText('Continuar con Microsoft',{exact:true}).count(),0);assert.equal(apiRequests.includes('/api/account/session'),false);
+  apiRequests.length=0;await page.goto(origin+'/checkout?status=approved');await page.getByText('Las compras online todavía no están habilitadas.',{exact:false}).waitFor();assert.equal(await page.locator('[data-checkout]').isVisible(),false);assert.equal(apiRequests.includes('/api/account/session'),false);assert.equal(apiRequests.some(p=>p.startsWith('/api/orders')),false);
   await context.close();
  }
  assert.deepEqual(errors,[]);await mkdir('docs',{recursive:true});await import('node:fs/promises').then(fs=>fs.writeFile('docs/e2e-results.json',JSON.stringify({environment:'local, services disabled, remote requests blocked',checks:report,errors},null,2)));console.log('PASS',report.length,'route/viewport checks; zero overflow; zero page exceptions.');

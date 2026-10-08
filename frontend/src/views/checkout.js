@@ -8,7 +8,9 @@ export const checkout={
   const ac=new AbortController(),status=$('[data-checkout-state]',root),form=$('[data-checkout]',root),orderId=new URLSearchParams(location.search).get('order');let flags,session,key=crypto.randomUUID().replaceAll('-','');
   const api=(p,o={})=>commerceRequest(p,{...o,signal:ac.signal});
   async function init(){try{
-   flags=await api('/auth/config');session=await api('/account/session');if(ac.signal.aborted)return;
+   flags=await api('/auth/config');if(ac.signal.aborted)return;
+   if(!flags.payments&&!orderId){status.textContent='Las compras online todavía no están habilitadas. Puedes consultar disponibilidad con la tienda.';return;}
+   session=await api('/account/session');if(ac.signal.aborted)return;
    if(orderId){const {order,items}=await api('/orders/'+orderId);if(ac.signal.aborted)return;status.innerHTML=`<article class="commerce-panel"><h2>Estado: ${esc(order.status)}</h2><p>Pedido ${esc(order.id)} · ${money(Number(order.total_cents)/100)}</p><p>${items.length} figuras registradas. El retorno desde la pasarela no confirma el pago.</p><a class="btn btn-secondary" href="/checkout?order=${esc(order.id)}&refresh=1">Actualizar estado</a></article>`;return;}
    if(!flags.payments){status.textContent='Las compras online todavía no están habilitadas. Puedes consultar disponibilidad con la tienda.';return;}
    const s=summarize();if(!s.lines.length){status.textContent='Añade figuras al carrito para continuar.';return;}

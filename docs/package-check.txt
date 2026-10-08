@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> grooty-store@3.0.0-rc.1 check:package
+> node tests/package-gate.mjs
+
+PACKAGE CHECK PASS: 3.0.0-rc.1; 124 public artifacts checked; integrations disabled by default. This is not commercial certification.

@@ -1,8 +1,10 @@
 <!-- Referencia Culqi y controles sandbox: docs/VALIDACION-CULQI-3.0.md; no activado. -->
 <!-- Refuerzo de acceso y Perú: docs/REFUERZO-PERU-3.0.md; aprobaciones privadas, no activadas en DB real. -->
-# Estado Grooty Store 3.0 (2026-10-08)
+# Grooty Store 3.0.0-rc.1 — versión para pruebas
 
 Esta rama contiene una evolución aislada: identidad Google/Microsoft, clientes, MFA, RBAC, pedidos/reservas transaccionales y adaptadores mock/Mercado Pago sandbox. **No está lista para cobros productivos**. No hay administrador por defecto. Producción, Culqi y envío real de notificaciones permanecen bloqueados; ningún cambio se publicó sobre la tienda activa.
+
+Cierre de versión: [guía RC1](docs/VERSION-3.0-RC1.md). Verificación local: `npm run verify`. Activación comercial: `npm run check:commercial` (bloqueada hasta completar evidencias).
 
 Documentación vigente: [auditoría](docs/AUDITORIA-3.0.md), [API](docs/API-3.0.md), [instalación y acceso](docs/ACTIVACION-3.0.md), [fases](docs/FASES-3.0.md), [seguridad](docs/SEGURIDAD-3.0.md), [resultados reales](docs/RESULTADOS-3.0.md). Las instrucciones históricas siguientes y los informes anteriores describen entregas previas; no sustituyen esas guías.
 

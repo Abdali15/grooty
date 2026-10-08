@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> grooty-store@3.0.0-rc.1 check:commercial
+> node tests/release-gate.mjs
+
+COMMERCIAL RELEASE BLOCKED: google_real_callback_verified, microsoft_personal_account_verified, admin_mfa_recovery_verified, postgres_multiconnection_concurrency_verified, mercadopago_sandbox_end_to_end_verified, refunds_and_chargebacks_verified, reconciliation_and_jobs_verified, shipping_and_tax_policy_confirmed, preorder_link_delivery_and_quote_checkout_verified, backup_restore_verified, security_and_accessibility_review_complete
