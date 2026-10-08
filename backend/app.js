@@ -9,19 +9,22 @@ import { authorize,transition } from './commerce/policy.js';
 import { createOrder,ownOrder,expireOrders,settlePayment } from './commerce/orders.js';
 import { gateway,verifyMpSignature } from './payments/gateway.js';
 import { customRequest,reservePreorder,preorderAvailable,preorderOrder } from './commerce/requests.js';
+import { validateIngress,enforceIngress,clientBucket,localAdmission } from './commerce/ingress.js';
 export function createHandler({dbFactory=database,env=process.env}={}){
+ const admit=localAdmission();
  return async function handler(req,res){
   res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');
-  const json=(status,value)=>{res.statusCode=status;res.end(JSON.stringify(value));};let path='';
+  const json=(status,value)=>{res.statusCode=status;res.end(JSON.stringify(value));};let path='',release=()=>{};
   try{
-   const url=new URL(req.url,'http://local.invalid');path=url.pathname;const method=req.method;
+   const url=validateIngress(req);path=url.pathname;const method=req.method;
    if(path==='/api/health'&&method==='GET')return json(200,{ok:true,version:'3.0'});
-   if(path==='/api/store/catalog'&&method==='GET')return json(200,await catalog(dbFactory()));
    const cfg=commerceConfig(env);
-   if(path==='/api/auth/config'&&method==='GET')return json(200,{google:cfg.flags.AUTH_GOOGLE_ENABLED,microsoft:cfg.flags.AUTH_MICROSOFT_ENABLED,payments:cfg.flags.PAYMENTS_ENABLED,paymentEnvironment:cfg.paymentEnvironment,preorders:cfg.flags.PREORDERS_ENABLED,customRequests:cfg.flags.CUSTOM_REQUESTS_ENABLED});
+   release=admit(clientBucket(req,cfg));
+   if(path==='/api/auth/config'&&method==='GET')return json(200,{google:cfg.flags.AUTH_GOOGLE_ENABLED,microsoft:cfg.flags.AUTH_MICROSOFT_ENABLED,payments:cfg.flags.PAYMENTS_ENABLED,paymentEnvironment:cfg.paymentEnvironment,country:'PE',currency:'PEN',preorders:cfg.flags.PREORDERS_ENABLED,customRequests:cfg.flags.CUSTOM_REQUESTS_ENABLED});
+   const db=dbFactory();await enforceIngress(db,req,cfg,path);
+   if(path==='/api/store/catalog'&&method==='GET')return json(200,await catalog(db));
    const oauth=path.match(/^\/api\/auth\/(google|microsoft)\/(start|callback)$/);
-   if(oauth){const db=dbFactory();return oauth[2]==='start'?await beginIdentity(db,cfg,req,res,oauth[1]):await finishIdentity(db,cfg,req,res,url,oauth[1]);}
-   const db=dbFactory();
+   if(oauth)return oauth[2]==='start'?await beginIdentity(db,cfg,req,res,oauth[1]):await finishIdentity(db,cfg,req,res,url,oauth[1]);
    if(path==='/api/payments/mercadopago/webhook'&&method==='POST'){
     if(!cfg.flags.PAYMENTS_ENABLED||cfg.provider!=='mercadopago')throw new HttpError(503,'Pagos desactivados.');
     const id=verifyMpSignature(req,url,env.MP_WEBHOOK_SECRET);await limit(db,'payment-webhook',300,60);return json(200,await settlePayment(db,await gateway(cfg).retrievePayment(id)));
@@ -96,9 +99,9 @@ export function createHandler({dbFactory=database,env=process.env}={}){
    }
    throw new HttpError(404,'Ruta no encontrada.');
   }catch(e){
-   const status=e.code==='23505'?409:e.status||500;if(/\/callback$/.test(path)){res.writeHead(303,{Location:'/cuenta?auth_error=retry'});return res.end();}
+   const status=e.code==='23505'?409:e.status||500;if(status===429)res.setHeader('Retry-After','60');if(/\/callback$/.test(path)){res.writeHead(303,{Location:'/cuenta?auth_error=retry'});return res.end();}
    if(status>=500)console.error('Grooty API failure',{code:e.code||'internal'});return json(status,{error:status>=500?'Servicio pendiente de configuración o temporalmente no disponible.':e.message});
-  }
+  }finally{release();}
  };
 }
 export default createHandler();

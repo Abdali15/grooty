@@ -36,7 +36,7 @@ No enviar contraseñas, tokens privados ni claves aquí. Introducirlos directame
 
 1. Configurar un proveedor y probar callback sin permisos. El registro crea CUSTOMER; `/cuenta` recupera sesión HttpOnly.
 2. El propietario inicia sesión con su identidad oficial. Revisar en DB el UUID/provider/issuer/sub/email verificado.
-3. Solo después de aprobación explícita del dueño: operador privado usa `CONFIRM_OWNER_AUTHORIZATION=true`, DATABASE_ADMIN_URL y `npm run admin --prefix backend -- bootstrap-super-admin UUID`. Se bloquea si ya existe otro SUPER_ADMIN. No hay cuenta por defecto ni contraseña inventada. El candidato Lucho_8_3_03@outlook.com NO está autorizado.
+3. Solo después de aprobación explícita del dueño: operador privado usa `CONFIRM_OWNER_AUTHORIZATION=true`, DATABASE_ADMIN_URL y `npm run admin --prefix backend -- bootstrap-super-admin UUID`. Se bloquea si ya existe otro SUPER_ADMIN. No hay cuenta por defecto ni contraseña inventada. Los dos correos indicados por el propietario ya están aprobados para ADMIN en un archivo privado. Todavía no hay permisos aplicados a una base real. Seguir REFUERZO-PERU-3.0.md para importar la aprobación y vincular cada identidad verificada; esta autorización no concede SUPER_ADMIN.
 4. Reingresar en `/cuenta`, configurar autenticador, confirmar código. Sin MFA no hay lectura de catálogo privado ni escritura administrativa.
 5. `/admin` para catálogo. `/operaciones` para pedidos, cotizaciones y permisos. Solo SUPER_ADMIN con MFA y OAuth en últimos 5 minutos cambia autorizaciones; el afectado debe iniciar nueva sesión. Para reautenticar, cerrar sesión y entrar nuevamente con el proveedor y verificar MFA.
 

@@ -44,6 +44,9 @@ export async function ownOrder(db,profileId,id){
 }
 export async function expireOrders(db){
  return transaction(db,async c=>{
+   await c.query('delete from grooty_private.rate_limits where key in (select key from grooty_private.rate_limits where expires_at<=now() limit 1000)');
+   await c.query('delete from grooty_commerce.sessions where token_hash in (select token_hash from grooty_commerce.sessions where expires_at<=now() limit 1000)');
+   await c.query('delete from grooty_commerce.oauth_attempts where state_hash in (select state_hash from grooty_commerce.oauth_attempts where expires_at<=now() limit 1000)');
    const {rows}=await c.query("select id from grooty_commerce.orders where status='PENDING_PAYMENT' and expires_at<=now() order by id for update skip locked limit 100");
    for(const o of rows){
      await c.query("update grooty_commerce.orders set status='PAYMENT_EXPIRED',updated_at=now() where id=$1",[o.id]);

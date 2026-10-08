@@ -4,8 +4,8 @@ No son resultados contra producción ni contra proveedores de cobro.
 
 | Comprobación | Resultado real | Evidencia |
 |---|---|---|
-| Backend Node tests | 26/26 aprobadas | backend-tests.txt |
-| Propiedades generadas | 4.384 entradas distintas: money 1.084, cart 1.100, RBAC 1.100, webhook 1.100 | Seeds 1001–1004 en properties.test.js; logs |
+| Backend Node tests | 35/35 aprobadas | backend-tests.txt |
+| Propiedades generadas | 5.584 entradas distintas: money 1.084, cart 1.100, RBAC 1.100, webhook 1.100, ingress 1.200 | Seeds 1001–1004 y 2001 en properties.test.js / hardening.test.js; logs |
 | Migración + catálogo PostgreSQL PGlite | Aplicada; preserva 88 productos; allowlist vacía | commerce.test.js |
 | Idempotencia pago/stock | Evento duplicado consume una vez; importe falso rechazado | commerce.test.js |
 | Autorización/MFA | CUSTOMER bloqueado, MFA requerido, replay código bloqueado | commerce.test.js |
@@ -18,6 +18,8 @@ No son resultados contra producción ni contra proveedores de cobro.
 | OAuth real / Mercado Pago sandbox | NO ejecutados, faltan configuración/credenciales aisladas | Flags desactivados y producción bloqueada |
 | ZAP, Semgrep, Gitleaks, axe, Lighthouse, k6 | NO ejecutados | Pendientes para revisión completa |
 
-El número de entradas generadas no incluye duplicados del generador ni aserciones múltiples ni repeticiones de tests. Son pruebas de propiedades, no 4.384 compras reales ni garantía de conformidad ASVS. Los 12 tests de regresión antiguos ejercitan legacy-app.js aislado; los nueve commerce tests y cinco de propiedades ejercitan la nueva base. El adaptador Vercel importa únicamente backend/app.js nuevo.
+El número de entradas generadas no incluye duplicados del generador ni aserciones múltiples ni repeticiones de tests. Son pruebas de propiedades, no 5.584 compras reales ni garantía de conformidad ASVS. Los 12 tests de regresión antiguos ejercitan legacy-app.js aislado; los nueve commerce tests, nueve hardening tests y cinco de propiedades ejercitan la nueva base. El adaptador Vercel importa únicamente backend/app.js nuevo.
 
 Publicación comercial BLOQUEADA. Los criterios de aceptación completos del prompt todavía no se cumplen. Ver activation-status.json, AUDITORIA-3.0.md y ACTIVACION-3.0.md para pendientes exactos. No basta introducir credenciales para retirar los bloqueos financieros.
+
+Refuerzo posterior: migración 004 probada; aprobación privada, rechazo de proveedor incorrecto, autorizaciones revocadas/expiradas, flooding de API, JSON excesivamente complejo, cookies ambiguas y combinaciones de pago incorrectas. Vercel consultado con valores ocultos: sin variables de entorno del backend configuradas. WAF activo no pudo leerse (404); no se activaron reglas ni se realizó despliegue.

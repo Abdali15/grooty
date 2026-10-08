@@ -1,3 +1,4 @@
+<!-- Refuerzo de acceso y Perú: docs/REFUERZO-PERU-3.0.md; aprobaciones privadas, no activadas en DB real. -->
 # Estado Grooty Store 3.0 (2026-10-08)
 
 Esta rama contiene una evolución aislada: identidad Google/Microsoft, clientes, MFA, RBAC, pedidos/reservas transaccionales y adaptadores mock/Mercado Pago sandbox. **No está lista para cobros productivos**. No hay administrador por defecto. Producción, Culqi y envío real de notificaciones permanecen bloqueados; ningún cambio se publicó sobre la tienda activa.

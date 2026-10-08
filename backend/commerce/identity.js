@@ -61,6 +61,7 @@ export async function finishIdentity(db,cfg,req,res,url,provider,verify=verifyId
      identity=(await c.query('insert into grooty_commerce.user_identities(profile_id,provider,issuer,subject,email,verified_at) values($1,$2,$3,$4,$5,now()) returning *',[profile.id,who.provider,who.issuer,who.subject,who.email])).rows[0];
    }
    if((await c.query('select deletion_requested_at from grooty_commerce.profiles where id=$1',[identity.profile_id])).rows[0].deletion_requested_at)throw new HttpError(403,'Cuenta pendiente de revisión.');
+   await c.query('select grooty_commerce.bind_approved_identity($1)',[identity.id]);
    const previous=cookies(req)[cookieName(cfg)];if(previous)await c.query('delete from grooty_commerce.sessions where token_hash=$1',[hash(previous)]);
    await c.query("insert into grooty_commerce.sessions(token_hash,identity_id,csrf,expires_at,reauthenticated_at) values($1,$2,$3,now()+interval '8 hours',now())",[hash(sid),identity.id,csrf]);
    await audit(c,identity.profile_id,'identity.login',identity.id,{provider});

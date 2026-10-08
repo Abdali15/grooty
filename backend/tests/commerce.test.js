@@ -17,7 +17,7 @@ let sql,db,server,base,cfg,sid,csrf,identity,profile,env;
 before(async()=>{
  sql=new PGlite();db={query:(s,p)=>sql.query(s,p),connect:async()=>({...db,release(){}})};
  await sql.exec('create role anon;create role authenticated;');
- for(const f of ['../../supabase/schema.sql','../../supabase/admin.sql','../database/003_commerce.sql','../../supabase/seed-catalog.sql'])await sql.exec((await readFile(new URL(f,import.meta.url),'utf8')).replace('create extension if not exists pgcrypto;',''));
+ for(const f of ['../../supabase/schema.sql','../../supabase/admin.sql','../database/003_commerce.sql','../database/004_admin_approvals.sql','../../supabase/seed-catalog.sql'])await sql.exec((await readFile(new URL(f,import.meta.url),'utf8')).replace('create extension if not exists pgcrypto;',''));
  server=http.createServer();await new Promise(r=>server.listen(0,'127.0.0.1',r));base='http://127.0.0.1:'+server.address().port;
  env={NODE_ENV:'development',APP_ORIGIN:base,DATABASE_URL:'test',AUTH_GOOGLE_ENABLED:'true',AUTH_MICROSOFT_ENABLED:'true',GOOGLE_CLIENT_ID:'google-test',GOOGLE_CLIENT_SECRET:'test',MICROSOFT_CLIENT_ID:'ms-test',MICROSOFT_CLIENT_SECRET:'test',MFA_ENCRYPTION_KEY:randomBytes(32).toString('base64'),PAYMENTS_ENABLED:'true',PAYMENT_PROVIDER:'mock',PAYMENT_ENVIRONMENT:'mock'};cfg=commerceConfig(env);
  server.on('request',createHandler({dbFactory:()=>db,env}));

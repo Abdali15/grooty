@@ -3,42 +3,52 @@ npm warn Unknown env config "http-proxy". This will stop working in the next maj
 > grooty-backend@1.0.0 test
 > node --test tests/*.test.js
 
-✔ schema + seed: 88 products, no administrative permissions for public roles (4812.178301ms)
-✔ private endpoints reject visitors and all writes need origin AND CSRF (85.655165ms)
-✔ create/update/archive images and stock atomically; stale revision rejected; hidden excluded (134.939161ms)
-✔ brand duplicate detection and storefront concurrency (49.852033ms)
-✔ Google JWT signature issuer audience expiry nonce verified Gmail (101.576358ms)
-✔ OAuth state must belong to browser; single use; unauthorized Gmail gets no session (13.217787ms)
-✔ permission revocation blocks existing session immediately (8.085754ms)
+✔ schema + seed: 88 products, no administrative permissions for public roles (6413.821375ms)
+✔ private endpoints reject visitors and all writes need origin AND CSRF (92.079883ms)
+✔ create/update/archive images and stock atomically; stale revision rejected; hidden excluded (161.869162ms)
+✔ brand duplicate detection and storefront concurrency (51.764332ms)
+✔ Google JWT signature issuer audience expiry nonce verified Gmail (78.6296ms)
+✔ OAuth state must belong to browser; single use; unauthorized Gmail gets no session (12.254937ms)
+✔ permission revocation blocks existing session immediately (12.122059ms)
 Grooty API operation failed { code: 'internal', status: 503 }
-✔ disabled configuration rejects administration without opening database (10.394944ms)
-✔ backend role cannot grant permissions or delete audit; session and RLS catalog work (15.130526ms)
-✔ OAuth authorized Gmail binds Google identity, sets HttpOnly cookie; logout revokes session (42.654823ms)
-✔ rate limit persisted across independent handler instances (4.184142ms)
-✔ failed photo insertion rolls back product and revision (30.144389ms)
-✔ migration keeps catalog; no candidate authorization; private RLS and financial journals (5157.144386ms)
-✔ customer cannot reach admin; role injection, CSRF and BOLA fail (100.593213ms)
-✔ unknown/zero stock, browser price and unpublished product cannot be ordered (30.173223ms)
-✔ order authoritative cents, idempotent replay, stock held, duplicate payment consumes once (92.446988ms)
-✔ expiry releases holds; late payment cannot steal inventory; promotion sets server expiry (43.272829ms)
-✔ MFA encrypted with identity binding; required for admin and TOTP replay denied (81.061758ms)
-✔ official signed JWT validation for Google/Microsoft: no unverified email or issuer/tenant bypass (196.267429ms)
-✔ OAuth same email creates separate profiles; state bound to browser and single use (41.908618ms)
-✔ webhook HMAC freshness and body independent API verification; sandbox never reports a paid mock (2.678616ms)
+✔ disabled configuration rejects administration without opening database (8.050029ms)
+✔ backend role cannot grant permissions or delete audit; session and RLS catalog work (42.587162ms)
+✔ OAuth authorized Gmail binds Google identity, sets HttpOnly cookie; logout revokes session (125.45007ms)
+✔ rate limit persisted across independent handler instances (4.233492ms)
+✔ failed photo insertion rolls back product and revision (40.965645ms)
+✔ migration keeps catalog; no candidate authorization; private RLS and financial journals (6076.264769ms)
+✔ customer cannot reach admin; role injection, CSRF and BOLA fail (114.359063ms)
+✔ unknown/zero stock, browser price and unpublished product cannot be ordered (32.005314ms)
+✔ order authoritative cents, idempotent replay, stock held, duplicate payment consumes once (98.221801ms)
+✔ expiry releases holds; late payment cannot steal inventory; promotion sets server expiry (42.659723ms)
+✔ MFA encrypted with identity binding; required for admin and TOTP replay denied (83.232844ms)
+✔ official signed JWT validation for Google/Microsoft: no unverified email or issuer/tenant bypass (174.094349ms)
+✔ OAuth same email creates separate profiles; state bound to browser and single use (28.952489ms)
+✔ webhook HMAC freshness and body independent API verification; sandbox never reports a paid mock (1.606129ms)
+Distinct new ingress cases: 1200
+✔ private owner approval binds correct verified provider/identity; no email-only cross-provider grant (5887.32231ms)
+✔ revoked, expired and unapproved pending records cannot reactivate through login (26.117007ms)
+✔ ingress denies unknown routes, bad methods, ambiguous params, compressed/oversized payloads before DB (3.513506ms)
+✔ trusted IP boundary ignores spoofed forwarded headers on non-Vercel; missing production key fails closed (1.747705ms)
+✔ bounded admission drops burst/concurrency before database; release is idempotent; timed recovery (0.322678ms)
+✔ distributed admission is shared across separate requests; changing arbitrary headers does not bypass quota (73.372847ms)
+✔ 1200 distinct generated request lengths/query injection attempts remain bounded (90.350981ms)
+✔ JSON structure and cookie ambiguity rejected before processing credentials or mutable fields (6.331122ms)
+✔ payment provider/environment pairs fail closed; production stays locked without financial certification (0.766756ms)
 Distinct money inputs: 1084
 Distinct cart attacks: 1100
 Distinct RBAC cases: 1100
 Distinct webhook cases: 1100
-✔ 1100 generated money cases: exact integer minor units, no rounding or scientific notation (55.770448ms)
-✔ 1100 generated carts: canonical item locks and attacker price/quantity rejected (75.699115ms)
-✔ 1100 generated RBAC time boundaries: no MFA, stale MFA, stale reauthentication, deny unknown roles (53.418127ms)
-✔ 1100 generated webhook tampering cases: legitimate HMAC accepted, altered reference rejected (89.639869ms)
-✔ all order-state edges: defined legal graph and no illegal transition (2.930228ms)
-ℹ tests 26
+✔ 1100 generated money cases: exact integer minor units, no rounding or scientific notation (36.438539ms)
+✔ 1100 generated carts: canonical item locks and attacker price/quantity rejected (61.303858ms)
+✔ 1100 generated RBAC time boundaries: no MFA, stale MFA, stale reauthentication, deny unknown roles (41.877095ms)
+✔ 1100 generated webhook tampering cases: legitimate HMAC accepted, altered reference rejected (63.521801ms)
+✔ all order-state edges: defined legal graph and no illegal transition (2.101155ms)
+ℹ tests 35
 ℹ suites 0
-ℹ pass 26
+ℹ pass 35
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 6281.791229
+ℹ duration_ms 7602.773673

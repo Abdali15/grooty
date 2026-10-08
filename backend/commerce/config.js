@@ -11,6 +11,7 @@ export function commerceConfig(env=process.env){
  if(!['mock','sandbox','production'].includes(paymentEnvironment)||!['mock','mercadopago','culqi'].includes(provider))throw new HttpError(503,'Configuración de pago inválida.');
  // Production remains explicitly locked until provider certification and reconciliation tests.
  if(flags.PAYMENTS_ENABLED&&(paymentEnvironment==='production'||provider==='culqi'))throw new HttpError(503,'Integración pendiente de certificación.');
+ if(flags.PAYMENTS_ENABLED&&((provider==='mock'&&paymentEnvironment!=='mock')||(provider==='mercadopago'&&paymentEnvironment!=='sandbox')))throw new HttpError(503,'Proveedor y entorno de pago incompatibles.');
  if(env.VERCEL_ENV==='preview'&&paymentEnvironment==='production')throw new HttpError(503,'Preview no admite credenciales productivas.');
  if(flags.AUTH_GOOGLE_ENABLED&&(!env.GOOGLE_CLIENT_ID||!env.GOOGLE_CLIENT_SECRET))throw new HttpError(503,'Configura Google antes de activar.');
  if(flags.AUTH_MICROSOFT_ENABLED&&(!env.MICROSOFT_CLIENT_ID||!env.MICROSOFT_CLIENT_SECRET))throw new HttpError(503,'Configura Microsoft antes de activar.');

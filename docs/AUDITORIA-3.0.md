@@ -16,7 +16,7 @@ La rama solicitada `redesign-supabase-preview` (cd304c03) contiene 15 archivos y
 | P0 | Sin verificación financiera real | Firma HMAC + consulta API MP + receptor/PEN/importe/referencia/live_mode; falta prueba con comercio sandbox real |
 | P1 | Dependencia source-map-js vulnerable (alta) | Actualizada a versión corregida; ver evidencia audit JSON |
 | P1 | Router interceptaba enlaces OAuth internos | `/api/` navega al servidor sin interceptación SPA |
-| P1 | Registro social podía confundir correo con permisos | CUSTOMER por defecto; allowlist ACTIVE exige identidad estable; correo candidato no insertado |
+| P1 | Registro social podía confundir correo con permisos | CUSTOMER por defecto; allowlist ACTIVE exige identidad estable; autorizaciones del dueño privadas, sin correos incrustados ni concesión automática desde navegador |
 | P1 | Sin recuperación MFA ni conciliación/reembolsos completos | Bloqueos explícitos antes de activación comercial |
 | P2 | Panel comercial incompleto | UI pedidos/cotizaciones/permisos y catálogo existente; aún faltan envíos/comprobantes/variantes/CSV paginado |
 

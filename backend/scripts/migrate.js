@@ -13,7 +13,7 @@ try{await transaction(db,async c=>{
   for(const f of ['schema.sql','admin.sql'])await c.query(await readFile(new URL('../../supabase/'+f,import.meta.url),'utf8'));
  }
  await c.query('create table if not exists grooty_private.migrations(version text primary key,checksum text not null,applied_at timestamptz not null default now())');
- for(const f of ['003_commerce.sql']){
+ for(const f of ['003_commerce.sql','004_admin_approvals.sql']){
   const content=await readFile(new URL('../database/'+f,import.meta.url),'utf8'),checksum=createHash('sha256').update(content).digest('hex');
   const prior=(await c.query('select checksum from grooty_private.migrations where version=$1',[f])).rows[0];
   if(prior){if(prior.checksum!==checksum)throw Error('Migración aplicada ha cambiado: '+f);continue;}
