@@ -3,52 +3,58 @@ npm warn Unknown env config "http-proxy". This will stop working in the next maj
 > grooty-backend@1.0.0 test
 > node --test tests/*.test.js
 
-✔ schema + seed: 88 products, no administrative permissions for public roles (6413.821375ms)
-✔ private endpoints reject visitors and all writes need origin AND CSRF (92.079883ms)
-✔ create/update/archive images and stock atomically; stale revision rejected; hidden excluded (161.869162ms)
-✔ brand duplicate detection and storefront concurrency (51.764332ms)
-✔ Google JWT signature issuer audience expiry nonce verified Gmail (78.6296ms)
-✔ OAuth state must belong to browser; single use; unauthorized Gmail gets no session (12.254937ms)
-✔ permission revocation blocks existing session immediately (12.122059ms)
+✔ schema + seed: 88 products, no administrative permissions for public roles (2737.595383ms)
+✔ private endpoints reject visitors and all writes need origin AND CSRF (55.764073ms)
+✔ create/update/archive images and stock atomically; stale revision rejected; hidden excluded (101.118477ms)
+✔ brand duplicate detection and storefront concurrency (33.111704ms)
+✔ Google JWT signature issuer audience expiry nonce verified Gmail (157.231157ms)
+✔ OAuth state must belong to browser; single use; unauthorized Gmail gets no session (8.399469ms)
+✔ permission revocation blocks existing session immediately (6.239421ms)
 Grooty API operation failed { code: 'internal', status: 503 }
-✔ disabled configuration rejects administration without opening database (8.050029ms)
-✔ backend role cannot grant permissions or delete audit; session and RLS catalog work (42.587162ms)
-✔ OAuth authorized Gmail binds Google identity, sets HttpOnly cookie; logout revokes session (125.45007ms)
-✔ rate limit persisted across independent handler instances (4.233492ms)
-✔ failed photo insertion rolls back product and revision (40.965645ms)
-✔ migration keeps catalog; no candidate authorization; private RLS and financial journals (6076.264769ms)
-✔ customer cannot reach admin; role injection, CSRF and BOLA fail (114.359063ms)
-✔ unknown/zero stock, browser price and unpublished product cannot be ordered (32.005314ms)
-✔ order authoritative cents, idempotent replay, stock held, duplicate payment consumes once (98.221801ms)
-✔ expiry releases holds; late payment cannot steal inventory; promotion sets server expiry (42.659723ms)
-✔ MFA encrypted with identity binding; required for admin and TOTP replay denied (83.232844ms)
-✔ official signed JWT validation for Google/Microsoft: no unverified email or issuer/tenant bypass (174.094349ms)
-✔ OAuth same email creates separate profiles; state bound to browser and single use (28.952489ms)
-✔ webhook HMAC freshness and body independent API verification; sandbox never reports a paid mock (1.606129ms)
+✔ disabled configuration rejects administration without opening database (5.817366ms)
+✔ backend role cannot grant permissions or delete audit; session and RLS catalog work (10.878028ms)
+✔ OAuth authorized Gmail binds Google identity, sets HttpOnly cookie; logout revokes session (28.506567ms)
+✔ rate limit persisted across independent handler instances (2.787214ms)
+✔ failed photo insertion rolls back product and revision (21.988649ms)
+✔ migration keeps catalog; no candidate authorization; private RLS and financial journals (2733.96573ms)
+✔ customer cannot reach admin; role injection, CSRF and BOLA fail (62.536978ms)
+✔ unknown/zero stock, browser price and unpublished product cannot be ordered (17.959414ms)
+✔ order authoritative cents, idempotent replay, stock held, duplicate payment consumes once (51.744209ms)
+✔ expiry releases holds; late payment cannot steal inventory; promotion sets server expiry (23.958414ms)
+✔ MFA encrypted with identity binding; required for admin and TOTP replay denied (46.763216ms)
+✔ official signed JWT validation for Google/Microsoft: no unverified email or issuer/tenant bypass (171.21478ms)
+✔ OAuth same email creates separate profiles; state bound to browser and single use (23.580907ms)
+✔ webhook HMAC freshness and body independent API verification; sandbox never reports a paid mock (1.14499ms)
 Distinct new ingress cases: 1200
-✔ private owner approval binds correct verified provider/identity; no email-only cross-provider grant (5887.32231ms)
-✔ revoked, expired and unapproved pending records cannot reactivate through login (26.117007ms)
-✔ ingress denies unknown routes, bad methods, ambiguous params, compressed/oversized payloads before DB (3.513506ms)
-✔ trusted IP boundary ignores spoofed forwarded headers on non-Vercel; missing production key fails closed (1.747705ms)
-✔ bounded admission drops burst/concurrency before database; release is idempotent; timed recovery (0.322678ms)
-✔ distributed admission is shared across separate requests; changing arbitrary headers does not bypass quota (73.372847ms)
-✔ 1200 distinct generated request lengths/query injection attempts remain bounded (90.350981ms)
-✔ JSON structure and cookie ambiguity rejected before processing credentials or mutable fields (6.331122ms)
-✔ payment provider/environment pairs fail closed; production stays locked without financial certification (0.766756ms)
+✔ private owner approval binds correct verified provider/identity; no email-only cross-provider grant (2379.909199ms)
+✔ revoked, expired and unapproved pending records cannot reactivate through login (13.216785ms)
+✔ ingress denies unknown routes, bad methods, ambiguous params, compressed/oversized payloads before DB (3.694675ms)
+✔ trusted IP boundary ignores spoofed forwarded headers on non-Vercel; missing production key fails closed (1.301202ms)
+✔ bounded admission drops burst/concurrency before database; release is idempotent; timed recovery (0.343729ms)
+✔ distributed admission is shared across separate requests; changing arbitrary headers does not bypass quota (56.203316ms)
+✔ 1200 distinct generated request lengths/query injection attempts remain bounded (54.63251ms)
+✔ JSON structure and cookie ambiguity rejected before processing credentials or mutable fields (2.934893ms)
+✔ payment provider/environment pairs fail closed; production stays locked without financial certification (0.620108ms)
+✔ sandbox payment is retrieved from fixed official origin with server credential; redirects prohibited (1.635399ms)
+✔ sandbox denies wrong receiver, currency, live mode, payment ID or reference (0.986847ms)
+✔ pending, unaccredited, refunded and incomplete transactions never become paid (1.253847ms)
+✔ checkout uses authoritative cents, idempotency and identical non-authoritative return URLs (1.425687ms)
+✔ unsafe checkout destinations and provider errors cannot create a successful result (5.691717ms)
+✔ Culqi remains explicitly unavailable and mock cannot report real payment success (0.83827ms)
 Distinct money inputs: 1084
 Distinct cart attacks: 1100
 Distinct RBAC cases: 1100
 Distinct webhook cases: 1100
-✔ 1100 generated money cases: exact integer minor units, no rounding or scientific notation (36.438539ms)
-✔ 1100 generated carts: canonical item locks and attacker price/quantity rejected (61.303858ms)
-✔ 1100 generated RBAC time boundaries: no MFA, stale MFA, stale reauthentication, deny unknown roles (41.877095ms)
-✔ 1100 generated webhook tampering cases: legitimate HMAC accepted, altered reference rejected (63.521801ms)
-✔ all order-state edges: defined legal graph and no illegal transition (2.101155ms)
-ℹ tests 35
+✔ 1100 generated money cases: exact integer minor units, no rounding or scientific notation (30.250395ms)
+✔ 1100 generated carts: canonical item locks and attacker price/quantity rejected (44.781912ms)
+✔ 1100 generated RBAC time boundaries: no MFA, stale MFA, stale reauthentication, deny unknown roles (63.691137ms)
+✔ 1100 generated webhook tampering cases: legitimate HMAC accepted, altered reference rejected (49.707879ms)
+✔ all order-state edges: defined legal graph and no illegal transition (1.16556ms)
+ℹ tests 41
 ℹ suites 0
-ℹ pass 35
+ℹ pass 41
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 7602.773673
+ℹ duration_ms 3409.770387

@@ -1,3 +1,4 @@
+<!-- Referencia Culqi y controles sandbox: docs/VALIDACION-CULQI-3.0.md; no activado. -->
 <!-- Refuerzo de acceso y Perú: docs/REFUERZO-PERU-3.0.md; aprobaciones privadas, no activadas en DB real. -->
 # Estado Grooty Store 3.0 (2026-10-08)
 

@@ -21,7 +21,7 @@ export function verifyMpSignature(req,url,secret,now=Date.now()){
 export class MercadoPagoGateway extends PaymentGateway {
  constructor(cfg,fetcher=fetch){super();this.cfg=cfg;this.fetcher=fetcher;}
  async request(path,{method='GET',body,key}={}){
-   const r=await this.fetcher('https://api.mercadopago.com'+path,{method,headers:{Authorization:'Bearer '+this.cfg.env.MP_ACCESS_TOKEN,'Content-Type':'application/json',...(key?{'X-Idempotency-Key':key}:{})},body:body?JSON.stringify(body):undefined,signal:AbortSignal.timeout(8000)});
+   const r=await this.fetcher('https://api.mercadopago.com'+path,{method,headers:{Authorization:'Bearer '+this.cfg.env.MP_ACCESS_TOKEN,'Content-Type':'application/json',...(key?{'X-Idempotency-Key':key}:{})},body:body?JSON.stringify(body):undefined,signal:AbortSignal.timeout(8000),redirect:'error'});
    if(!r.ok)throw new HttpError(502,'La pasarela no pudo completar la operación.');return r.json();
  }
  async createCheckout(order,items){
@@ -31,15 +31,17 @@ export class MercadoPagoGateway extends PaymentGateway {
      back_urls:Object.fromEntries(['success','failure','pending'].map(k=>[k,this.cfg.origin+'/checkout?order='+order.id])),
      expires:true,expiration_date_to:new Date(order.expires_at).toISOString()}});
    if(String(p.collector_id)!==this.cfg.env.MP_COLLECTOR_ID||!p.sandbox_init_point)throw new HttpError(502,'Comercio sandbox no validado.');
-   const u=new URL(p.sandbox_init_point);if(u.protocol!=='https:'||!/(^|\.)mercadopago\.(com|com\.pe)$/.test(u.hostname))throw new HttpError(502,'Destino de pago inválido.');
+   const u=new URL(p.sandbox_init_point);if(u.protocol!=='https:'||u.username||u.password||u.port||!/(^|\.)mercadopago\.(com|com\.pe)$/.test(u.hostname))throw new HttpError(502,'Destino de pago inválido.');
    return {id:String(p.id),url:u.href,environment:'sandbox'};
  }
  async retrievePayment(id){
    if(!/^\d{1,30}$/.test(id))throw new HttpError(400,'Referencia inválida.');
    const p=await this.request('/v1/payments/'+id);
    if(String(p.id)!==id||String(p.collector_id)!==this.cfg.env.MP_COLLECTOR_ID||p.currency_id!=='PEN'||p.live_mode!==false)throw new HttpError(409,'Comercio o entorno incorrecto.');
-   const state={approved:'PAID',rejected:'PAYMENT_FAILED',cancelled:'CANCELLED',charged_back:'CHARGEBACK'}[p.status];
+   const state=new Map([['approved','PAID'],['rejected','PAYMENT_FAILED'],['cancelled','CANCELLED'],['charged_back','CHARGEBACK']]).get(p.status);
    if(!state)throw new HttpError(409,'Estado pendiente de conciliación.');
+   if(state==='PAID'&&(p.status_detail!=='accredited'||p.captured===false||cents(String(p.transaction_amount_refunded))!==0))throw new HttpError(409,'Pago sin acreditación o con devolución: requiere conciliación.');
+   if(typeof p.date_last_updated!=='string'||p.date_last_updated.length>40||!Number.isFinite(Date.parse(p.date_last_updated)))throw new HttpError(409,'Evento financiero sin fecha válida.');
    if(!/^[0-9a-f-]{36}$/.test(p.external_reference||''))throw new HttpError(409,'Referencia inválida.');
    return {provider:'mercadopago',environment:'sandbox',providerId:id,orderId:p.external_reference,amountCents:cents(String(p.transaction_amount)),currency:p.currency_id,state,eventKey:id+':'+p.status+':'+p.date_last_updated};
  }
