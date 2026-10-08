@@ -19,7 +19,7 @@ before(async()=>{
  await sql.exec('create role anon;create role authenticated;');
  for(const f of ['../../supabase/schema.sql','../../supabase/admin.sql','../database/003_commerce.sql','../database/004_admin_approvals.sql','../../supabase/seed-catalog.sql'])await sql.exec((await readFile(new URL(f,import.meta.url),'utf8')).replace('create extension if not exists pgcrypto;',''));
  server=http.createServer();await new Promise(r=>server.listen(0,'127.0.0.1',r));base='http://127.0.0.1:'+server.address().port;
- env={NODE_ENV:'development',APP_ORIGIN:base,DATABASE_URL:'test',AUTH_GOOGLE_ENABLED:'true',AUTH_MICROSOFT_ENABLED:'true',GOOGLE_CLIENT_ID:'google-test',GOOGLE_CLIENT_SECRET:'test',MICROSOFT_CLIENT_ID:'ms-test',MICROSOFT_CLIENT_SECRET:'test',MFA_ENCRYPTION_KEY:randomBytes(32).toString('base64'),PAYMENTS_ENABLED:'true',PAYMENT_PROVIDER:'mock',PAYMENT_ENVIRONMENT:'mock'};cfg=commerceConfig(env);
+ env={AUTH_ADMIN_ONLY:'false',NODE_ENV:'development',APP_ORIGIN:base,DATABASE_URL:'test',AUTH_GOOGLE_ENABLED:'true',AUTH_MICROSOFT_ENABLED:'true',GOOGLE_CLIENT_ID:'google-test',GOOGLE_CLIENT_SECRET:'test',MICROSOFT_CLIENT_ID:'ms-test',MICROSOFT_CLIENT_SECRET:'test',MFA_ENCRYPTION_KEY:randomBytes(32).toString('base64'),PAYMENTS_ENABLED:'true',PAYMENT_PROVIDER:'mock',PAYMENT_ENVIRONMENT:'mock'};cfg=commerceConfig(env);
  server.on('request',createHandler({dbFactory:()=>db,env}));
  profile=(await sql.query('insert into grooty_commerce.profiles default values returning id')).rows[0].id;
  identity=(await sql.query("insert into grooty_commerce.user_identities(profile_id,provider,issuer,subject,email,verified_at) values($1,'google','https://accounts.google.com','test-sub','test@example.com',now()) returning id",[profile])).rows[0].id;
@@ -120,4 +120,15 @@ test('webhook HMAC freshness and body independent API verification; sandbox neve
  assert.equal((await new MockGateway().createCheckout({id:token()})).url,null);
  const mp=new MercadoPagoGateway({...cfg,env:{MP_ACCESS_TOKEN:'test',MP_COLLECTOR_ID:'99'}},async()=>({ok:true,json:async()=>({id:123,collector_id:99,currency_id:'PEN',live_mode:true})}));await assert.rejects(mp.retrievePayment('123'),/entorno/);
  assert.throws(()=>commerceConfig({...env,PAYMENT_ENVIRONMENT:'production'}),/certificación/);
+});
+
+test('admin-only OAuth denies unapproved identities without persisting profile or session; approved identity may log in',async()=>{
+ const restricted=commerceConfig({...env,AUTH_ADMIN_ONLY:'true'});
+ for(const approved of [false,true]){
+  const state=token(),browser=token();await sql.query("insert into grooty_commerce.oauth_attempts values($1,$2,'google',$3,$4,now()+interval '5 minutes')",[hash(state),hash(browser),token(),token()]);
+  const req={headers:{cookie:cookieName(cfg,'oauth')+'='+browser}},res={setHeader(){},writeHead(status){this.status=status;},end(){}},url=new URL(base+'/api/auth/google/callback?state='+state+'&code=test');
+  const verify=async()=>({provider:'google',issuer:'https://accounts.google.com',subject:approved?'test-sub':'unapproved-admin-only',email:approved?'test@example.com':'unapproved@example.test'}),fetcher=async()=>({ok:true,json:async()=>({id_token:'test-only'})});
+  if(approved){await finishIdentity(db,restricted,req,res,url,'google',verify,fetcher);assert.equal(res.status,303);}
+  else {const count=(await sql.query('select count(*) n from grooty_commerce.sessions')).rows[0].n;await assert.rejects(finishIdentity(db,restricted,req,res,url,'google',verify,fetcher),/no está autorizada/);assert.equal((await sql.query('select count(*) n from grooty_commerce.sessions')).rows[0].n,count);assert.equal((await sql.query("select count(*) n from grooty_commerce.user_identities where subject='unapproved-admin-only'")).rows[0].n,0);}
+ }
 });

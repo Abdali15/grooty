@@ -7,6 +7,8 @@ export function commerceConfig(env=process.env){
  }
  if(env.ADMIN_MFA_REQUIRED==='false')throw new HttpError(503,'MFA administrativo es obligatorio.');
  if(flags.EMAIL_NOTIFICATIONS_ENABLED)throw new HttpError(503,'Entrega de notificaciones pendiente de verificación.');
+ if(env.AUTH_ADMIN_ONLY!==undefined&&!['true','false'].includes(env.AUTH_ADMIN_ONLY))throw new HttpError(503,'Modo de acceso inválido.');
+ const authAdminOnly=env.AUTH_ADMIN_ONLY!=='false';
  const paymentEnvironment=env.PAYMENT_ENVIRONMENT||'mock',provider=env.PAYMENT_PROVIDER||'mock';
  if(!['mock','sandbox','production'].includes(paymentEnvironment)||!['mock','mercadopago','culqi'].includes(provider))throw new HttpError(503,'Configuración de pago inválida.');
  // Production remains explicitly locked until provider certification and reconciliation tests.
@@ -16,5 +18,5 @@ export function commerceConfig(env=process.env){
  if(flags.AUTH_GOOGLE_ENABLED&&(!env.GOOGLE_CLIENT_ID||!env.GOOGLE_CLIENT_SECRET))throw new HttpError(503,'Configura Google antes de activar.');
  if(flags.AUTH_MICROSOFT_ENABLED&&(!env.MICROSOFT_CLIENT_ID||!env.MICROSOFT_CLIENT_SECRET))throw new HttpError(503,'Configura Microsoft antes de activar.');
  if(flags.PAYMENTS_ENABLED&&provider==='mercadopago'&&(!env.MP_ACCESS_TOKEN||!env.MP_WEBHOOK_SECRET||!env.MP_COLLECTOR_ID))throw new HttpError(503,'Configura sandbox de pagos antes de activar.');
- return {...cfg,flags,paymentEnvironment,provider,env};
+ return {...cfg,flags,authAdminOnly,paymentEnvironment,provider,env};
 }

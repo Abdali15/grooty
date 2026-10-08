@@ -27,3 +27,11 @@ Se prepara Preview en el proyecto existente del equipo verificado. Se configuran
 APP_ORIGIN para esta Preview se utiliza como configuración del servidor; antes de activar OAuth deberá coincidir con el dominio estable exacto elegido y su callback Google. Una variable no crea la aplicación OAuth ni la DB.
 
 La Preview sin backend conectado puede consultar metadata pública de servicios sin una clave privada: solo expone flags/country/currency, con presupuesto local. Las APIs privadas mantienen exigencia de clave de rate limiting y fallan cerrado. El intento de guardar automáticamente esa clave fue rechazado por revisión automática; no se guardó ningún secreto. El propietario configurará sus secretos directamente en Vercel antes de activar cuentas.
+
+## Corrección: tienda pública, autenticación solo para administradores
+
+El catálogo, las fichas, los favoritos, la selección y las consultas WhatsApp no necesitan cuenta. La navegación muestra Admin, sin exigir registro de compradores. `/admin` muestra únicamente el acceso privado; no ofrece una demostración anónima. `/cuenta` contiene el inicio de sesión administrativo y MFA.
+
+`AUTH_ADMIN_ONLY=true` es el valor predeterminado del backend. Tras validar OAuth y vincular la identidad aprobada en la lista privada, el servidor exige una autorización ACTIVE antes de crear la sesión. Una cuenta no aprobada recibe denegación y se revierte cualquier perfil provisional. Los correos autorizados no se publican en el frontend. Se conservan las capacidades de compradores para una futura activación explícita mediante `AUTH_ADMIN_ONLY=false`; no están activas en este perfil.
+
+La protección de Vercel de una Preview es independiente del login de Grooty. La publicación de la tienda debe utilizar un dominio público; nunca usar la protección global del hosting como sustituto del control privado de Admin. Las credenciales DB/OAuth siguen pendientes y esta corrección no activa cuentas reales por sí sola.

@@ -62,6 +62,10 @@ export async function finishIdentity(db,cfg,req,res,url,provider,verify=verifyId
    }
    if((await c.query('select deletion_requested_at from grooty_commerce.profiles where id=$1',[identity.profile_id])).rows[0].deletion_requested_at)throw new HttpError(403,'Cuenta pendiente de revisión.');
    await c.query('select grooty_commerce.bind_approved_identity($1)',[identity.id]);
+   if(cfg.authAdminOnly){
+     const allowed=(await c.query("select 1 from grooty_commerce.admin_allowlist where identity_id=$1 and provider=$2 and status='ACTIVE' and role in ('CATALOG_MANAGER','ORDER_MANAGER','ADMIN','SUPER_ADMIN')",[identity.id,who.provider])).rows.length;
+     if(!allowed)throw new HttpError(403,'Esta cuenta no está autorizada para administrar la tienda. El catálogo público no requiere iniciar sesión.');
+   }
    const previous=cookies(req)[cookieName(cfg)];if(previous)await c.query('delete from grooty_commerce.sessions where token_hash=$1',[hash(previous)]);
    await c.query("insert into grooty_commerce.sessions(token_hash,identity_id,csrf,expires_at,reauthenticated_at) values($1,$2,$3,now()+interval '8 hours',now())",[hash(sid),identity.id,csrf]);
    await audit(c,identity.profile_id,'identity.login',identity.id,{provider});
