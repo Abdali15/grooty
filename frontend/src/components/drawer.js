@@ -86,7 +86,7 @@ function render(animateId = null) {
   if (tab === "selection") {
     body.innerHTML = sel.lines.length ? `<ul class="lines">${sel.lines.map(selectionLine).join("")}</ul>` : emptyState("selection");
     foot.innerHTML = sel.lines.length
-      ? `${summaryHTML(sel)}<a href="/checkout" data-nav class="btn btn-secondary btn-block">Revisar compra online</a>
+      ? `${summaryHTML(sel)}${SITE.paymentsEnabled ? '<a href="/checkout" data-nav class="btn btn-secondary btn-block">Revisar compra online</a>' : ''}
          <button class="btn btn-primary btn-block" type="button" data-wa="selection">${icons.whatsapp}<span>${waLabel("Consultar selección por WhatsApp")}</span></button>
          <p class="wa-channel-note">${esc(waContactNote())}</p>
          ${!waDirectReady() ? `<a class="link-btn" href="${esc(SITE.instagram)}" target="_blank" rel="noopener">${icons.instagram}Consulta privada por Instagram</a>` : ''}

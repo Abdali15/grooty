@@ -5,9 +5,9 @@ npm warn Unknown env config "http-proxy". This will stop working in the next maj
 
 PASS: aliases, exact precedence, typo suggestions, preorder search and recommendations (12 Spider-Man matches, 88 products)
 PASS: XSS escaping, hostile links, invalid catalog data, hidden products, role/CSRF shape, CSP and headers. Server authorization remains pending backend.
-✔ component cancellation preserves the request deadline instead of disabling it (2.525164ms)
-✔ leaving a view immediately cancels its API request (0.455105ms)
-✔ server CSRF remains in memory, goes only to same-origin writes and is cleared on logout (1.32136ms)
+✔ component cancellation preserves the request deadline instead of disabling it (2.420117ms)
+✔ leaving a view immediately cancels its API request (0.538529ms)
+✔ server CSRF remains in memory, goes only to same-origin writes and is cleared on logout (1.007934ms)
 ℹ tests 3
 ℹ suites 0
 ℹ pass 3
@@ -15,4 +15,4 @@ PASS: XSS escaping, hostile links, invalid catalog data, hidden products, role/C
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 97.706694
+ℹ duration_ms 83.305756

@@ -24,6 +24,8 @@ export const SITE = {
   whatsappNumber: clean(import.meta.env.VITE_WHATSAPP_NUMBER) || clean(WHATSAPP_NUMBER),
   announcement: "",
   currency: "PEN",
+  // UI only. The server separately authorizes every financial operation.
+  paymentsEnabled: import.meta.env.VITE_PAYMENTS_ENABLED === 'true',
 
   // 2) Logo original optimizado, sin cambiar su composición.
   //    Si el archivo ya incluye el texto "Grooty Store", pon showWordmark en false.

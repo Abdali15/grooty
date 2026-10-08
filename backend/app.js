@@ -19,8 +19,10 @@ export function createHandler({dbFactory=database,env=process.env}={}){
    const url=validateIngress(req);path=url.pathname;const method=req.method;
    if(path==='/api/health'&&method==='GET')return json(200,{ok:true,version:'3.0'});
    const cfg=commerceConfig(env);
+   // Public capability metadata uses no identities, DB or secret-bearing integration.
+   if(path==='/api/auth/config'&&method==='GET'){release=admit('public-capabilities');return json(200,{google:cfg.flags.AUTH_GOOGLE_ENABLED,microsoft:cfg.flags.AUTH_MICROSOFT_ENABLED,payments:cfg.flags.PAYMENTS_ENABLED,paymentEnvironment:cfg.paymentEnvironment,country:'PE',currency:'PEN',preorders:cfg.flags.PREORDERS_ENABLED,customRequests:cfg.flags.CUSTOM_REQUESTS_ENABLED});}
    release=admit(clientBucket(req,cfg));
-   if(path==='/api/auth/config'&&method==='GET')return json(200,{google:cfg.flags.AUTH_GOOGLE_ENABLED,microsoft:cfg.flags.AUTH_MICROSOFT_ENABLED,payments:cfg.flags.PAYMENTS_ENABLED,paymentEnvironment:cfg.paymentEnvironment,country:'PE',currency:'PEN',preorders:cfg.flags.PREORDERS_ENABLED,customRequests:cfg.flags.CUSTOM_REQUESTS_ENABLED});
+   if(!cfg.flags.PAYMENTS_ENABLED&&((path==='/api/orders'&&method==='POST')||path.endsWith('/checkout')||path.startsWith('/api/payments/')||/^\/api\/preorders\/[0-9a-f-]{36}\/order$/.test(path)))throw new HttpError(503,'Los pagos online están desactivados.');
    const db=dbFactory();await enforceIngress(db,req,cfg,path);
    if(path==='/api/store/catalog'&&method==='GET')return json(200,await catalog(db));
    const oauth=path.match(/^\/api\/auth\/(google|microsoft)\/(start|callback)$/);

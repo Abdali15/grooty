@@ -2,10 +2,24 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {MercadoPagoGateway,MockGateway,gateway} from '../payments/gateway.js';
 import {commerceConfig} from '../commerce/config.js';
+import {createHandler} from '../app.js';
 const orderId='00000000-0000-4000-8000-000000000001';
 const cfg={origin:'https://store.example.test',env:{MP_ACCESS_TOKEN:'fake-test-only',MP_COLLECTOR_ID:'99'}};
 const payment={id:123,collector_id:99,currency_id:'PEN',live_mode:false,status:'approved',status_detail:'accredited',transaction_amount:'24.50',transaction_amount_refunded:0,external_reference:orderId,date_last_updated:'2026-10-08T06:00:00.000Z'};
 const adapter=(data,onRequest=()=>{})=>new MercadoPagoGateway(cfg,async(url,options)=>{onRequest(url,options);return {ok:true,json:async()=>data};});
+test('unconfigured production preview exposes only public capabilities; private APIs still fail closed',async()=>{
+ const handle=createHandler({env:{NODE_ENV:'production',APP_ORIGIN:'https://store.example.test'},dbFactory:()=>{throw Error('No DB expected');}});
+ const res=()=>({setHeader(){},end(body){this.body=JSON.parse(body);}}),publicResponse=res();
+ await handle({method:'GET',url:'/api/auth/config',headers:{}},publicResponse);assert.equal(publicResponse.statusCode,200);assert.equal(publicResponse.body.google,false);assert.equal(publicResponse.body.payments,false);assert.equal(publicResponse.body.env,undefined);
+ const privateResponse=res();await handle({method:'GET',url:'/api/admin/catalog',headers:{}},privateResponse);assert.equal(privateResponse.statusCode,503);
+});
+test('disabled financial APIs cannot contact DB or a gateway even with a forged success payload',async()=>{
+ let calls=0;const handle=createHandler({env:{NODE_ENV:'development',PAYMENTS_ENABLED:'false'},dbFactory:()=>{calls++;throw Error('No DB access allowed');}});
+ for(const path of ['/api/orders','/api/orders/'+orderId+'/checkout','/api/preorders/'+orderId+'/order','/api/payments/mercadopago/webhook?data.id=123']){
+ const res={setHeader(){},end(body){this.body=JSON.parse(body);}};
+ await handle({method:'POST',url:path,headers:{'content-type':'application/json'},body:{status:'approved',price:1}},res);assert.equal(res.statusCode,503);
+ }assert.equal(calls,0);
+});
 test('sandbox payment is retrieved from fixed official origin with server credential; redirects prohibited',async()=>{
  const value=await adapter(payment,(url,options)=>{
   assert.equal(url,'https://api.mercadopago.com/v1/payments/123');assert.equal(options.redirect,'error');assert.equal(options.headers.Authorization,'Bearer fake-test-only');assert.ok(options.signal);
