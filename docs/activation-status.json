@@ -1,0 +1,13 @@
+{
+ "google_real_callback_verified":false,
+ "microsoft_personal_account_verified":false,
+ "admin_mfa_recovery_verified":false,
+ "postgres_multiconnection_concurrency_verified":false,
+ "mercadopago_sandbox_end_to_end_verified":false,
+ "refunds_and_chargebacks_verified":false,
+ "reconciliation_and_jobs_verified":false,
+ "shipping_and_tax_policy_confirmed":false,
+ "preorder_link_delivery_and_quote_checkout_verified":false,
+ "backup_restore_verified":false,
+ "security_and_accessibility_review_complete":false
+}

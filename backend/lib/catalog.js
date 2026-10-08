@@ -28,9 +28,15 @@ export async function saveProduct(db,actor,body,pathId=null){
       const qs=values(p);qs.push(b.id,slug(p.titulo)+'-'+randomUUID());
       saved=(await c.query(`insert into public.products(${columns.join(',')},brand_id,slug) values(${qs.map((_,i)=>'$'+(i+1)).join(',')}) returning id,revision`,qs)).rows[0];
     }else{
+      const previous=(await c.query('select stock from public.products where id=$1 for update',[pathId])).rows[0];
       const qs=values(p);qs.push(b.id,pathId,p.revision);
       saved=(await c.query(`update public.products set ${columns.filter(k=>k!=='revision').map(k=>`${k}=$${columns.indexOf(k)+1}`).join(',')},revision=$10::integer+1,brand_id=$16,updated_at=now() where id=$17 and revision=$18 returning id,revision`,qs)).rows[0];
       if(!saved)throw new HttpError(409,'La figura cambió. Recarga antes de editarla.');
+      // Unknown stock has no numeric delta; audit the first explicit confirmation separately.
+      if(previous.stock!==p.stock){
+        const commerce=(await c.query("select to_regclass('grooty_commerce.inventory_movements') exists")).rows[0].exists;
+        if(commerce)await c.query('insert into grooty_commerce.inventory_movements(product_id,delta,reason) values($1,$2,$3)',[pathId,(p.stock??0)-(previous.stock??0),previous.stock===null?'stock.confirmed':p.stock===null?'stock.unknown':'manual.adjustment']);
+      }
     }
     await images(c,saved.id,p.imagenes_producto);await audit(c,actor,pathId===null?'product.create':'product.update',saved.id,{revision:saved.revision});
     return {product:{...p,id:Number(saved.id),revision:saved.revision}};

@@ -8,6 +8,7 @@ import "./styles/future.css";
 import "./styles/admin.css";
 import "./styles/request.css";
 import "./styles/refinement.css";
+import "./styles/commerce.css";
 
 import { loadPublicCatalog } from "./lib/catalog-source.js";
 

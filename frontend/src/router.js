@@ -81,7 +81,7 @@ function setMeta(out) {
   document.title = out.title;
   let robots = document.querySelector('meta[name="robots"]');
   if (!robots) { robots = document.createElement("meta"); robots.name = "robots"; document.head.appendChild(robots); }
-  robots.content = currentPath() === "/admin" ? "noindex,nofollow" : "index,follow";
+  robots.content = ['/admin','/cuenta','/checkout','/operaciones'].includes(currentPath()) ? "noindex,nofollow" : "index,follow";
   let m = document.querySelector('meta[name="description"]');
   if (m && out.description) m.setAttribute("content", out.description);
 }
@@ -210,6 +210,8 @@ export function startRouter() {
       return;
     }
     if (u.origin !== location.origin) return;
+    // OAuth must navigate to the server, never render as a SPA route.
+    if (u.pathname.startsWith('/api/')) return;
     if (u.pathname === location.pathname && u.search === location.search && u.hash && !u.hash.startsWith("#!")) {
       e.preventDefault();
       navigate(u.pathname + u.search + u.hash);

@@ -22,7 +22,7 @@ export async function adminRequest(path, { method = 'GET', body, signal } = {}) 
   return result;
 }
 export function acceptSession(session) {
-  if (!session?.user || !['owner', 'admin'].includes(session.user.role) || typeof session.csrf !== 'string' || session.csrf.length < 16) throw new AdminError('Esta cuenta no tiene acceso de propietario.', 403);
+  if (!session?.user || !['CATALOG_MANAGER','ADMIN','SUPER_ADMIN'].includes(session.user.role) || typeof session.csrf !== 'string' || session.csrf.length < 16) throw new AdminError('Esta cuenta no tiene acceso de propietario.', 403);
   csrf = session.csrf;
   return session.user;
 }

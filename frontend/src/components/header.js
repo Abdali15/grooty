@@ -33,7 +33,7 @@ export function renderShell() {
             ${NAV.map(([href, label]) => `<a href="${href}" data-nav class="nav-link">${label}</a>`).join("")}
           </nav>
         </div>
-        <a href="/admin" data-nav class="icon-btn admin-link" aria-label="Administrar tienda" title="Panel de administración">${icons.settings}<span>Admin</span></a>
+        <a href="/cuenta" data-nav class="icon-btn admin-link" aria-label="Mi cuenta" title="Mi cuenta"><span>Cuenta</span></a><a href="/admin" data-nav class="icon-btn admin-link" aria-label="Administrar tienda" title="Panel de administración">${icons.settings}<span>Admin</span></a>
         <button class="search-pill" type="button" data-search-open aria-label="Buscar figuras (Ctrl K)">
           ${icons.search}<span class="search-pill-text">Buscar figuras</span><kbd class="kbd">Ctrl K</kbd>
         </button>

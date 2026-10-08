@@ -90,3 +90,9 @@ El refresh directo en cualquiera de estas rutas funciona gracias a `frontend/ver
 - `?motion=off` al final de cualquier URL desactiva toda la animación (para comparar).
 - Con `prefers-reduced-motion: reduce` activado en el sistema, ocurre lo mismo automáticamente.
 - Vacía `whatsappNumber` (por defecto) y confirma que ningún botón abre un enlace roto.
+# Estado Grooty Store 3.0 (2026-10-08)
+
+Esta rama contiene una evolución aislada: identidad Google/Microsoft, clientes, MFA, RBAC, pedidos/reservas transaccionales y adaptadores mock/Mercado Pago sandbox. **No está lista para cobros productivos**. No hay administrador por defecto. Producción, Culqi y envío real de notificaciones permanecen bloqueados; ningún cambio se publicó sobre la tienda activa.
+
+Documentación vigente: [auditoría](docs/AUDITORIA-3.0.md), [API](docs/API-3.0.md), [instalación y acceso](docs/ACTIVACION-3.0.md), [fases](docs/FASES-3.0.md), [seguridad](docs/SEGURIDAD-3.0.md), [resultados reales](docs/RESULTADOS-3.0.md). Las instrucciones históricas siguientes y los informes anteriores describen entregas previas; no sustituyen esas guías.
+

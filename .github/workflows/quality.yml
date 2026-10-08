@@ -1,0 +1,27 @@
+name: Quality gate
+on:
+  pull_request:
+  push:
+    branches: [grooty-3-security-review-20261008]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts
+      - run: npm ci --prefix backend --ignore-scripts
+      - run: npm ci --prefix frontend --ignore-scripts
+      - run: npm audit --audit-level=high --prefix backend
+      - run: npm audit --audit-level=high --prefix frontend
+      - run: npm test --prefix backend
+      - run: npm test --prefix frontend
+      - run: npm run build --prefix frontend
+      - run: npx playwright install --with-deps chromium
+      - run: node tests/e2e.mjs
+      # No deployment step. Commercial release additionally requires release-gate.mjs and owner approval.

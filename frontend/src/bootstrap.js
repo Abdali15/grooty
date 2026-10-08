@@ -13,8 +13,14 @@ import { help } from "./views/help.js";
 import { admin } from "./views/admin.js";
 import { figureRequest } from "./views/figure-request.js";
 import { notfound } from "./views/notfound.js";
+import { account } from "./views/account.js";
+import { checkout } from "./views/checkout.js";
+import { operations } from "./views/operations.js";
 
 defineRoutes([
+  {name:'operations',match:p=>p==='/operaciones'?{}:null,view:operations},
+  {name:'account',match:p=>p==='/cuenta'?{}:null,view:account},
+  {name:'checkout',match:p=>p==='/checkout'?{}:null,view:checkout},
   { name: "figure-request", match: (p) => p === "/a-pedido" ? {} : null, view: figureRequest },
   { name: "admin", match: (p) => p === "/admin" ? {} : null, view: admin },
   { name: "home", match: (p) => (p === "/" ? {} : null), view: home },

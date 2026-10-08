@@ -1,0 +1,7 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> grooty-store-v4@4.0.0 test
+> node tests/catalog-search.mjs && node tests/security.mjs
+
+PASS: aliases, exact precedence, typo suggestions, preorder search and recommendations (12 Spider-Man matches, 88 products)
+PASS: XSS escaping, hostile links, invalid catalog data, hidden products, role/CSRF shape, CSP and headers. Server authorization remains pending backend.

@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import http from 'node:http';
 import { PGlite } from '@electric-sql/pglite';
 import { generateKeyPair,SignJWT,createLocalJWKSet,exportJWK } from 'jose';
-import { createHandler } from '../app.js';
+import { createHandler } from '../legacy-app.js';
 import { googleToken,finishGoogle } from '../lib/auth.js';
 import { token,hash,cookieName,config,challenge } from '../lib/security.js';
 import { catalog } from '../lib/catalog.js';

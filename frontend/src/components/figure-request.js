@@ -4,6 +4,7 @@ import { brands } from '../data.js';
 import { SITE } from '../config.js';
 import { waReady, waDirectReady, waLabel, sendWhatsApp } from '../lib/whatsapp.js';
 import { normalizeFigureRequest, figureRequestMessage } from '../lib/figure-request.js';
+import { commerceRequest } from '../lib/commerce-client.js';
 
 export function figureRequestPanel({ standalone = false, compact = false } = {}) {
   const tag = standalone ? 'h1' : 'h2';
@@ -27,6 +28,7 @@ export function figureRequestPanel({ standalone = false, compact = false } = {})
         <label class="request-field">Versión, escala u otros detalles<textarea name="details" rows="3" maxlength="600" placeholder="Marca, edición, tamaño o accesorios que buscas"></textarea></label>
       </div></details>
       <button class="btn btn-primary btn-block request-submit" type="submit">${waReady() ? icons.whatsapp : icons.copy}<span>${waLabel('Consultar por WhatsApp')}</span>${icons.arrow}</button>
+      <button class="btn btn-secondary btn-block" type="button" data-online-request hidden>Registrar solicitud en mi cuenta</button>
       <p class="request-fine">${waDirectReady() ? 'Abriremos el chat de la tienda con tu consulta. Tú decides cuándo enviarla.' : waReady() ? 'Abriremos el grupo de WhatsApp de la tienda y copiaremos tu consulta para pegarla allí. Si prefieres una consulta privada, usa Instagram.' : 'Copia el mensaje y envíalo al chat de la tienda o a nuestro Instagram.'} La disponibilidad, el precio y el plazo se confirman con Grooty.</p>
       ${!waDirectReady() ? `<a class="link-btn" href="${esc(SITE.instagram)}" target="_blank" rel="noopener">${icons.instagram} Consulta privada por Instagram</a>` : ''}
       <p class="request-status" role="status" aria-live="polite" data-request-status></p>
@@ -40,6 +42,16 @@ export function mountFigureRequest(root) {
   if (!form) return () => {};
   let disposed = false;
   const status = form.querySelector('[data-request-status]');
+  const online=form.querySelector('[data-online-request]');
+  commerceRequest('/auth/config').then(flags=>{if(!disposed&&flags.customRequests)online.hidden=false;}).catch(()=>{});
+  async function register(){online.disabled=true;try{
+    if(!form.reportValidity())return;
+    await commerceRequest('/account/session');
+    const r=normalizeFigureRequest(Object.fromEntries(new FormData(form)));
+    const saved=await commerceRequest('/requests',{method:'POST',body:{character:r.figure,brand:r.brand,reference:'',url:r.reference||'',franchise:'',quantity:1,notes:r.details||''}});
+    if(!disposed)status.textContent='Solicitud registrada: '+saved.id+'. La tienda revisará tu referencia antes de cotizar.';
+  }catch(error){if(!disposed)status.textContent=error.status===401?'Inicia sesión en Mi cuenta para registrar la solicitud.':error.message;}finally{online.disabled=false;}}
+  online.addEventListener('click',register);
   const submit = async (event) => {
     event.preventDefault();
     if (!form.reportValidity()) return;
@@ -57,5 +69,5 @@ export function mountFigureRequest(root) {
     } finally { if (!disposed) button.disabled = false; }
   };
   form.addEventListener('submit', submit);
-  return () => { disposed = true; form.removeEventListener('submit', submit); };
+  return () => { disposed = true; form.removeEventListener('submit', submit); online.removeEventListener('click',register); };
 }
